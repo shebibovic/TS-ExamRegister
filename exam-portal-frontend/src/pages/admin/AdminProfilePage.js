@@ -48,13 +48,10 @@ const AdminProfilePage = () => {
               <td>{`${user.firstName} ${user.lastName}`}</td>
             </tr>
             <tr>
-              <td>Username</td>
+              <td>Email</td>
               <td>{user.username}</td>
             </tr>
-            <tr>
-              <td>Phone</td>
-              <td>{user.phoneNumber}</td>
-            </tr>
+
             <tr>
               <td>Role</td>
               <td>{user.roles[0].roleName}</td>
