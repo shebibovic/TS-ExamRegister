@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,6 +16,7 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
+@Builder
 @Entity
 @Table(name = "users") //annotations
 public class User implements UserDetails {
@@ -77,5 +79,16 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return isActive;
+    }
+
+    public User(String firstName, String lastName, String username, String password,
+                String phoneNumber, boolean isActive, Role user_role) {
+       this.firstName=firstName;
+       this.lastName=lastName;
+       this.username=username;
+       this.password=password;
+       this.phoneNumber=phoneNumber;
+       this.isActive=isActive;
+       this.roles=new HashSet<>(Collections.singleton(user_role));
     }
 }
