@@ -21,7 +21,7 @@ import java.util.Set;
 @Table(name = "users") //annotations
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
     private long userId;
 
@@ -43,21 +43,14 @@ public class User implements UserDetails {
     @Column(name = "is_active")
     private boolean isActive = true;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "user_role",
-            joinColumns = {
-                    @JoinColumn(name = "user_id")
-            },
-            inverseJoinColumns = {
-                    @JoinColumn(name = "role_id")
-            }
-    )
-    private Set<Role> roles;
+    @ManyToOne
+    @JoinColumn(name = "user_role", nullable = false)
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        this.roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getRoleName())));
+        authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
         return authorities;
     }
 
@@ -82,13 +75,13 @@ public class User implements UserDetails {
     }
 
     public User(String firstName, String lastName, String username, String password,
-                String phoneNumber, boolean isActive, Role user_role) {
+                String phoneNumber, boolean isActive, Role userRole) {
        this.firstName=firstName;
        this.lastName=lastName;
        this.username=username;
        this.password=password;
        this.phoneNumber=phoneNumber;
        this.isActive=isActive;
-       this.roles=new HashSet<>(Collections.singleton(user_role));
+       this.role=userRole;
     }
 }
