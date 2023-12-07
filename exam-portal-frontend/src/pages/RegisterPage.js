@@ -15,7 +15,7 @@ const RegisterPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [code, setCode] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [passwordType, setPasswordType] = useState("password");
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -52,7 +52,7 @@ const RegisterPage = () => {
       lastName: lastName,
       username: username,
       password: password,
-      phoneNumber: phoneNumber,
+      code: code,
     };
     register(dispatch, user).then((data) => {
       if (data.type === authConstants.USER_REGISTER_SUCCESS) {
@@ -143,14 +143,14 @@ const RegisterPage = () => {
           </InputGroup>
         </Form.Group>
 
-        <Form.Group className="my-3" controlId="phoneNumber">
-          <Form.Label>Phone Number</Form.Label>
+        <Form.Group className="my-3" controlId="code">
+          <Form.Label>Code</Form.Label>
           <Form.Control
-            type="tel"
-            placeholder="Enter Phone Number"
-            value={phoneNumber}
+            type="text"
+            placeholder="Enter Code"
+            value={code}
             onChange={(e) => {
-              setPhoneNumber(e.target.value);
+              setCode(e.target.value);
             }}
           ></Form.Control>
         </Form.Group>
