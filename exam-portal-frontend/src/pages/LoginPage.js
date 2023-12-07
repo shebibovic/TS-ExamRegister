@@ -58,10 +58,10 @@ const LoginPage = () => {
       <h1>Sign In</h1>
       <Form onSubmit={submitHandler}>
         <Form.Group className="my-3" controlId="username">
-          <Form.Label>User Name</Form.Label>
+          <Form.Label>Email</Form.Label>
           <Form.Control
             type="text"
-            placeholder="Enter User Name"
+            placeholder="Enter Your Email"
             value={username}
             onChange={(e) => {
               setUsername(e.target.value);

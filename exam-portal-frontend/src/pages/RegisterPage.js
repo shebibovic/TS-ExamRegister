@@ -65,35 +65,12 @@ const RegisterPage = () => {
     <FormContainer>
       <h1>Sign Up</h1>
       <Form onSubmit={submitHandler}>
-        <Form.Group className="my-3" controlId="fname">
-          <Form.Label>First Name</Form.Label>
-          <Form.Control
-            type="name"
-            placeholder="Enter First Name"
-            value={firstName}
-            onChange={(e) => {
-              setFirstName(e.target.value);
-            }}
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group className="my-3" controlId="lname">
-          <Form.Label>Last Name</Form.Label>
-          <Form.Control
-            type="name"
-            placeholder="Enter Last Name"
-            value={lastName}
-            onChange={(e) => {
-              setLastName(e.target.value);
-            }}
-          ></Form.Control>
-        </Form.Group>
 
         <Form.Group className="my-3" controlId="username">
-          <Form.Label>User Name</Form.Label>
+          <Form.Label>Email</Form.Label>
           <Form.Control
             type="text"
-            placeholder="Enter User Name"
+            placeholder="Enter Your Email"
             value={username}
             onChange={(e) => {
               setUsername(e.target.value);
