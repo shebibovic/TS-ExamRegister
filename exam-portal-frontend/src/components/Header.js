@@ -17,17 +17,20 @@ const Header = () => {
   };
 
   useEffect(() => {
-    if (localStorage.getItem("jwtToken")) {
+    const jwtToken = localStorage.getItem("jwtToken");
+
+    if (jwtToken && loginReducer.user && loginReducer.user.roles) {
       setIsLoggedIn(true);
-      loginReducer.user.roles.map((r) => {
-        if (r["roleName"] === "ADMIN") {
-          profilePageUrl = "/adminProfile";
-        } else {
-          profilePageUrl = "/";
-        }
-      });
+
+      const isAdmin = loginReducer.user.roles.some((r) => r["roleName"] === "ADMIN");
+
+      // Use a conditional statement to set profilePageUrl based on isAdmin
+      const profilePageUrl = isAdmin ? "/adminProfile" : "/";
+
+      // Use navigate here to redirect the user
+      navigate(profilePageUrl);
     }
-  }, [navigate]);
+  }, [loginReducer.user, navigate]);
 
   return (
     <header>
