@@ -27,6 +27,8 @@ public class ExamPortalBackendApplication {
 			Role professorRole = Role.builder().roleName("PROFESSOR").roleDescription("Superuser, who is a professor").build();
 			roleRepository.saveAll(Arrays.asList(studentRole, adminRole, professorRole));
 
+			User admin = new User("Kerim","Nurikic", "KerimNurikic", "password", "050123", true, adminRole);
+			userRepository.save(admin);
 		};
 	}
 
