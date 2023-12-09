@@ -7,9 +7,9 @@ import AdminUpdateCategoryPage from "./pages/admin/subjects/AdminUpdateCategoryP
 import AdminProfilePage from "./pages/admin/AdminProfilePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import AdminQuizzesPage from "./pages/admin/quizzes/AdminQuizzesPage";
-import AdminAddQuiz from "./pages/admin/quizzes/AdminAddQuiz";
-import AdminUpdateQuiz from "./pages/admin/quizzes/AdminUpdateQuiz";
+import AdminQuizzesPage from "./pages/admin/exams/AdminQuizzesPage";
+import AdminAddQuiz from "./pages/admin/exams/AdminAddQuiz";
+import AdminUpdateQuiz from "./pages/admin/exams/AdminUpdateQuiz";
 import AdminQuestionsPage from "./pages/admin/questions/AdminQuestionsPage";
 import AdminAddQuestionsPage from "./pages/admin/questions/AdminAddQuestionsPage";
 import AdminUpdateQuestionPage from "./pages/admin/questions/AdminUpdateQuestionPage";
