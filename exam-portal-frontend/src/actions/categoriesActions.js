@@ -20,20 +20,24 @@ export const addCategory = async (dispatch, category, token) => {
   }
 };
 
-export const fetchCategories = async (dispatch, token) => {
+export const fetchCategories = async (dispatch, token, categoryId = null) => {
   dispatch({ type: categoriesConstants.FETCH_CATEGORIES_REQUEST });
   const data = await categoriesServices.fetchCategories(token);
-  if (data) {
+
+  // Filter by categoryId if provided
+  if (categoryId) {
+    const categoryDetails = data.find(cat => cat.catId === categoryId);
     return dispatch({
       type: categoriesConstants.FETCH_CATEGORIES_SUCCESS,
-      payload: data,
-    });
-  } else {
-    return dispatch({
-      type: categoriesConstants.FETCH_CATEGORIES_FAILURE,
-      payload: data,
+      payload: categoryDetails ? [categoryDetails] : [], // Return an array with the found category or an empty array if not found
     });
   }
+
+  // Otherwise, return all categories
+  return dispatch({
+    type: categoriesConstants.FETCH_CATEGORIES_SUCCESS,
+    payload: data,
+  });
 };
 
 export const updateCategory = async (dispatch, category, token) => {

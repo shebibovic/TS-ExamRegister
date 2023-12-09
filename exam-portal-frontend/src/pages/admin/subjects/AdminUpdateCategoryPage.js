@@ -30,9 +30,9 @@ const AdminUpdateCategoryPage = () => {
     const category = { catId: catId, title: title, description: description };
     updateCategory(dispatch, category, token).then((data) => {
       if (data.type === categoriesConstants.UPDATE_CATEGORY_SUCCESS) {
-        swal("Category Updated!", `${title} succesfully updated`, "success");
+        swal("Subject Updated!", `${title} succesfully updated`, "success");
       } else {
-        swal("Category Not Updated!", `${title} not updated`, "error");
+        swal("Subject Not Updated!", `${title} not updated`, "error");
       }
     });
     navigate("/adminCategories");
@@ -45,13 +45,13 @@ const AdminUpdateCategoryPage = () => {
       </div>
       <div className="adminUpdateCategoryPage__content">
         <FormContainer>
-          <h2>Update Category</h2>
+          <h2>Update Subject</h2>
           <Form onSubmit={submitHandler}>
             <Form.Group className="my-3" controlId="title">
               <Form.Label>Title</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Enter Category Title"
+                placeholder="Enter Subject Title"
                 value={title}
                 onChange={(e) => {
                   setTitle(e.target.value);
@@ -66,7 +66,7 @@ const AdminUpdateCategoryPage = () => {
                 as="textarea"
                 rows="5"
                 type="text"
-                placeholder="Enter Category Description"
+                placeholder="Enter Subject Description"
                 value={description}
                 onChange={(e) => {
                   setDescription(e.target.value);

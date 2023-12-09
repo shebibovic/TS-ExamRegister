@@ -19,6 +19,8 @@ import UserQuizManualPage from "./pages/users/UserQuizManualPage";
 import UserQuestionsPage from "./pages/users/UserQuestionsPage";
 import UserQuizResultPage from "./pages/users/UserQuizResultPage";
 import AdminQuizResultPage from "./pages/admin/AdminQuizResultPage";
+import AdminSubjectID from "./pages/admin/subjects/AdminSubjectID";
+
 
 const App = () => {
   return (
@@ -37,8 +39,8 @@ const App = () => {
         />
         <Route path="/adminQuizzes" element={<AdminQuizzesPage />} />
         <Route path="/adminAddQuiz" element={<AdminAddQuiz />} />
-        <Route path="/adminUpdateQuiz/:quizId" element={<AdminUpdateQuiz />} /> //ne radi
-        <Route path="/adminQuestions" element={<AdminQuestionsPage />} /> // ne radi
+        <Route path="/adminUpdateQuiz/:quizId" element={<AdminUpdateQuiz />} />
+        <Route path="/adminQuestions" element={<AdminQuestionsPage />} />
         <Route path="/adminAddQuestion" element={<AdminAddQuestionsPage />} />
         <Route path="/adminallResult" element={<AdminQuizResultPage />} />
         <Route
@@ -51,6 +53,7 @@ const App = () => {
         <Route path="/quizManual/" element={<UserQuizManualPage />} />
         <Route path="/questions/" element={<UserQuestionsPage />} />
         <Route path="/quizResults/" element={<UserQuizResultPage />} />
+        <Route path="/adminCategories/:catId" element={<AdminSubjectID />} />
       </Routes>
     </Router>
   );
