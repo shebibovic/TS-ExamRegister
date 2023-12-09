@@ -21,9 +21,13 @@ export const login = async (dispatch, username, password) => {
   dispatch({ type: authConstants.USER_LOGIN_REQUEST });
   const data = await authServices.login(username, password);
   if (data && data.user) {
+    // Extract user roles from the response and include them in the payload
+    const { user, roles } = data.user;
+    const userDataWithRoles = { ...user, roles }; // assuming roles are directly available in data.user.roles
+
     return dispatch({
       type: authConstants.USER_LOGIN_SUCCESS,
-      payload: data.user,
+      payload: userDataWithRoles,
     });
   } else {
     return dispatch({
