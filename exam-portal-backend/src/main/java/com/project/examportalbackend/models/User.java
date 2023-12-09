@@ -6,6 +6,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -31,9 +33,13 @@ public class User implements UserDetails {
     @Column(name = "last_name")
     private String lastName;
 
+    @NotEmpty(message = "Username is required!")
+    @Size(max = 30, message = "Username can't be longer than 30 characters!")
     @Column(name = "username", unique = true)
     private String username;
 
+    @NotEmpty(message = "Password is required!")
+    @Size(min = 8, message = "Password can't be less than 8 characters!")
     @Column(name = "password")
     private String password;
 

@@ -48,23 +48,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/login").permitAll()
 
                 .antMatchers(HttpMethod.POST, "/api/category/**").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.GET, "/api/category/**").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers(HttpMethod.GET, "/api/category/**").hasAnyAuthority("STUDENT", "ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/category/**").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/category/**").hasAuthority("ADMIN")
 
                 .antMatchers(HttpMethod.POST, "/api/quiz/**").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.GET, "/api/quiz/**").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers(HttpMethod.GET, "/api/quiz/**").hasAnyAuthority("STUDENT", "ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/quiz/**").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/quiz/**").hasAuthority("ADMIN")
 
                 .antMatchers(HttpMethod.POST, "/api/question/**").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.GET, "/api/question/**").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers(HttpMethod.GET, "/api/question/**").hasAnyAuthority("STUDENT", "ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/question/**").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/question/**").hasAuthority("ADMIN")
 
-                .antMatchers(HttpMethod.POST, "/api/quizResult/**").hasAuthority("USER")
+                .antMatchers(HttpMethod.POST, "/api/quizResult/**").hasAuthority("STUDENT")
                 .antMatchers(HttpMethod.GET, "/api/quizResult/all/**").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.GET, "/api/quizResult/**").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers(HttpMethod.GET, "/api/quizResult/**").hasAnyAuthority("STUDENT", "ADMIN")
 
                 .anyRequest().denyAll()
                 .and()
