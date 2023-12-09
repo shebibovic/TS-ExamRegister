@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Header from "./components/Header";
-import AdminAddCategoryPage from "./pages/admin/categories/AdminAddCategoryPage";
-import AdminCategoriesPage from "./pages/admin/categories/AdminCategoriesPage";
-import AdminUpdateCategoryPage from "./pages/admin/categories/AdminUpdateCategoryPage";
+import AdminAddCategoryPage from "./pages/admin/subjects/AdminAddCategoryPage";
+import AdminCategoriesPage from "./pages/admin/subjects/AdminCategoriesPage";
+import AdminUpdateCategoryPage from "./pages/admin/subjects/AdminUpdateCategoryPage";
 import AdminProfilePage from "./pages/admin/AdminProfilePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";

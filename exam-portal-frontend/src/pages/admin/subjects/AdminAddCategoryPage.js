@@ -25,9 +25,9 @@ const AdminAddCategoryPage = () => {
     const category = { title: title, description: description };
     addCategory(dispatch, category, token).then((data) => {
       if (data.type === categoriesConstants.ADD_CATEGORY_SUCCESS) {
-        swal("Category Added!", `${title} succesfully added`, "success");
+        swal("Subject Added!", `${title} succesfully added`, "success");
       } else {
-        swal("Category Not Added!", `${title} not added`, "error");
+        swal("Subject Not Added!", `${title} not added`, "error");
       }
       // navigate("/adminCategories");
     });
@@ -40,13 +40,13 @@ const AdminAddCategoryPage = () => {
       </div>
       <div className="adminAddCategoryPage__content">
         <FormContainer>
-          <h2>Add Category</h2>
+          <h2>Add Subject</h2>
           <Form onSubmit={submitHandler}>
             <Form.Group className="my-3" controlId="title">
               <Form.Label>Title</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Enter Category Title"
+                placeholder="Enter Subject Title"
                 value={title}
                 onChange={(e) => {
                   setTitle(e.target.value);
@@ -61,7 +61,7 @@ const AdminAddCategoryPage = () => {
                 as="textarea"
                 rows="5"
                 type="text"
-                placeholder="Enter Category Description"
+                placeholder="Enter Subject Description"
                 value={description}
                 onChange={(e) => {
                   setDescription(e.target.value);

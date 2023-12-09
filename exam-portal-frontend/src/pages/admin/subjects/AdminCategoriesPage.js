@@ -38,7 +38,7 @@ const AdminCategoriesPage = () => {
     event.stopPropagation();
     swal({
       title: "Are you sure?",
-      text: "Once deleted, you will not be able to recover this category!",
+      text: "Once deleted, you will not be able to recover this subject!",
       icon: "warning",
       buttons: true,
       dangerMode: true,
@@ -47,13 +47,13 @@ const AdminCategoriesPage = () => {
         deleteCategory(dispatch, category.catId, token).then((data) => {
           if (data.type === categoriesConstants.DELETE_CATEGORY_SUCCESS) {
             swal(
-              "Category Deleted!",
+              "Subject Deleted!",
               `${category.title} succesfully deleted`,
               "success"
             );
           } else {
             swal(
-              "Category Not Deleted!",
+              "Subject Not Deleted!",
               `${category.title} not deleted`,
               "error"
             );
@@ -83,11 +83,11 @@ const AdminCategoriesPage = () => {
         <Sidebar />
       </div>
       <div className="adminCategoriesPage__content">
-        <h2>Categories</h2>
+        <h2>Subjects</h2>
         {categories ? (
           categories.length === 0 ? (
             <Message>
-              No categories are present. Try adding some categories.
+              No subjects are present. Try adding some subjects.
             </Message>
           ) : (
             categories.map((cat, index) => {
@@ -148,7 +148,7 @@ const AdminCategoriesPage = () => {
           className="adminCategoriesPage__content--button"
           onClick={addNewCategoryHandler}
         >
-          Add Category
+          Add Subject
         </Button>
       </div>
     </div>
