@@ -34,18 +34,21 @@ const LoginPage = () => {
     e.preventDefault();
     login(dispatch, username, password).then((data) => {
       if (data.type === authConstants.USER_LOGIN_SUCCESS) {
-        data.payload.roles.map((r) => {
-          if (r["roleName"] === "ADMIN") {
-            return navigate("/adminProfile");
-          } else {
-            return navigate("/profile");
-          }
-        });
+        const isAdmin = data.payload && data.payload.roles && data.payload.roles.some((r) => r["roleName"] === "ADMIN");
+        if (isAdmin) {
+          navigate("/adminProfile");
+        } else {
+          navigate("/profile");
+        }
       }
     });
   };
 
   useEffect(() => {
+    console.log("Token:", token);
+    console.log("User:", user);
+    console.log("User Roles:", user && user.roles);
+
     if (token && user && user.roles && user.roles.length > 0) {
       const isAdmin = user.roles.some((r) => r.roleName === "ADMIN");
 
@@ -55,67 +58,67 @@ const LoginPage = () => {
         navigate("/profile");
       }
     }
-  }, [token, user]);
+  }, [token, user, navigate]);
   return (
-    <FormContainer>
-      <h1>Sign In</h1>
-      <Form onSubmit={submitHandler}>
-        <Form.Group className="my-3" controlId="username">
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter Your Email"
-            value={username}
-            onChange={(e) => {
-              setUsername(e.target.value);
-            }}
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group className="my-3" controlId="password">
-          <Form.Label>Password</Form.Label>
-          <InputGroup>
+      <FormContainer>
+        <h1>Sign In</h1>
+        <Form onSubmit={submitHandler}>
+          <Form.Group className="my-3" controlId="username">
+            <Form.Label>Email</Form.Label>
             <Form.Control
-              type={`${passwordType}`}
-              placeholder="Enter Password"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-            />
-            <Button
-              onClick={showPasswordHandler}
+                type="text"
+                placeholder="Enter Your Email"
+                value={username}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                }}
+            ></Form.Control>
+          </Form.Group>
+
+          <Form.Group className="my-3" controlId="password">
+            <Form.Label>Password</Form.Label>
+            <InputGroup>
+              <Form.Control
+                  type={`${passwordType}`}
+                  placeholder="Enter Password"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+              />
+              <Button
+                  onClick={showPasswordHandler}
+                  variant=""
+                  style={{ border: "1px solid black" }}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </Button>
+            </InputGroup>
+          </Form.Group>
+
+          <Button
               variant=""
-              style={{ border: "1px solid black" }}
-            >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
-            </Button>
-          </InputGroup>
-        </Form.Group>
+              className="my-3"
+              type="submit"
+              style={{ backgroundColor: "rgb(68 177 49)", color: "white" }}
+          >
+            Login
+          </Button>
+        </Form>
 
-        <Button
-          variant=""
-          className="my-3"
-          type="submit"
-          style={{ backgroundColor: "rgb(68 177 49)", color: "white" }}
-        >
-          Login
-        </Button>
-      </Form>
-
-      {loginReducer.loading ? (
-        <Loader />
-      ) : (
-        <Row className="py-3">
-          <Col>
-            New Customer?{" "}
-            <Link to="/register" style={{ color: "rgb(68 177 49)" }}>
-              First Login
-            </Link>
-          </Col>
-        </Row>
-      )}
-    </FormContainer>
+        {loginReducer.loading ? (
+            <Loader />
+        ) : (
+            <Row className="py-3">
+              <Col>
+                New Customer?{" "}
+                <Link to="/register" style={{ color: "rgb(68 177 49)" }}>
+                  First Login
+                </Link>
+              </Col>
+            </Row>
+        )}
+      </FormContainer>
   );
 };
 

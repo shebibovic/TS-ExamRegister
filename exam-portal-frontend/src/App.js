@@ -29,16 +29,16 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/adminProfile" element={<AdminProfilePage />} />
-        <Route path="/adminCategories" element={<AdminCategoriesPage />} />
+        <Route path="/adminCategories" element={<AdminCategoriesPage />} /> //ne radi
         <Route path="/adminAddCategory" element={<AdminAddCategoryPage />} />
         <Route
           path="/adminUpdateCategory/:catId"
           element={<AdminUpdateCategoryPage />}
         />
-        <Route path="/adminQuizzes" element={<AdminQuizzesPage />} />
-        <Route path="/adminAddQuiz" element={<AdminAddQuiz />} />
-        <Route path="/adminUpdateQuiz/:quizId" element={<AdminUpdateQuiz />} />
-        <Route path="/adminQuestions" element={<AdminQuestionsPage />} />
+        <Route path="/adminQuizzes" element={<AdminQuizzesPage />} /> //ne radi
+        <Route path="/adminAddQuiz" element={<AdminAddQuiz />} /> //ne radi
+        <Route path="/adminUpdateQuiz/:quizId" element={<AdminUpdateQuiz />} /> //ne radi
+        <Route path="/adminQuestions" element={<AdminQuestionsPage />} /> // ne radi
         <Route path="/adminAddQuestion" element={<AdminAddQuestionsPage />} />
         <Route path="/adminallResult" element={<AdminQuizResultPage />} />
         <Route
@@ -46,9 +46,9 @@ const App = () => {
           element={<AdminUpdateQuestionPage />}
         />
         <Route path="/profile" element={<UserProfilePage />} />
-        <Route path="/quizzes" element={<UserQuizzesPage />} />
+        <Route path="/quizzes" element={<UserQuizzesPage />} /> //ne radi
         <Route path="/quiz/*" element={<UserQuizzesPage />} />
-        <Route path="/quizManual/" element={<UserQuizManualPage />} />
+        <Route path="/quizManual/" element={<UserQuizManualPage />} /> //ne radi
         <Route path="/questions/" element={<UserQuestionsPage />} />
         <Route path="/quizResults/" element={<UserQuizResultPage />} />
       </Routes>

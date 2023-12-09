@@ -38,19 +38,34 @@ const UserQuestionsPage = () => {
   let intervalId = null;
 
   useEffect(() => {
-    intervalId = setInterval(() => {
-      if (timeRemaining <= 0) {
-        submitQuizHandler(answers, true);
-      } else {
-        setTimeRemaining((prev) => prev - 1);
-      }
-    }, 1000);
+    if (!localStorage.getItem("jwtToken")) navigate("/");
+  }, [navigate]);
 
-    return () => {
-      clearInterval(intervalId);
-      intervalId = null;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const quizzesResponse = await fetchQuizzes(dispatch, token);
+        const tempQuizzes = quizzesResponse.payload;
+        setQuizzes(tempQuizzes);
+        const selectedQuiz = tempQuizzes.find((q) => q.quizId === quizId);
+        if (selectedQuiz) {
+          setQuiz(selectedQuiz);
+          const questionsResponse = await fetchQuestionsByQuiz(dispatch, quizId, token);
+          const quizQuestions = questionsResponse.payload;
+          setQuestions(quizQuestions);
+          setTimeRemaining(quizQuestions.length * 2 * 60);
+        } else {
+          // Handle case where selected quiz is not found
+          console.log("Selected quiz not found");
+        }
+      } catch (error) {
+        // Handle error if fetching quizzes or questions fails
+        console.error("Error fetching data:", error);
+      }
     };
-  }, []);
+
+    fetchData();
+  }, [dispatch, quizId, token]);
 
   const submitQuizHandler = (isTimesUp = false) => {
     const answers = JSON.parse(localStorage.getItem("answers"));

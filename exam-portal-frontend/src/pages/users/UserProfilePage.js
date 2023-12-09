@@ -7,64 +7,65 @@ import { fetchCategories } from "../../actions/categoriesActions";
 import { fetchQuizzes } from "../../actions/quizzesActions";
 import SidebarUser from "../../components/SidebarUser";
 import "./UserProfilePage.css";
+
 const UserProfilePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const loginReducer = useSelector((state) => state.loginReducer);
-  const user = loginReducer.user;
-  const token = JSON.parse(localStorage.getItem("jwtToken"));
+
+  // Retrieve user data from localStorage
+  const user = JSON.parse(localStorage.getItem("user"));
+  const token = localStorage.getItem("jwtToken");
 
   useEffect(() => {
+    // Redirect to login page if token is not present
+    if (!token) {
+      navigate("/");
+    }
+
+    // Fetch categories and quizzes (assuming these actions require a token)
     fetchCategories(dispatch, token);
-  }, [dispatch]);
-
-  useEffect(() => {
     fetchQuizzes(dispatch, token);
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (!localStorage.getItem("jwtToken")) navigate("/");
-  }, []);
+  }, [dispatch, navigate, token]);
 
   return (
-    <div className="userProfilePage__container">
-      <div className="userProfilePage__sidebar">
-        <SidebarUser />
-      </div>
-      {user && (
-        <div className="userProfilePage__content">
-          <Image
-            className="userProfilePage__content--profilePic"
-            width="20%"
-            height="20%"
-            roundedCircle
-            src="images/user.png"
-          />
-
-          <Table bordered className="userProfilePage__content--table">
-            <tbody>
-              <tr>
-                <td>Name</td>
-                <td>{`${user.firstName} ${user.lastName}`}</td>
-              </tr>
-              <tr>
-                <td>Email</td>
-                <td>{user.username}</td>
-              </tr>
-
-              <tr>
-                <td>Role</td>
-                <td>{user.roles[0].roleName}</td>
-              </tr>
-              <tr>
-                <td>Account Status</td>
-                <td>{`${user.enabled}`}</td>
-              </tr>
-            </tbody>
-          </Table>
+      <div className="userProfilePage__container">
+        <div className="userProfilePage__sidebar">
+          <SidebarUser />
         </div>
-      )}
-    </div>
+
+        {user && (
+            <div className="userProfilePage__content">
+              <Image
+                  className="userProfilePage__content--profilePic"
+                  width="20%"
+                  height="20%"
+                  roundedCircle
+                  src="images/user.png"
+              />
+
+              <Table bordered className="userProfilePage__content--table">
+                <tbody>
+                <tr>
+                  <td>Name</td>
+                  <td>{`${user.firstName} ${user.lastName}`}</td>
+                </tr>
+                <tr>
+                  <td>Email</td>
+                  <td>{user.username}</td>
+                </tr>
+                <tr>
+                  <td>Role</td>
+                  <td>{user.roles && user.roles[0].roleName}</td>
+                </tr>
+                <tr>
+                  <td>Account Status</td>
+                  <td>{`${user.enabled}`}</td>
+                </tr>
+                </tbody>
+              </Table>
+            </div>
+        )}
+      </div>
   );
 };
 
