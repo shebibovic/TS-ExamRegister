@@ -48,6 +48,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public User registerUserService(User user) throws Exception {
+        // Validate user object using its annotations
         Set<ConstraintViolation<User>> violations = validator.validate(user);
 
         if (!violations.isEmpty()) {
@@ -62,13 +63,8 @@ public class AuthServiceImpl implements AuthService {
         if (temp != null) {
             throw new Exception("User Already Exists");
         } else {
-            Role role;
-            if (user.getRole().equals("PROFESSOR")){
-                role = roleRepository.findById("PROFESSOR").orElse(null);
-            } else {
-                // Assign the role of a student
-                role = roleRepository.findById("STUDENT").orElse(null);
-            }
+            Role role = roleRepository.findById("STUDENT").orElse(null);
+
             user.setRole(role);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             return userRepository.save(user);
