@@ -19,6 +19,7 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const loginReducer = useSelector((state) => state.loginReducer);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const showPasswordHandler = () => {
     const temp = !showPassword;
@@ -40,6 +41,8 @@ const LoginPage = () => {
         } else {
           navigate("/profile");
         }
+      } else if (data.type === authConstants.USER_LOGIN_FAILURE) {
+        setErrorMessage("User does not exist. Wrong email or password.");
       }
     });
   };
@@ -104,6 +107,9 @@ const LoginPage = () => {
           >
             Login
           </Button>
+          {errorMessage && (
+              <p style={{ color: 'red' }}>{errorMessage}</p>
+          )}
         </Form>
 
         {loginReducer.loading ? (
