@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./AdminUpdateCategoryPage.css";
 import { Button, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,6 +11,7 @@ import { updateCategory } from "../../../actions/categoriesActions";
 import { useNavigate } from "react-router-dom";
 
 const AdminSubjectID = () => {
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const params = useParams();
@@ -23,7 +24,32 @@ const AdminSubjectID = () => {
     const [description, setDescription] = useState(
         oldCategory ? oldCategory.description : ""
     );
+    const [assignedProfessor, setAssignedProfessor] = useState(null); // State to hold professor info
     const token = JSON.parse(localStorage.getItem("jwtToken"));
+
+    useEffect(() => {
+        const fetchProfessor = async () => {
+            try {
+                if (oldCategory && oldCategory.assignedProfessorId) {
+                    const response = await fetch(`/api/professors/${oldCategory.assignedProfessorId}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+                    if (response.ok) {
+                        const professorData = await response.json();
+                        setAssignedProfessor(professorData);
+                    } else {
+                        throw new Error("Failed to fetch professor");
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching professor:", error);
+            }
+        };
+
+        fetchProfessor();
+    }, [oldCategory, token]);
 
     return (
         <div className="adminUpdateCategoryPage__container">
@@ -35,6 +61,7 @@ const AdminSubjectID = () => {
                     <h2>Subject Details</h2>
                     <p><strong>Subject Name:</strong> {title}</p>
                     <p><strong>Description:</strong> {description}</p>
+                    <p><strong>Professor:</strong> {assignedProfessor ? assignedProfessor.username : 'Not Assigned'}</p>
                 </div>
             </div>
         </div>

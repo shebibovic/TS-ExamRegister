@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./AdminAddCategoryPage.css";
 import { Button, Form } from "react-bootstrap";
 import { useDispatch } from "react-redux";
@@ -15,6 +15,8 @@ import { useNavigate } from "react-router-dom";
 const AdminAddCategoryPage = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [selectedUser, setSelectedUser] = useState(""); // State to hold selected user
+  const [users, setUsers] = useState([]); // State to hold the list of users
   const token = JSON.parse(localStorage.getItem("jwtToken"));
 
   const dispatch = useDispatch();
@@ -22,16 +24,39 @@ const AdminAddCategoryPage = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    const category = { title: title, description: description };
+    const category = {
+      title: title,
+      description: description,
+      userId: selectedUser // Include selected professor ID in category data
+    };
     addCategory(dispatch, category, token).then((data) => {
       if (data.type === categoriesConstants.ADD_CATEGORY_SUCCESS) {
-        swal("Subject Added!", `${title} succesfully added`, "success");
+        swal("Subject Added!", `${title} successfully added`, "success");
       } else {
         swal("Subject Not Added!", `${title} not added`, "error");
       }
       // navigate("/adminCategories");
     });
   };
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch("/api/category/users");
+        if (!response.ok) {
+          throw new Error("Failed to fetch users");
+        }
+        const usersData = await response.json();
+        console.log(usersData); // Log fetched user data
+        setUsers(usersData);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    fetchUsers();
+  }, [token]);
+
 
   return (
     <div className="adminAddCategoryPage__container">
@@ -68,6 +93,19 @@ const AdminAddCategoryPage = () => {
                 }}
               ></Form.Control>
             </Form.Group>
+
+            <Form.Select
+                aria-label="Choose Professor"
+                onChange={(e) => setSelectedUser(e.target.value)}
+                value={selectedUser}
+            >
+              <option value="">Choose Professor</option>
+              {users.map((user) => (
+                  <option key={user.userId} value={user.userId}>
+                    {user.username}
+                  </option>
+              ))}
+            </Form.Select>
 
             <Button
               className="my-3 adminAddCategoryPage__content--button"

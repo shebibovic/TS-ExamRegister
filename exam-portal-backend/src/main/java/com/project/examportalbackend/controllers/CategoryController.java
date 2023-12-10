@@ -1,11 +1,16 @@
 package com.project.examportalbackend.controllers;
 
 import com.project.examportalbackend.models.Category;
+import com.project.examportalbackend.models.User;
+import com.project.examportalbackend.repository.UserRepository;
+import com.project.examportalbackend.services.AuthService;
 import com.project.examportalbackend.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -15,7 +20,11 @@ public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
-
+    private final UserRepository userRepository;
+    @Autowired
+    public CategoryController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
     @PostMapping("/")
     public ResponseEntity<?> addCategory(@RequestBody Category category) {
         return ResponseEntity.ok(categoryService.addCategory(category));
@@ -43,5 +52,9 @@ public class CategoryController {
     public ResponseEntity<?> deleteCategory(@PathVariable Long categoryId) {
         categoryService.deleteCategory(categoryId);
         return ResponseEntity.ok(true);
+    }
+    @GetMapping("/users")
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }
