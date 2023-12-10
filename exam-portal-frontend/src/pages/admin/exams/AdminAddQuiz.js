@@ -74,42 +74,42 @@ const AdminAddQuiz = () => {
   }, []);
 
   return (
-    <div className="adminAddQuizPage__container">
-      <div className="adminAddQuizPage__sidebar">
-        <Sidebar />
-      </div>
-      <div className="adminAddQuizPage__content">
-        <FormContainer>
-          <h2>Add Exam</h2>
-          <Form onSubmit={submitHandler}>
-            <Form.Group className="my-3" controlId="title">
-              <Form.Label>Title</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter Exam Title"
-                value={title}
-                onChange={(e) => {
-                  setTitle(e.target.value);
-                }}
-              ></Form.Control>
-            </Form.Group>
+      <div className="adminAddQuizPage__container">
+        <div className="adminAddQuizPage__sidebar">
+          <Sidebar />
+        </div>
+        <div className="adminAddQuizPage__content">
+          <FormContainer>
+            <h2>Add Exam</h2>
+            <Form onSubmit={submitHandler}>
+              <Form.Group className="my-3" controlId="title">
+                <Form.Label>Title</Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="Enter Exam Title"
+                    value={title}
+                    onChange={(e) => {
+                      setTitle(e.target.value);
+                    }}
+                ></Form.Control>
+              </Form.Group>
 
-            <Form.Group className="my-3" controlId="description">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                style={{ textAlign: "top" }}
-                as="textarea"
-                rows="3"
-                type="text"
-                placeholder="Enter Exam Description"
-                value={description}
-                onChange={(e) => {
-                  setDescription(e.target.value);
-                }}
-              ></Form.Control>
-            </Form.Group>
+              <Form.Group className="my-3" controlId="description">
+                <Form.Label>Description</Form.Label>
+                <Form.Control
+                    style={{ textAlign: "top" }}
+                    as="textarea"
+                    rows="3"
+                    type="text"
+                    placeholder="Enter Exam Description"
+                    value={description}
+                    onChange={(e) => {
+                      setDescription(e.target.value);
+                    }}
+                ></Form.Control>
+              </Form.Group>
 
-            {/* <Form.Group className="my-3" controlId="maxMarks">
+              {/* <Form.Group className="my-3" controlId="maxMarks">
               <Form.Label>Maximum Marks</Form.Label>
               <Form.Control
                 type="number"
@@ -121,7 +121,7 @@ const AdminAddQuiz = () => {
               ></Form.Control>
             </Form.Group> */}
 
-            {/* <Form.Group className="my-3" controlId="numberOfQuestions">
+              {/* <Form.Group className="my-3" controlId="numberOfQuestions">
               <Form.Label>Number of Questions</Form.Label>
               <Form.Control
                 type="number"
@@ -133,59 +133,59 @@ const AdminAddQuiz = () => {
               ></Form.Control>
             </Form.Group> */}
 
-            <Form.Check
-              className="my-3"
-              type="switch"
-              id="publish-switch"
-              label="Publish Exam"
-              onChange={onClickPublishedHandler}
-              checked={isActive}
-            />
+              <Form.Check
+                  className="my-3"
+                  type="switch"
+                  id="publish-switch"
+                  label="Publish Exam"
+                  onChange={onClickPublishedHandler}
+                  checked={isActive}
+              />
 
-            <div className="my-3">
-              <label htmlFor="category-select">Choose a Subject:</label>
-              <Form.Select
-                aria-label="Choose Subject"
-                id="category-select"
-                onChange={onSelectCategoryHandler}
-              >
-                <option value="n/a">Choose Subject</option>
-                {categories ? (
-                  categories.map((cat, index) => (
-                    <option key={index} value={cat.catId}>
-                      {cat.title}
-                    </option>
-                  ))
-                ) : (
-                  <option value="">Choose one from below</option>
-                )}
-                {/* <option value="1">One</option>
+              <div className="my-3">
+                <label htmlFor="category-select">Choose a Subject:</label>
+                <Form.Select
+                    aria-label="Choose Subject"
+                    id="category-select"
+                    onChange={onSelectCategoryHandler}
+                >
+                  <option value="n/a">Choose Subject</option>
+                  {categories ? (
+                      categories.map((cat, index) => (
+                          <option key={index} value={cat.catId}>
+                            {cat.title}
+                          </option>
+                      ))
+                  ) : (
+                      <option value="">Choose one from below</option>
+                  )}
+                  {/* <option value="1">One</option>
                   <option value="2">Two</option>
                   <option value="3">Three</option> */}
-              </Form.Select>
+                </Form.Select>
 
-              <Form.Group className="my-3" controlId="examDate">
-                <Form.Label>Exam Date</Form.Label>
-                <Form.Control
-                    type="date"
-                    value={examDate}
-                    onChange={(e) => setExamDate(e.target.value)}
-                ></Form.Control>
-              </Form.Group>
+                <Form.Group className="my-3" controlId="examDate">
+                  <Form.Label>Exam Date</Form.Label>
+                  <Form.Control
+                      type="date"
+                      value={examDate}
+                      onChange={(e) => setExamDate(e.target.value)}
+                  ></Form.Control>
+                </Form.Group>
 
 
-            </div>
-            <Button
-              className="my-5 adminAddQuizPage__content--button"
-              type="submit"
-              variant="primary"
-            >
-              Add
-            </Button>
-          </Form>
-        </FormContainer>
+              </div>
+              <Button
+                  className="my-5 adminAddQuizPage__content--button"
+                  type="submit"
+                  variant="primary"
+              >
+                Add
+              </Button>
+            </Form>
+          </FormContainer>
+        </div>
       </div>
-    </div>
   );
 };
 
