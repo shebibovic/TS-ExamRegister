@@ -24,21 +24,24 @@ const AdminSubjectID = () => {
     const [description, setDescription] = useState(
         oldCategory ? oldCategory.description : ""
     );
-    const [assignedProfessor, setAssignedProfessor] = useState(null); // State to hold professor info
+    //const [assignedProfessor, setAssignedProfessor] = useState(null); // State to hold professor info
     const token = JSON.parse(localStorage.getItem("jwtToken"));
+    const [users, setUsers] = useState([]);
+    const [selectedUser, setSelectedUser] = useState("");
+    const [selectedUsers, setSelectedUsers] = useState([]);
 
     useEffect(() => {
         const fetchProfessor = async () => {
             try {
-                if (oldCategory && oldCategory.assignedProfessorId) {
-                    const response = await fetch(`/api/professors/${oldCategory.assignedProfessorId}`, {
+                if (oldCategory && oldCategory.userId) {
+                    const response = await fetch(`/api/category/users/${oldCategory.userId}`, {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
                     });
                     if (response.ok) {
                         const professorData = await response.json();
-                        setAssignedProfessor(professorData);
+                        setSelectedUser(professorData);
                     } else {
                         throw new Error("Failed to fetch professor");
                     }
@@ -61,7 +64,17 @@ const AdminSubjectID = () => {
                     <h2>Subject Details</h2>
                     <p><strong>Subject Name:</strong> {title}</p>
                     <p><strong>Description:</strong> {description}</p>
-                    <p><strong>Professor:</strong> {assignedProfessor ? assignedProfessor.username : 'Not Assigned'}</p>
+                    <p><strong>Professor:</strong> {selectedUser ? selectedUser.username : 'Not Assigned'}</p>
+                    <p><strong>Students:</strong></p>
+                    <ul>
+                        {selectedUsers.length > 0 ? (
+                            selectedUsers.map((user) => (
+                                <li key={user.id}>{user.username}</li>
+                            ))
+                        ) : (
+                            <li>No Assigned Students</li>
+                        )}
+                    </ul>
                 </div>
             </div>
         </div>

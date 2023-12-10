@@ -18,6 +18,7 @@ const AdminAddCategoryPage = () => {
   const [selectedUser, setSelectedUser] = useState(""); // State to hold selected user
   const [users, setUsers] = useState([]); // State to hold the list of users
   const token = JSON.parse(localStorage.getItem("jwtToken"));
+  const [selectedUsers, setSelectedUsers] = useState([]);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -27,7 +28,8 @@ const AdminAddCategoryPage = () => {
     const category = {
       title: title,
       description: description,
-      userId: selectedUser // Include selected professor ID in category data
+      userId: selectedUser, // Include selected professor ID in category data
+      students: selectedUsers
     };
     addCategory(dispatch, category, token).then((data) => {
       if (data.type === categoriesConstants.ADD_CATEGORY_SUCCESS) {
@@ -106,6 +108,31 @@ const AdminAddCategoryPage = () => {
                   </option>
               ))}
             </Form.Select>
+
+
+            <Form.Group controlId="students">
+              <Form.Label>Choose Students (Multiple)</Form.Label>
+              {users.map((user) => (
+                  <Form.Check
+                      key={user.userId}
+                      type="checkbox"
+                      id={`user-${user.userId}`}
+                      label={user.username}
+                      onChange={(e) => {
+                        const isChecked = e.target.checked;
+                        if (isChecked) {
+                          setSelectedUsers((prevSelected) => [...prevSelected, user.userId]);
+                        } else {
+                          setSelectedUsers((prevSelected) =>
+                              prevSelected.filter((selectedUserId) => selectedUserId !== user.userId)
+                          );
+                        }
+                      }}
+                      checked={selectedUsers.includes(user.userId)}
+                  />
+              ))}
+            </Form.Group>
+
 
             <Button
               className="my-3 adminAddCategoryPage__content--button"

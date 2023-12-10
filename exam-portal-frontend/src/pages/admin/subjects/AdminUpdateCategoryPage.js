@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import "./AdminUpdateCategoryPage.css";
 import { Button, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,10 +24,13 @@ const AdminUpdateCategoryPage = () => {
     oldCategory ? oldCategory.description : ""
   );
   const token = JSON.parse(localStorage.getItem("jwtToken"));
+  const [selectedUser, setSelectedUser] = useState("");
+  const [users, setUsers] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]);
 
   const submitHandler = (e) => {
     e.preventDefault();
-    const category = { catId: catId, title: title, description: description };
+    const category = { catId: catId, title: title, description: description, userId: selectedUser, students: selectedUsers };
     updateCategory(dispatch, category, token).then((data) => {
       if (data.type === categoriesConstants.UPDATE_CATEGORY_SUCCESS) {
         swal("Subject Updated!", `${title} succesfully updated`, "success");
@@ -37,6 +40,25 @@ const AdminUpdateCategoryPage = () => {
     });
     navigate("/adminCategories");
   };
+
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch("/api/category/users");
+        if (!response.ok) {
+          throw new Error("Failed to fetch users");
+        }
+        const usersData = await response.json();
+        console.log(usersData); // Log fetched user data
+        setUsers(usersData);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    fetchUsers();
+  }, [token]);
 
   return (
     <div className="adminUpdateCategoryPage__container">
@@ -72,6 +94,41 @@ const AdminUpdateCategoryPage = () => {
                   setDescription(e.target.value);
                 }}
               ></Form.Control>
+            </Form.Group>
+            <Form.Select
+                aria-label="Choose Professor"
+                onChange={(e) => setSelectedUser(e.target.value)}
+                value={selectedUser}
+            >
+              <option value="">Choose Professor</option>
+              {users.map((user) => (
+                  <option key={user.userId} value={user.userId}>
+                    {user.username}
+                  </option>
+              ))}
+            </Form.Select>
+
+            <Form.Group controlId="students">
+              <Form.Label>Choose Students (Multiple)</Form.Label>
+              {users.map((user) => (
+                  <Form.Check
+                      key={user.userId}
+                      type="checkbox"
+                      id={`user-${user.userId}`}
+                      label={user.username}
+                      onChange={(e) => {
+                        const isChecked = e.target.checked;
+                        if (isChecked) {
+                          setSelectedUsers((prevSelected) => [...prevSelected, user.userId]);
+                        } else {
+                          setSelectedUsers((prevSelected) =>
+                              prevSelected.filter((selectedUserId) => selectedUserId !== user.userId)
+                          );
+                        }
+                      }}
+                      checked={selectedUsers.includes(user.userId)}
+                  />
+              ))}
             </Form.Group>
 
             <Button
