@@ -12,7 +12,7 @@ const Header = () => {
   useEffect(() => {
     const jwtToken = localStorage.getItem("jwtToken");
 
-    if (jwtToken && loginReducer.user && loginReducer.user.roles) {
+    if (jwtToken && loginReducer.user) {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
@@ -36,7 +36,7 @@ const Header = () => {
               <Nav className="justify-content-end flex-grow-1 pe-3">
                 {isLoggedIn && loginReducer.user ? (
                     <>
-                      <Nav.Link>{loginReducer.user.firstName}</Nav.Link>
+                      <Nav.Link>{loginReducer.user.name}</Nav.Link>
                       <LinkContainer to="/">
                         <Nav.Link onClick={logoutHandler}>Logout</Nav.Link>
                       </LinkContainer>

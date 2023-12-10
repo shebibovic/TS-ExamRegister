@@ -50,18 +50,15 @@ const LoginPage = () => {
   useEffect(() => {
     console.log("Token:", token);
     console.log("User:", user);
-    console.log("User Roles:", user && user.roles);
+    console.log("User Roles:", user && user.role);
 
-    if (token && user && user.roles && user.roles.length > 0) {
-      const isAdmin = user.roles.some((r) => r.roleName === "ADMIN");
-
-      if (isAdmin) {
-        navigate("/adminProfile");
-      } else {
-        navigate("/profile");
-      }
+    if (token && user && user.role && user.role.length > 0) {
+      user.roles.map((r) => {
+        if (r["roleName"] === "ADMIN") return navigate("/adminProfile");
+        else return navigate("/profile");
+      });
     }
-  }, [token, user, navigate]);
+  }, []);
   return (
       <FormContainer>
         <h1>Sign In</h1>

@@ -69,7 +69,7 @@ const RegisteredExams = () => {
                         </Table>
                     ) : (
                         <Message>
-                            No results to display. Attemp any <Link to="/quizzes">Quiz.</Link>
+                            No Registered Exams. Register any <Link to="/quizzes">Exam.</Link>
                         </Message>
                     )}
             </div>

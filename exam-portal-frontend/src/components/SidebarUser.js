@@ -33,22 +33,7 @@ const SidebarUser = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
 
-  useEffect(() => {
-    console.log("Fetching Categories because of SidebarUser");
-    fetchCategories(dispatch, token).then((data) => {
-      const tempCategories = data.payload;
-      setCategories(tempCategories);
 
-      const newMenuItems = tempCategories.map((c) => {
-        return {
-          path: `/quiz/cat${c.title}?catId=${c.catId}`,
-          name: c.title,
-          icon: <TbLayoutGrid />,
-        };
-      });
-      setMenuItems([...menuItems, ...newMenuItems]);
-    });
-  }, []);
 
   return (
     <div
