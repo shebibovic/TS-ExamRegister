@@ -22,6 +22,7 @@ import UserQuizResultPage from "./pages/users/UserQuizResultPage";
 import RegisteredExams from "./pages/users/RegisteredExams";
 import AdminQuizResultPage from "./pages/admin/AdminQuizResultPage";
 import AdminSubjectID from "./pages/admin/subjects/AdminSubjectID";
+import ProfessorProfilePage from "./pages/professor/ProfessorProfilePage";
 
 
 const App = () => {
@@ -58,6 +59,7 @@ const App = () => {
         <Route path="/registeredExams/" element={<RegisteredExams />} />
         <Route path="/adminCategories/:catId" element={<AdminSubjectID />} />
         <Route path="/adminQuizzes/:catId" element={<AdminExamID />} />
+        <Route path="/professorProfile" element={<ProfessorProfilePage />} />
       </Routes>
     </Router>
   );
