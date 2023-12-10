@@ -3,8 +3,8 @@ package com.project.examportalbackend.controllers;
 import com.project.examportalbackend.models.Category;
 import com.project.examportalbackend.models.User;
 import com.project.examportalbackend.repository.UserRepository;
-import com.project.examportalbackend.services.AuthService;
 import com.project.examportalbackend.services.CategoryService;
+import com.project.examportalbackend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +25,24 @@ public class CategoryController {
     public CategoryController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+    @Autowired
+    private UserService userService;
+
     @PostMapping("/")
     public ResponseEntity<?> addCategory(@RequestBody Category category) {
         return ResponseEntity.ok(categoryService.addCategory(category));
+    }
+    @GetMapping("/{userId}")
+    public ResponseEntity<?> getProfesor(@PathVariable Long profesorId) {
+        return ResponseEntity.ok(userService.getUser(profesorId));
+    }
+    @GetMapping("/profesors")
+    public ResponseEntity<?> getAllProfesors(){
+        return ResponseEntity.ok(userService.getAllProfesors());
+    }
+    @GetMapping("/students")
+    public ResponseEntity<?> getAllStudents(){
+        return ResponseEntity.ok(userService.getAllStudents());
     }
 
     @GetMapping("/")
@@ -53,6 +68,7 @@ public class CategoryController {
         categoryService.deleteCategory(categoryId);
         return ResponseEntity.ok(true);
     }
+
     @GetMapping("/users")
     public List<User> getAllUsers() {
         return userRepository.findAll();
