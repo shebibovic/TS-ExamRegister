@@ -9,6 +9,7 @@ import Loader from "../../../components/Loader";
 import { deleteQuiz, fetchQuizzes } from "../../../actions/quizzesActions";
 import * as quizzesConstants from "../../../constants/quizzesConstants";
 import swal from "sweetalert";
+import { Link } from "react-router-dom";
 
 const AdminQuizzesPage = () => {
   const navigate = useNavigate();
@@ -19,42 +20,10 @@ const AdminQuizzesPage = () => {
 
   const quizzesReducer = useSelector((state) => state.quizzesReducer);
   const [quizzes, setQuizzes] = useState(quizzesReducer.quizzes);
-
   const addNewQuizHandler = () => {
     navigate("/adminAddQuiz");
   };
-  const deleteQuizHandler = (quiz) => {
-    swal({
-      title: "Are you sure?",
-      text: "Once deleted, you will not be able to recover this exam!",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
-        deleteQuiz(dispatch, quiz.quizId, token).then((data) => {
-          if (data.type === quizzesConstants.DELETE_QUIZ_SUCCESS) {
-            swal(
-              "Exam Deleted!",
-              `${quiz.title} succesfully deleted`,
-              "success"
-            );
-          } else {
-            swal("Exam Not Deleted!", `${quiz.title} not deleted`, "error");
-          }
-        });
-      } else {
-        swal(`${quiz.title} is safe`);
-      }
-    });
-  };
-  const updateQuizHandler = (quizTitle, quizId) => {
-    navigate(`/adminUpdateQuiz/${quizId}`);
-  };
 
-  const questionsHandler = (quizTitle, quizId) => {
-    navigate(`/adminQuestions/?quizId=${quizId}&quizTitle=${quizTitle}`);
-  };
 
   useEffect(() => {
     if (quizzes.length === 0) {
@@ -69,117 +38,51 @@ const AdminQuizzesPage = () => {
   }, []);
 
   return (
-    <div className="adminQuizzesPage__container">
-      <div className="adminQuizzesPage__sidebar">
-        <Sidebar />
-      </div>
-      <div className="adminQuizzesPage__content">
-        <h2>Exams</h2>
-        {quizzes ? (
-          quizzes.length === 0 ? (
-            <Message>No exams are present. Try adding some exams.</Message>
+      <div className="adminQuizzesPage__container">
+        <div className="adminQuizzesPage__sidebar">
+          <Sidebar />
+        </div>
+        <div className="adminQuizzesPage__content">
+          <h2>Exams</h2>
+          {quizzes ? (
+              quizzes.length === 0 ? (
+                  <Message>No exams are present. Try adding some exams.</Message>
+              ) : (
+                  quizzes.map((quiz, index) => {
+                    if ((catId && quiz.category.catId == catId) || (catId == null))
+                      return (
+                          <ListGroup
+                              className="adminQuizzesPage__content--quizzesList"
+                              key={index}
+                          >
+                            <Link
+                                to={`/adminQuizzes/${quiz.quizId}`}
+                                className="list-group-item list-group-item-action"
+                            >
+                              <div className="ms-2 me-auto">
+                                <div className="fw-bold">{quiz.title}</div>
+                                <p style={{ color: "grey" }}>{quiz.category.title}</p>
+                                {<p className="my-3">{quiz.description}</p>}
+                                {/* Buttons... */}
+                              </div>
+                              {/* <Badge bg="primary" pill></Badge> */}
+                            </Link>
+                          </ListGroup>
+                      );
+                  })
+              )
           ) : (
-            quizzes.map((quiz, index) => {
-              if ((catId && quiz.category.catId == catId) || (catId == null))
-                return (
-                  <ListGroup
-                    className="adminQuizzesPage__content--quizzesList"
-                    key={index}
-                  >
-                    <ListGroup.Item className="align-items-start" action>
-                      <div className="ms-2 me-auto">
-                        <div className="fw-bold">{quiz.title}</div>
-                        <p style={{ color: "grey" }}>{quiz.category.title}</p>
-                        {<p className="my-3">{quiz.description}</p>}
-                        <div className="adminQuizzesPage__content--ButtonsList">
-                          <div
-                            onClick={() =>
-                              questionsHandler(quiz.title, quiz.quizId)
-                            }
-                            style={{
-                              border: "1px solid grey",
-                              width: "100px",
-                              height: "35px",
-                              padding: "1px",
-                              textAlign: "center",
-                              borderRadius: "5px",
-                              color: "white",
-                              backgroundColor: "rgb(68 177 49)",
-                              margin: "0px 4px",
-                            }}
-                          >{`Questions`}</div>
-                          <div
-                            style={{
-                              border: "1px solid grey",
-                              width: "100px",
-                              padding: "1px",
-                              textAlign: "center",
-                              borderRadius: "5px",
-                              height: "35px",
-                              margin: "0px 4px",
-                            }}
-                          >{`Marks : ${quiz.numOfQuestions * 5}`}</div>
-                          <div
-                            style={{
-                              border: "1px solid grey",
-                              width: "100px",
-                              padding: "1px",
-                              textAlign: "center",
-                              borderRadius: "5px",
-                              height: "35px",
-                              margin: "0px 4px",
-                            }}
-                          >{`${quiz.numOfQuestions} Questions`}</div>
-                          <div
-                            onClick={() =>
-                              updateQuizHandler(quiz.title, quiz.quizId)
-                            }
-                            style={{
-                              border: "1px solid grey",
-                              color: "white",
-                              backgroundColor: "rgb(68 177 49)",
-                              width: "100px",
-                              padding: "1px",
-                              textAlign: "center",
-                              borderRadius: "5px",
-                              height: "35px",
-                              margin: "0px 4px",
-                            }}
-                          >{`Update`}</div>
-                          <div
-                            onClick={() => deleteQuizHandler(quiz)}
-                            style={{
-                              border: "1px solid grey",
-                              color: "white",
-                              backgroundColor: "#ff0b0bdb",
-                              width: "100px",
-                              padding: "2px",
-                              textAlign: "center",
-                              borderRadius: "5px",
-                              height: "35px",
-                              margin: "0px 4px",
-                            }}
-                          >{`Delete`}</div>
-                        </div>
-                      </div>
-                      {/* <Badge bg="primary" pill></Badge> */}
-                    </ListGroup.Item>
-                  </ListGroup>
-                );
-            })
-          )
-        ) : (
-          <Loader />
-        )}
-        <Button
-          variant=""
-          className="adminQuizzesPage__content--button"
-          onClick={addNewQuizHandler}
-        >
-          Add Exam
-        </Button>
+              <Loader />
+          )}
+          <Button
+              variant=""
+              className="adminQuizzesPage__content--button"
+              onClick={addNewQuizHandler}
+          >
+            Add Exam
+          </Button>
+        </div>
       </div>
-    </div>
   );
 };
 

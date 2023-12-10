@@ -23,6 +23,7 @@ const AdminAddQuiz = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [examDate, setExamDate] = useState("");
 
   const onClickPublishedHandler = () => {
     setIsActive(!isActive);
@@ -43,13 +44,10 @@ const AdminAddQuiz = () => {
         isActive: isActive,
         category: {
           catId: selectedCategoryId,
-          title: categories.filter((cat) => cat.catId == selectedCategoryId)[0][
-            "title"
-          ],
-          description: categories.filter(
-            (cat) => cat.catId == selectedCategoryId
-          )[0]["description"],
+          title: categories.filter((cat) => cat.catId == selectedCategoryId)[0]["title"],
+          description: categories.filter((cat) => cat.catId == selectedCategoryId)[0]["description"],
         },
+        examDate: examDate, // Include exam date in the quiz object
       };
       addQuiz(dispatch, quiz, token).then((data) => {
         if (data.type === quizzesConstants.ADD_QUIZ_SUCCESS)
@@ -165,6 +163,17 @@ const AdminAddQuiz = () => {
                   <option value="2">Two</option>
                   <option value="3">Three</option> */}
               </Form.Select>
+
+              <Form.Group className="my-3" controlId="examDate">
+                <Form.Label>Exam Date</Form.Label>
+                <Form.Control
+                    type="date"
+                    value={examDate}
+                    onChange={(e) => setExamDate(e.target.value)}
+                ></Form.Control>
+              </Form.Group>
+
+
             </div>
             <Button
               className="my-5 adminAddQuizPage__content--button"

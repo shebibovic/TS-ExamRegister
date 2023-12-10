@@ -32,14 +32,16 @@ public class CategoryController {
     public ResponseEntity<?> addCategory(@RequestBody Category category) {
         return ResponseEntity.ok(categoryService.addCategory(category));
     }
-    @GetMapping("/{userId}")
-    public ResponseEntity<?> getProfesor(@PathVariable Long profesorId) {
-        return ResponseEntity.ok(userService.getUser(profesorId));
-    }
+    //@GetMapping("/{userId}")
+    //public ResponseEntity<?> getProfesor(@PathVariable Long profesorId) {
+      //  return ResponseEntity.ok(userService.getUser(profesorId));
+   // }
+
     @GetMapping("/profesors")
-    public ResponseEntity<?> getAllProfesors(){
+    public ResponseEntity<?> getAllProfesors() {
         return ResponseEntity.ok(userService.getAllProfesors());
     }
+
     @GetMapping("/students")
     public ResponseEntity<?> getAllStudents(){
         return ResponseEntity.ok(userService.getAllStudents());

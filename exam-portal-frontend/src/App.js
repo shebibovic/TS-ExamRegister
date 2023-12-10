@@ -9,6 +9,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import AdminQuizzesPage from "./pages/admin/exams/AdminQuizzesPage";
 import AdminAddQuiz from "./pages/admin/exams/AdminAddQuiz";
+import AdminExamID from "./pages/admin/exams/AdminExamID";
 import AdminUpdateQuiz from "./pages/admin/exams/AdminUpdateQuiz";
 import AdminQuestionsPage from "./pages/admin/questions/AdminQuestionsPage";
 import AdminAddQuestionsPage from "./pages/admin/questions/AdminAddQuestionsPage";
@@ -54,6 +55,7 @@ const App = () => {
         <Route path="/questions/" element={<UserQuestionsPage />} />
         <Route path="/quizResults/" element={<UserQuizResultPage />} />
         <Route path="/adminCategories/:catId" element={<AdminSubjectID />} />
+        <Route path="/adminQuizzes/:catId" element={<AdminExamID />} />
       </Routes>
     </Router>
   );
