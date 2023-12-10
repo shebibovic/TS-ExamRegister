@@ -16,28 +16,23 @@ const Sidebar = ({ children }) => {
     },
     {
       path: "/adminCategories",
-      name: "Categories",
+      name: "Subjects",
       icon: <TbLayoutGrid />,
     },
     {
       path: "/adminAddCategory",
-      name: "Add Category",
+      name: "Add Subject",
       icon: <TbLayoutGridAdd />,
     },
     {
       path: "/adminQuizzes",
-      name: "Quizzes",
+      name: "Exams",
       icon: <MdQuiz />,
     },
     {
       path: "/adminAddQuiz",
-      name: "Add Quiz",
+      name: "Add Exam",
       icon: <MdQueue />,
-    },
-    {
-      path: "/adminallResult",
-      name: "All Result",
-      icon: <TbReport/>,
     },
   ];
   return (

@@ -19,13 +19,13 @@ const SidebarUser = ({ children }) => {
       icon: <FaUserAlt />,
     },
     {
-      path: "/quizResults",
-      name: "Report Card",
+      path: "/registeredExams",
+      name: "Registered Exams",
       icon: <TbReport />,
     },
     {
       path: "/quizzes",
-      name: "All Quizzes",
+      name: "All Exams",
       icon: <MdQuiz />,
     },
   ]);

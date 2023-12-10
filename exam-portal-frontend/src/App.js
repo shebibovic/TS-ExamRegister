@@ -19,6 +19,7 @@ import UserQuizzesPage from "./pages/users/UserQuizzesPage";
 import UserQuizManualPage from "./pages/users/UserQuizManualPage";
 import UserQuestionsPage from "./pages/users/UserQuestionsPage";
 import UserQuizResultPage from "./pages/users/UserQuizResultPage";
+import RegisteredExams from "./pages/users/RegisteredExams";
 import AdminQuizResultPage from "./pages/admin/AdminQuizResultPage";
 import AdminSubjectID from "./pages/admin/subjects/AdminSubjectID";
 
@@ -54,6 +55,7 @@ const App = () => {
         <Route path="/quizManual/" element={<UserQuizManualPage />} />
         <Route path="/questions/" element={<UserQuestionsPage />} />
         <Route path="/quizResults/" element={<UserQuizResultPage />} />
+        <Route path="/registeredExams/" element={<RegisteredExams />} />
         <Route path="/adminCategories/:catId" element={<AdminSubjectID />} />
         <Route path="/adminQuizzes/:catId" element={<AdminExamID />} />
       </Routes>
