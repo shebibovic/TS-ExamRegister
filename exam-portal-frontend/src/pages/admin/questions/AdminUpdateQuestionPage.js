@@ -44,7 +44,7 @@ const AdminUpdateQuestionPage = () => {
   );
   const [answer, setAnswer] = useState(oldQuestion ? oldQuestion.answer : null);
 
-  const token = JSON.parse(localStorage.getItem("jwtToken"));
+  const token = localStorage.getItem("jwtToken");
 
   const onSelectAnswerHandler = (e) => {
     setAnswer(e.target.value);

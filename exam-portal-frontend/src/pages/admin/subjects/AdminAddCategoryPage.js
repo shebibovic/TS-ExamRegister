@@ -17,7 +17,7 @@ const AdminAddCategoryPage = () => {
   const [description, setDescription] = useState("");
   const [selectedUser, setSelectedUser] = useState(""); // State to hold selected user
   const [users, setUsers] = useState([]); // State to hold the list of users
-  const token = JSON.parse(localStorage.getItem("jwtToken"));
+  const token = localStorage.getItem("jwtToken");
   const [selectedUsers, setSelectedUsers] = useState([]);
 
   const dispatch = useDispatch();

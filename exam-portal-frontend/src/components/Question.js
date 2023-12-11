@@ -11,7 +11,7 @@ const Question = ({ number, answers, question, isAdmin = false }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const answer = question.answer;
-  const token = JSON.parse(localStorage.getItem("jwtToken"));
+  const token = localStorage.getItem("jwtToken");
 
   const saveAnswer = (quesId, ans) => {
     const newAns = {};

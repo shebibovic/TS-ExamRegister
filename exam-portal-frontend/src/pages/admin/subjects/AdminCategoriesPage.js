@@ -16,7 +16,7 @@ import swal from "sweetalert";
 const AdminCategoriesPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const token = JSON.parse(localStorage.getItem("jwtToken"));
+  const token = localStorage.getItem("jwtToken");
 
   const categoriesReducer = useSelector((state) => state.categoriesReducer);
   const [categories, setCategories] = useState(categoriesReducer.categories);

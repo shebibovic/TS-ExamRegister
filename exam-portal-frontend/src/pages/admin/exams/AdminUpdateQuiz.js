@@ -41,7 +41,7 @@ const AdminUpdateQuiz = () => {
     setSelectedCategoryId(e.target.value);
   };
 
-  const token = JSON.parse(localStorage.getItem("jwtToken"));
+  const token = localStorage.getItem("jwtToken");
 
   const submitHandler = (e) => {
     e.preventDefault();

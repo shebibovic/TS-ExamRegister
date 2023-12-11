@@ -29,7 +29,7 @@ const UserQuestionsPage = () => {
   );
   const questionsReducer = useSelector((state) => state.questionsReducer);
   const [questions, setQuestions] = useState(questionsReducer.questions);
-  const token = JSON.parse(localStorage.getItem("jwtToken"));
+  const token = localStorage.getItem("jwtToken");
   const user = JSON.parse(localStorage.getItem("user"));
   const userId = user ? user.userId : null;
   const [timeRemaining, setTimeRemaining] = useState(questions.length * 2 * 60);

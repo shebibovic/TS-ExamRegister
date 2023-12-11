@@ -17,7 +17,7 @@ const AdminQuestionsPage = () => {
 
   const questionsReducer = useSelector((state) => state.questionsReducer);
   const [questions, setQuestions] = useState(questionsReducer.questions);
-  const token = JSON.parse(localStorage.getItem("jwtToken"));
+  const token = localStorage.getItem("jwtToken");
   let answers = {};
 
   const addNewQuestionHandler = () => {

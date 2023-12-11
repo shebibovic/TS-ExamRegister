@@ -19,7 +19,7 @@ const UserQuizManualPage = () => {
   const [quiz, setQuiz] = useState(
     quizzes.filter((q) => q.quizId == quizId)[0]
   );
-  const token = JSON.parse(localStorage.getItem("jwtToken"));
+  const token = localStorage.getItem("jwtToken");
 
   const startQuizHandler = (quizTitle, quizId) => {
     navigate(`/questions/?quizId=${quizId}&quizTitle=${quizTitle}`);

@@ -16,7 +16,7 @@ const AdminQuizResultPage = () => {
 
   const quizResultReducer = useSelector((state) => state.quizResultReducer);
   const [quizResults, setQuizResults] = useState(null);
-  const token = JSON.parse(localStorage.getItem("jwtToken"));
+  const token = localStorage.getItem("jwtToken");
   const user = JSON.parse(localStorage.getItem("user"));
   const userId = user ? user.userId : null;
 

@@ -25,7 +25,7 @@ const AdminExamID = () => {
         oldCategory ? oldCategory.description : ""
     );
     //const [assignedProfessor, setAssignedProfessor] = useState(null); // State to hold professor info
-    const token = JSON.parse(localStorage.getItem("jwtToken"));
+    const token = localStorage.getItem("jwtToken");
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState("");
     const [selectedUsers, setSelectedUsers] = useState([]);

@@ -22,7 +22,7 @@ const AdminAddQuestionsPage = () => {
   const dispatch = useDispatch();
   const urlParams = new URLSearchParams(window.location.search);
   const quizId = urlParams.get("quizId");
-  const token = JSON.parse(localStorage.getItem("jwtToken"));
+  const token = localStorage.getItem("jwtToken");
 
   const onSelectAnswerHandler = (e) => {
     setAnswer(e.target.value);

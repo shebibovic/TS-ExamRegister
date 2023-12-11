@@ -23,7 +23,7 @@ const AdminUpdateCategoryPage = () => {
   const [description, setDescription] = useState(
     oldCategory ? oldCategory.description : ""
   );
-  const token = JSON.parse(localStorage.getItem("jwtToken"));
+  const token = localStorage.getItem("jwtToken");
   const [selectedUser, setSelectedUser] = useState("");
   const [users, setUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);

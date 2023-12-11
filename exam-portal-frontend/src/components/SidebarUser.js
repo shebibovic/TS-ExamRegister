@@ -11,7 +11,7 @@ const SidebarUser = ({ children }) => {
   const categoriesReducer = useSelector((state) => state.categoriesReducer);
   const [categories, setCategories] = useState(categoriesReducer.categories);
   const dispatch = useDispatch();
-  const token = JSON.parse(localStorage.getItem("jwtToken"));
+  const token = localStorage.getItem("jwtToken");
   const [menuItems, setMenuItems] = useState([
     {
       path: "/profile",

@@ -11,7 +11,7 @@ const AdminProfilePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const loginReducer = useSelector((state) => state.loginReducer);
-  const token = JSON.parse(localStorage.getItem("jwtToken"));
+  const token = localStorage.getItem("jwtToken");
 
   useEffect(() => {
     if (!token) {

@@ -11,7 +11,7 @@ const UserQuizzesPage = () => {
   const dispatch = useDispatch();
   const urlParams = new URLSearchParams(window.location.search);
   const catId = urlParams.get("catId");
-  const token = JSON.parse(localStorage.getItem("jwtToken"));
+  const token = localStorage.getItem("jwtToken");
 
   const quizzesReducer = useSelector((state) => state.quizzesReducer);
   const [quizzes, setQuizzes] = useState(quizzesReducer.quizzes);
