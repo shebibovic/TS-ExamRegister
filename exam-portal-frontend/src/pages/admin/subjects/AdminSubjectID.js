@@ -24,35 +24,62 @@ const AdminSubjectID = () => {
     const [description, setDescription] = useState(
         oldCategory ? oldCategory.description : ""
     );
-    //const [assignedProfessor, setAssignedProfessor] = useState(null); // State to hold professor info
     const token = JSON.parse(localStorage.getItem("jwtToken"));
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState("");
     const [selectedUsers, setSelectedUsers] = useState([]);
 
     useEffect(() => {
-        const fetchProfessor = async () => {
+        const fetchSelectedUsers = async () => {
             try {
-                if (oldCategory && oldCategory.userId) {
-                    const response = await fetch(`/api/category/users/${oldCategory.userId}`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    });
-                    if (response.ok) {
-                        const professorData = await response.json();
-                        setSelectedUser(professorData);
-                    } else {
-                        throw new Error("Failed to fetch professor");
-                    }
+                // Make an API call to fetch selected users for the category
+                const response = await fetch(`/api/category/users`, {
+                    //const response = await fetch(`/api/category/${catId}/users`, {
+                    //sad fetcha sve usere jer ovo fali u controllerima
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                if (response.ok) {
+                    const selectedUsersData = await response.json();
+                    setSelectedUsers(selectedUsersData); // Update the selectedUsers state
+                } else {
+                    throw new Error("Failed to fetch selected STUDENTS");
                 }
             } catch (error) {
-                console.error("Error fetching professor:", error);
+                console.error("Error fetching selected STUDENTS:", error);
             }
         };
 
-        fetchProfessor();
-    }, [oldCategory, token]);
+        fetchSelectedUsers();
+    }, [catId, token]);
+
+    useEffect(() => {
+        const fetchSelectedUser = async () => {
+            try {
+                // Make an API call to fetch selected users for the category
+                const response = await fetch(`/api/category/users`, {
+                    //const response = await fetch(`/api/category/${catId}/users`, {
+                    //sad fetcha sve usere jer ovo fali u controllerima
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                if (response.ok) {
+                    const selectedUserData = await response.json();
+                    setSelectedUser(selectedUserData); // Update the selectedUsers state
+                } else {
+                    throw new Error("Failed to fetch selected PROFESSORS");
+                }
+            } catch (error) {
+                console.error("Error fetching selected PROFESSORS:", error);
+            }
+        };
+
+        fetchSelectedUser();
+    }, [catId, token]);
 
     return (
         <div className="adminUpdateCategoryPage__container">

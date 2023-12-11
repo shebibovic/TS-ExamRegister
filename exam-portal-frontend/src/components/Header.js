@@ -8,16 +8,18 @@ const Header = () => {
   const navigate = useNavigate();
   const loginReducer = useSelector((state) => state.loginReducer);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const jwtToken = localStorage.getItem("jwtToken");
 
   useEffect(() => {
-    const jwtToken = localStorage.getItem("jwtToken");
+    console.log("jwtToken:", jwtToken);
+    console.log("loginReducer.user:", loginReducer.user);
 
     if (jwtToken && loginReducer.user) {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
     }
-  }, [loginReducer.user]);
+  }, [jwtToken, loginReducer.user]);
 
   const logoutHandler = () => {
     localStorage.clear();

@@ -27,6 +27,22 @@ const UserProfilePage = () => {
     fetchQuizzes(dispatch, token);
   }, [dispatch, navigate, token]);
 
+  useEffect(() => {
+    console.log("Token:", token);
+    console.log("User:", user);
+    console.log("User Roles:", user && user.role);
+
+    if (token && user && user.role && user.role.length > 0) {
+      user.role.map((r) => {
+        if (r["roleName"] === "ADMIN") return navigate("/adminProfile");
+        else return navigate("/profile");
+      });
+    }
+  }, []);
+  useEffect(() => {
+    console.log("User Roles:", user && user.role);
+  }, [user]);
+
   return (
       <div className="userProfilePage__container">
         <div className="userProfilePage__sidebar">
@@ -53,9 +69,20 @@ const UserProfilePage = () => {
                   <td>Email</td>
                   <td>{user.username}</td>
                 </tr>
+
                 <tr>
                   <td>Role</td>
-                  <td>{user.roles && user.roles[0].roleName}</td>
+                  <td>
+                    {user && user.role ? (
+                        user.role.length > 0 ? (
+                            user.roles[0].roleName
+                        ) : (
+                            "Role not assigned"
+                        )
+                    ) : (
+                        "Role information unavailable"
+                    )}
+                  </td>
                 </tr>
                 <tr>
                   <td>Account Status</td>
