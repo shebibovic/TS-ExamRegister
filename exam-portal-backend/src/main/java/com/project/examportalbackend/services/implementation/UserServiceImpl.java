@@ -2,16 +2,14 @@ package com.project.examportalbackend.services.implementation;
 
 import com.project.examportalbackend.models.User;
 import com.project.examportalbackend.repository.CategoryRepository;
-//import com.project.examportalbackend.repository.StudentCategoryRepository;
+import com.project.examportalbackend.repository.StudentCategoryRepository;
 import com.project.examportalbackend.repository.UserRepository;
-//import com.project.examportalbackend.services.UserService;
 import com.project.examportalbackend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -21,8 +19,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    //@Autowired
-    //private StudentCategoryRepository studentCategoryRepository;
+    @Autowired
+    private StudentCategoryRepository studentCategoryRepository;
 
     @Override
     public User createUser(User user) {
@@ -35,8 +33,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getUser(Long studentId) {
-        return userRepository.findById(studentId);
+    public User getUser(Long studentId) {
+        User u = userRepository.getById(studentId);
+        // if(u.getRole().getRoleName()!="PROFESSOR") throw new IllegalArgumentException();
+        return u;
     }
 
     @Override
@@ -56,6 +56,16 @@ public class UserServiceImpl implements UserService {
             if(u.getRole().getRoleName().equals("STUDENT")) studenti.add(u);
         }
         return studenti;
+    }
+
+    @Override
+    public User getProfessor(Long profesorId) {
+        List<User> users = userRepository.findAll();
+        for(User user:users){
+            if(user.getUserId()==profesorId)
+                return user;
+        }
+        return null;
     }
 
 

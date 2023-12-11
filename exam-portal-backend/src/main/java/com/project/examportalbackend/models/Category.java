@@ -26,6 +26,10 @@ public class Category {
     @Column(name = "description")
     private String description;
 
+    @ManyToOne
+    @JoinColumn(name = "professor_id")
+    private User profesor;
+
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Quiz> quizzes = new ArrayList<>();

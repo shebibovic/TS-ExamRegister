@@ -30,7 +30,7 @@ const UserProfilePage = () => {
   useEffect(() => {
     console.log("Token:", token);
     console.log("User:", user);
-    console.log("User Roles:", user && user.role);
+    console.log("User Roles:", user && user.role.roleName);
 
     if (token && user && user.role && user.role.length > 0) {
       user.role.map((r) => {
@@ -73,15 +73,7 @@ const UserProfilePage = () => {
                 <tr>
                   <td>Role</td>
                   <td>
-                    {user && user.role ? (
-                        user.role.length > 0 ? (
-                            user.roles[0].roleName
-                        ) : (
-                            "Role not assigned"
-                        )
-                    ) : (
-                        "Role information unavailable"
-                    )}
+                    {user.role.roleName}
                   </td>
                 </tr>
                 <tr>

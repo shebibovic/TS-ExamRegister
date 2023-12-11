@@ -93,6 +93,7 @@ const RegisterPage = () => {
       <FormContainer>
         <h1>Sign Up</h1>
         <Form onSubmit={submitHandler}>
+
           <Form.Group className="my-3" controlId="username">
             <Form.Label>Email</Form.Label>
             <Form.Control

@@ -60,7 +60,9 @@ const AdminProfilePage = () => {
 
             <tr>
               <td>Role</td>
-              <td>{user.roles && user.roles[0].roleName}</td>
+              <td>
+                {user.role.roleName}
+              </td>
             </tr>
             <tr>
               <td>Status</td>

@@ -44,7 +44,7 @@ const AdminAddCategoryPage = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("/api/category/users");
+        const response = await fetch("/api/category/profesors");
         if (!response.ok) {
           throw new Error("Failed to fetch users");
         }

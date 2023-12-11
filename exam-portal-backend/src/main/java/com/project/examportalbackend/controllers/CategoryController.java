@@ -4,6 +4,7 @@ import com.project.examportalbackend.models.Category;
 import com.project.examportalbackend.models.User;
 import com.project.examportalbackend.repository.UserRepository;
 import com.project.examportalbackend.services.CategoryService;
+import com.project.examportalbackend.services.StudentCategoryService;
 import com.project.examportalbackend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,9 @@ public class CategoryController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private StudentCategoryService studentCategoryService;
+
     @PostMapping("/")
     public ResponseEntity<?> addCategory(@RequestBody Category category) {
         return ResponseEntity.ok(categoryService.addCategory(category));
@@ -36,16 +40,6 @@ public class CategoryController {
     //public ResponseEntity<?> getProfesor(@PathVariable Long profesorId) {
       //  return ResponseEntity.ok(userService.getUser(profesorId));
    // }
-
-    @GetMapping("/profesors")
-    public ResponseEntity<?> getAllProfesors() {
-        return ResponseEntity.ok(userService.getAllProfesors());
-    }
-
-    @GetMapping("/students")
-    public ResponseEntity<?> getAllStudents(){
-        return ResponseEntity.ok(userService.getAllStudents());
-    }
 
     @GetMapping("/")
     public ResponseEntity<?> getCategories() {
@@ -75,4 +69,31 @@ public class CategoryController {
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
+
+    @PostMapping("/addStudents")
+    public ResponseEntity<?>addStudentsCategory( @RequestBody Long categoryId,
+                                                 @RequestBody Long studentId) {
+
+        return ResponseEntity.ok(studentCategoryService.addStudentCategory(categoryId, studentId));
+    }
+
+    @GetMapping("/students/{id}")
+    public ResponseEntity<?> getStudents(@PathVariable Long id) {
+        return ResponseEntity.ok(studentCategoryService.getStudents(id));
+    } //geta studente na predmetu po idu predmeta
+
+    @GetMapping("/professor/{profesorId}")
+    public ResponseEntity<?> getProfesor(@PathVariable Long profesorId) {
+        return ResponseEntity.ok(userService.getProfessor(profesorId));
+    }
+    @GetMapping("/profesors")
+    public ResponseEntity<?> getAllProfesors(){
+        return ResponseEntity.ok(userService.getAllProfesors());
+    }
+
+    @GetMapping("/students")
+    public ResponseEntity<?> getAllStudents(){
+        return ResponseEntity.ok(userService.getAllStudents());
+    }
+
 }
