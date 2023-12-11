@@ -43,28 +43,14 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Autowired
-    private Validator validator; // Inject the Validator
-
     @Override
     public User registerUserService(User user) throws Exception {
-        // Validate user object using its annotations
-        Set<ConstraintViolation<User>> violations = validator.validate(user);
-
-        if (!violations.isEmpty()) {
-            StringBuilder errorMessage = new StringBuilder();
-            for (ConstraintViolation<User> violation : violations) {
-                errorMessage.append(violation.getMessage()).append("; ");
-            }
-            throw new Exception("Validation Error: " + errorMessage.toString());
-        }
 
         User temp = userRepository.findByUsername(user.getUsername());
         if (temp != null) {
             throw new Exception("User Already Exists");
         } else {
-            Role role = roleRepository.findById("STUDENT").orElse(null);
-
+            Role role = roleRepository.findById(user.getRole().getRoleName()).orElse(null);
             user.setRole(role);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             return userRepository.save(user);

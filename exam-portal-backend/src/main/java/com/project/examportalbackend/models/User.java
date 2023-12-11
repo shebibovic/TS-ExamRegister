@@ -50,7 +50,7 @@ public class User implements UserDetails {
     private boolean isActive = true;
 
     @ManyToOne
-    @JoinColumn(name = "user_role", nullable = false)
+    @JoinColumn(name = "user_role",referencedColumnName = "role_name", nullable = false)
     private Role role;
 
     @Override
