@@ -37,7 +37,7 @@ public class ExamPortalBackendApplication {
 					"password",
 					"0501035",
 					true,
-					new Role("ADMIN","test")));
+					new Role("Admin","test")));
 
 
 		};
