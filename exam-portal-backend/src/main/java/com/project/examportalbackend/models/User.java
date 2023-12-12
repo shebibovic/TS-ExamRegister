@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Collections;
@@ -33,13 +34,17 @@ public class User implements UserDetails {
     @Column(name = "last_name")
     private String lastName;
 
-    @NotEmpty(message = "Username is required!")
-    @Size(max = 30, message = "Username can't be longer than 30 characters!")
+    @NotEmpty(message = "Email is required!")
     @Column(name = "username", unique = true)
+   //@Pattern(regexp = "^[\\w\\.-]+@[a-zA-Z\\d\\.-]+\\.[a-zA-Z]{2,}$", message ="Incorrect Email format")
     private String username;
 
     @NotEmpty(message = "Password is required!")
     @Size(min = 8, message = "Password can't be less than 8 characters!")
+    @Pattern(
+            regexp = "^(?=.*[A-Z])(?=.*\\d).+$",
+            message = "Password must contain at least one uppercase letter and one digit!"
+    )
     @Column(name = "password")
     private String password;
 
