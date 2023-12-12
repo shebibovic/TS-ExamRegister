@@ -31,6 +31,7 @@ const LoginPage = () => {
     }
   };
 
+
   const submitHandler = (e) => {
     e.preventDefault();
     login(dispatch, username, password).then((data) => {
@@ -50,15 +51,18 @@ const LoginPage = () => {
   useEffect(() => {
     console.log("Token:", token);
     console.log("User:", user);
-    console.log("User Roles:", user && user.role);
+    console.log("User Roles:", user && user.roles);
 
-    if (token && user && user.role && user.role.length > 0) {
-      user.roles.map((r) => {
-        if (r["roleName"] === "ADMIN") return navigate("/adminProfile");
-        else return navigate("/profile");
-      });
+    if (token && user && user.roles && user.roles.length > 0) {
+      const isAdmin = user.roles.some((r) => r.roleName === "ADMIN");
+      if (isAdmin) {
+        navigate("/adminProfile");
+      } else {
+        navigate("/profile");
+      }
     }
   }, []);
+
   return (
       <FormContainer>
         <h1>Sign In</h1>

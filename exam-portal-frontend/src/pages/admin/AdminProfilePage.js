@@ -6,6 +6,7 @@ import Sidebar from "../../components/Sidebar";
 import Image from "react-bootstrap/Image";
 import { fetchCategories } from "../../actions/categoriesActions";
 import { fetchQuizzes } from "../../actions/quizzesActions";
+import "./AdminProfilePage.css";
 
 const AdminProfilePage = () => {
   const dispatch = useDispatch();

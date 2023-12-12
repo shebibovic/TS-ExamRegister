@@ -24,6 +24,10 @@ import AdminQuizResultPage from "./pages/admin/AdminQuizResultPage";
 import AdminSubjectID from "./pages/admin/subjects/AdminSubjectID";
 import ProfessorProfilePage from "./pages/professor/ProfessorProfilePage";
 import AddUser from "./pages/admin/users/AddUser";
+import ProfessorCategoriesPage from "./pages/professor/subjects/ProfessorCategoriesPage";
+import ProfessorQuizzesPage from "./pages/professor/exams/ProfessorQuizzesPage";
+import ProfessorAddQuiz from "./pages/professor/exams/ProfessorAddQuiz";
+import ProfessorSubjectID from "./pages/professor/subjects/ProfessorSubjectID";
 
 
 const App = () => {
@@ -62,6 +66,11 @@ const App = () => {
         <Route path="/adminQuizzes/:catId" element={<AdminExamID />} />
         <Route path="/professorProfile" element={<ProfessorProfilePage />} />
         <Route path="/addUser" element={<AddUser />} />
+
+        <Route path="/professorCategories" element={<ProfessorCategoriesPage />} />
+        <Route path="/professorQuizzes" element={<ProfessorQuizzesPage />} />
+        <Route path="/professorAddQuiz" element={<ProfessorAddQuiz />} />
+        <Route path="/professorCategories/:catId" element={<ProfessorSubjectID />} />
       </Routes>
     </Router>
   );

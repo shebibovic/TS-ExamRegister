@@ -24,6 +24,31 @@ const AdminQuizzesPage = () => {
     navigate("/adminAddQuiz");
   };
 
+  const deleteQuizHandler = (quiz) => {
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this quiz!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        deleteQuiz(dispatch, quiz.quizId, token).then((data) => {
+          if (data.type === quizzesConstants.DELETE_QUIZ_SUCCESS) {
+            swal(
+                "Quiz Deleted!",
+                `${quiz.title} succesfully deleted`,
+                "success"
+            );
+          } else {
+            swal("Quiz Not Deleted!", `${quiz.title} not deleted`, "error");
+          }
+        });
+      } else {
+        swal(`${quiz.title} is safe`);
+      }
+    });
+  };
 
   useEffect(() => {
     if (quizzes.length === 0) {
@@ -43,10 +68,10 @@ const AdminQuizzesPage = () => {
           <Sidebar />
         </div>
         <div className="adminQuizzesPage__content">
-          <h2>Exams</h2>
+          <h2>Quizzes</h2>
           {quizzes ? (
               quizzes.length === 0 ? (
-                  <Message>No exams are present. Try adding some exams.</Message>
+                  <Message>No quizzes are present. Try adding some quizzes.</Message>
               ) : (
                   quizzes.map((quiz, index) => {
                     if ((catId && quiz.category.catId == catId) || (catId == null))
@@ -55,18 +80,30 @@ const AdminQuizzesPage = () => {
                               className="adminQuizzesPage__content--quizzesList"
                               key={index}
                           >
-                            <Link
-                                to={`/adminQuizzes/${quiz.quizId}`}
-                                className="list-group-item list-group-item-action"
-                            >
+                            <ListGroup.Item className="align-items-start" action>
                               <div className="ms-2 me-auto">
                                 <div className="fw-bold">{quiz.title}</div>
                                 <p style={{ color: "grey" }}>{quiz.category.title}</p>
                                 {<p className="my-3">{quiz.description}</p>}
-                                {/* Buttons... */}
+                                <div className="adminQuizzesPage__content--ButtonsList">
+                                  <div
+                                      onClick={() => deleteQuizHandler(quiz)}
+                                      style={{
+                                        border: "1px solid grey",
+                                        color: "white",
+                                        backgroundColor: "#ff0b0bdb",
+                                        width: "100px",
+                                        padding: "2px",
+                                        textAlign: "center",
+                                        borderRadius: "5px",
+                                        height: "35px",
+                                        margin: "0px 4px",
+                                      }}
+                                  >{`Delete`}</div>
+                                </div>
                               </div>
                               {/* <Badge bg="primary" pill></Badge> */}
-                            </Link>
+                            </ListGroup.Item>
                           </ListGroup>
                       );
                   })
@@ -79,7 +116,7 @@ const AdminQuizzesPage = () => {
               className="adminQuizzesPage__content--button"
               onClick={addNewQuizHandler}
           >
-            Add Exam
+            Add Quiz
           </Button>
         </div>
       </div>
