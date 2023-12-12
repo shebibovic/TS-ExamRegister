@@ -16,6 +16,7 @@ const AdminSubjectID = () => {
     const navigate = useNavigate();
     const params = useParams();
     const catId = params.catId;
+    const profId = params.professorId;
 
     const oldCategory = useSelector((state) =>
         state.categoriesReducer.categories.filter((cat) => cat.catId == catId)
@@ -33,9 +34,7 @@ const AdminSubjectID = () => {
         const fetchSelectedUsers = async () => {
             try {
                 // Make an API call to fetch selected users for the category
-                const response = await fetch(`/api/category/users`, {
-                    //const response = await fetch(`/api/category/${catId}/users`, {
-                    //sad fetcha sve usere jer ovo fali u controllerima
+                const response = await fetch(`api/category/${catId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -59,7 +58,7 @@ const AdminSubjectID = () => {
         const fetchSelectedUser = async () => {
             try {
                 // Make an API call to fetch selected users for the category
-                const response = await fetch(`/api/category/users`, {
+                const response = await fetch(`/api/category/${catId}`, {
                     //const response = await fetch(`/api/category/${catId}/users`, {
                     //sad fetcha sve usere jer ovo fali u controllerima
                     headers: {

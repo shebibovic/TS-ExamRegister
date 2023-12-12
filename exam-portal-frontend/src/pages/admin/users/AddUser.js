@@ -21,6 +21,7 @@ const AddUser = () => {
     const [passwordType, setPasswordType] = useState('password');
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [confirmPasswordType, setConfirmPasswordType] = useState('password');
+    const [selectedRole, setSelectedRole] = useState('');
 
     const [usernameError, setUsernameError] = useState('');
     const [passwordError, setPasswordError] = useState('');
@@ -32,17 +33,6 @@ const AddUser = () => {
     const navigate = useNavigate();
     const registerReducer = useSelector((state) => state.registerReducer);
 
-    const showPasswordHandler = () => {
-        const temp = !showPassword;
-        setShowPassword(temp);
-        setPasswordType(temp ? 'text' : 'password');
-    };
-
-    const showConfirmPasswordHandler = () => {
-        const temp = !showConfirmPassword;
-        setShowConfirmPassword(temp);
-        setConfirmPasswordType(temp ? 'text' : 'password');
-    };
 
     useEffect(() => {
         setUsernameExistsError('');
@@ -61,31 +51,17 @@ const AddUser = () => {
             setUsernameError('');
         }
 
-        if (password.length < 8) {
-            setPasswordError('Password must be at least 8 characters long');
-            isValid = false;
-        } else {
-            setPasswordError('');
-        }
-
-        if (password !== confirmPassword) {
-            setConfirmPasswordError('Passwords do not match');
-            isValid = false;
-        } else {
-            setConfirmPasswordError('');
-        }
-
         if (isValid) {
             const user = {
                 firstName: firstName,
                 lastName: lastName,
                 username: username,
-                password: password,
-                code: code,
+                role: selectedRole,
             };
             register(dispatch, user).then((data) => {
+                console.log(data); // Log the response here to check its structure
                 if (data.type === authConstants.USER_REGISTER_SUCCESS) {
-                    navigate('/login');
+                    navigate('/allUsers');
                 }
             });
         }
@@ -97,70 +73,72 @@ const AddUser = () => {
             <div className="adminCategoriesPage__sidebar">
                 <Sidebar />
             </div>
-        <FormContainer>
-            <h1>Create User</h1>
-            <Form onSubmit={submitHandler}>
+            <FormContainer>
+                <h1>Create User</h1>
+                <Form onSubmit={submitHandler}>
 
-                <Form.Group className="my-3" controlId="firstName">
-                    <Form.Label>First Name</Form.Label>
-                    <Form.Control
-                        type="text"
-                        placeholder="Enter First Name"
-                        value={firstName}
-                        onChange={(e) => {
-                            setFirstName(e.target.value);
-                        }}
-                    ></Form.Control>
-                </Form.Group>
-                <Form.Group className="my-3" controlId="lastName">
-                    <Form.Label>Last Name</Form.Label>
-                    <Form.Control
-                        type="text"
-                        placeholder="Enter Last Name"
-                        value={lastName}
-                        onChange={(e) => {
-                            setLastName(e.target.value);
-                        }}
-                    ></Form.Control>
-                </Form.Group>
+                    <Form.Group className="my-3" controlId="firstName">
+                        <Form.Label>First Name</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter First Name"
+                            value={firstName}
+                            onChange={(e) => {
+                                setFirstName(e.target.value);
+                            }}
+                        ></Form.Control>
+                    </Form.Group>
+                    <Form.Group className="my-3" controlId="lastName">
+                        <Form.Label>Last Name</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter Last Name"
+                            value={lastName}
+                            onChange={(e) => {
+                                setLastName(e.target.value);
+                            }}
+                        ></Form.Control>
+                    </Form.Group>
 
-                <Form.Group className="my-3" controlId="username">
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control
-                        type="text"
-                        placeholder="Enter Your Email"
-                        value={username}
-                        onChange={(e) => {
-                            setUsername(e.target.value);
-                            setUsernameError('');
-                        }}
-                    ></Form.Control>
-                    {usernameError && <p className="text-danger">{usernameError}</p>}
-                </Form.Group>
+                    <Form.Group className="my-3" controlId="username">
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter Email"
+                            value={username}
+                            onChange={(e) => {
+                                setUsername(e.target.value);
+                                setUsernameError('');
+                            }}
+                        ></Form.Control>
+                        {usernameError && <p className="text-danger">{usernameError}</p>}
+                    </Form.Group>
 
-                <Button
-                    variant=""
-                    className="my-3"
-                    type="submit"
-                    style={{ backgroundColor: 'rgb(68 177 49)', color: 'white' }}
-                >
-                    Register
-                </Button>
-            </Form>
+                    <Form.Group controlId="role" className="my-3">
+                        <Form.Label>Role</Form.Label>
+                        <Form.Select
+                            onChange={(e) => {
+                                setSelectedRole(e.target.value);
+                            }}
+                            value={selectedRole}
+                        >
+                            <option value="">Select Role</option>
+                            <option value="PROFESSOR">Professor</option>
+                            <option value="STUDENT">Student</option>
+                        </Form.Select>
+                    </Form.Group>
 
-            {registerReducer.loading ? (
-                <Loader />
-            ) : (
-                <Row className="py-3">
-                    <Col>
-                        Have an Account?{' '}
-                        <Link to="/" style={{ color: 'rgb(68 177 49)' }}>
-                            Login
-                        </Link>
-                    </Col>
-                </Row>
-            )}
-        </FormContainer>
+                    <Button
+                        variant=""
+                        className="my-3"
+                        type="submit"
+                        style={{ backgroundColor: 'rgb(68 177 49)', color: 'white' }}
+                    >
+                        Register New User
+                    </Button>
+                </Form>
+
+            </FormContainer>
         </div>
     );
 };

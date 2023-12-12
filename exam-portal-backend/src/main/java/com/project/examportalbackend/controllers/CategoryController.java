@@ -82,9 +82,9 @@ public class CategoryController {
         return ResponseEntity.ok(studentCategoryService.getStudents(id));
     } //geta studente na predmetu po idu predmeta
 
-    @GetMapping("/professor/{profesorId}")
-    public ResponseEntity<?> getProfesor(@PathVariable Long profesorId) {
-        return ResponseEntity.ok(userService.getProfessor(profesorId));
+    @GetMapping("/professor/{categoryId}")
+    public ResponseEntity<?> getProfesor(@PathVariable Long categoryId) {
+        return ResponseEntity.ok(userService.getProfessor(categoryId));
     }
     @GetMapping("/profesors")
     public ResponseEntity<?> getAllProfesors(){
@@ -94,6 +94,17 @@ public class CategoryController {
     @GetMapping("/students")
     public ResponseEntity<?> getAllStudents(){
         return ResponseEntity.ok(userService.getAllStudents());
+    }
+
+    //getanje profesorovih predmeta
+    @GetMapping("/subjects/{professorId}")
+    public ResponseEntity<?> getProfessorSubjects(@PathVariable Long professorId){
+        return ResponseEntity.ok(categoryService.getCategoriesFromProfessor(professorId));
+    }
+
+    @GetMapping("/student/{studentId}")
+    private ResponseEntity<?> getStudentsSubjects(@PathVariable Long studentId){
+        return ResponseEntity.ok(studentCategoryService.getCategories(studentId));
     }
 
 }

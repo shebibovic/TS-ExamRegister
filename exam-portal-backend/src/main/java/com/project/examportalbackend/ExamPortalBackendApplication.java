@@ -11,6 +11,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.Arrays;
+
 @SpringBootApplication
 public class ExamPortalBackendApplication {
 
@@ -24,11 +26,10 @@ public class ExamPortalBackendApplication {
 	@Bean
 	public ApplicationRunner initializer(RoleRepository roleRepository, UserRepository userRepository) {
 		return args -> {
-//			Role studentRole = Role.builder().roleName("STUDENT").roleDescription("Default Role provided to each user").build();
-//			Role adminRole = Role.builder().roleName("ADMIN").roleDescription("Superuser, who has access to all functionality").build();
-//			Role professorRole = Role.builder().roleName("PROFESSOR").roleDescription("Superuser, who is a professor").build();
-//			roleRepository.saveAll(Arrays.asList(studentRole, adminRole, professorRole));
-//
+			Role studentRole = Role.builder().roleName("STUDENT").roleDescription("Default Role provided to each user").build();
+			Role adminRole = Role.builder().roleName("ADMIN").roleDescription("Superuser, who has access to all functionality").build();
+			Role professorRole = Role.builder().roleName("PROFESSOR").roleDescription("Superuser, who is a professor").build();
+			roleRepository.saveAll(Arrays.asList(studentRole, adminRole, professorRole));
 
 			authService.registerUserService(new User(
 					"Kerim",
@@ -37,7 +38,37 @@ public class ExamPortalBackendApplication {
 					"password",
 					"0501035",
 					true,
-					new Role("Admin","test")));
+					adminRole));
+
+			authService.registerUserService(new User(
+					"Nedina",
+					"Nedi",
+					"nedina",
+					"password",
+					"0501035",
+					true,
+					studentRole));
+
+			authService.registerUserService(new User(
+					"Sani",
+					"Nedi",
+					"sanidastudent",
+					"password",
+					"0501035",
+					true,
+					studentRole));
+
+
+			authService.registerUserService(new User(
+					"Sanida",
+					"Sani",
+					"sanida",
+					"password",
+					"0501035",
+					true,
+					professorRole));
+
+
 
 
 		};

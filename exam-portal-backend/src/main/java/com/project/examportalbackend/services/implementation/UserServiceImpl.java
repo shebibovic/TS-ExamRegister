@@ -1,5 +1,6 @@
 package com.project.examportalbackend.services.implementation;
 
+import com.project.examportalbackend.models.Category;
 import com.project.examportalbackend.models.User;
 import com.project.examportalbackend.repository.CategoryRepository;
 import com.project.examportalbackend.repository.StudentCategoryRepository;
@@ -59,11 +60,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getProfessor(Long profesorId) {
+    public User getProfessor(Long categoryId) {
         List<User> users = userRepository.findAll();
-        for(User user:users){
-            if(user.getUserId()==profesorId)
-                return user;
+        List<Category> categories = categoryRepository.findAll();
+        for(Category category:categories){
+            if(category.getCatId()==categoryId)
+                return category.getProfesor();
         }
         return null;
     }

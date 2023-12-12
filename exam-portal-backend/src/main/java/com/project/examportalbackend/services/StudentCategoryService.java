@@ -1,5 +1,6 @@
 package com.project.examportalbackend.services;
 
+import com.project.examportalbackend.models.Category;
 import com.project.examportalbackend.models.StudentCategory;
 import com.project.examportalbackend.models.User;
 
@@ -13,4 +14,6 @@ public interface StudentCategoryService {
     List<StudentCategory> getAll();
 
     List<User> getStudents(Long id);
+
+    List<Category> getCategories(Long studentId);
 }

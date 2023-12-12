@@ -17,8 +17,9 @@ const AdminAddCategoryPage = () => {
   const [description, setDescription] = useState("");
   const [selectedUser, setSelectedUser] = useState(""); // State to hold selected user
   const [users, setUsers] = useState([]); // State to hold the list of users
+  const [professor, setProfessor] = useState([]);
   const token = localStorage.getItem("jwtToken");
-  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [selectedStudents, setSelectedStudents] = useState([]);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -29,9 +30,11 @@ const AdminAddCategoryPage = () => {
       title: title,
       description: description,
       userId: selectedUser, // Include selected professor ID in category data
-      students: selectedUsers
+      students: selectedStudents
     };
     addCategory(dispatch, category, token).then((data) => {
+      console.log("OVO SAD GLEDAMO" + category.students);
+      console.log(category.userId);
       if (data.type === categoriesConstants.ADD_CATEGORY_SUCCESS) {
         swal("Subject Added!", `${title} successfully added`, "success");
       } else {
@@ -48,11 +51,23 @@ const AdminAddCategoryPage = () => {
         if (!response.ok) {
           throw new Error("Failed to fetch users");
         }
+        const userData = await response.json();
+        console.log(userData); // Log fetched user data
+        setProfessor(userData);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+
+      try {
+        const response = await fetch("/api/category/students");
+        if (!response.ok) {
+          throw new Error("Failed to fetch students");
+        }
         const usersData = await response.json();
         console.log(usersData); // Log fetched user data
         setUsers(usersData);
       } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching students:", error);
       }
     };
 
@@ -102,7 +117,7 @@ const AdminAddCategoryPage = () => {
                 value={selectedUser}
             >
               <option value="">Choose Professor</option>
-              {users.map((user) => (
+              {professor.map((user) => (
                   <option key={user.userId} value={user.userId}>
                     {user.username}
                   </option>
@@ -112,23 +127,23 @@ const AdminAddCategoryPage = () => {
 
             <Form.Group controlId="students">
               <Form.Label>Choose Students (Multiple)</Form.Label>
-              {users.map((user) => (
+              {users.map((users) => (
                   <Form.Check
-                      key={user.userId}
+                      key={users.userId}
                       type="checkbox"
-                      id={`user-${user.userId}`}
-                      label={user.username}
+                      id={`user-${users.userId}`}
+                      label={users.username}
                       onChange={(e) => {
                         const isChecked = e.target.checked;
                         if (isChecked) {
-                          setSelectedUsers((prevSelected) => [...prevSelected, user.userId]);
+                          setSelectedStudents((prevSelected) => [...prevSelected, users.userId]);
                         } else {
-                          setSelectedUsers((prevSelected) =>
-                              prevSelected.filter((selectedUserId) => selectedUserId !== user.userId)
+                          setSelectedStudents((prevSelected) =>
+                              prevSelected.filter((selectedUserId) => selectedUserId !== users.userId)
                           );
                         }
                       }}
-                      checked={selectedUsers.includes(user.userId)}
+                      checked={selectedStudents.includes(users.userId)}
                   />
               ))}
             </Form.Group>

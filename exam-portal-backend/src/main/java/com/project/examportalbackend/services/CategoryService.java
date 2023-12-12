@@ -15,4 +15,6 @@ public interface CategoryService {
     Category updateCategory(Category category);
 
     void deleteCategory(Long categoryId);
+
+    List<Category> getCategoriesFromProfessor(Long professorId);
 }

@@ -49,4 +49,16 @@ public class StudentCategoryImpl implements StudentCategoryService {
         }
         return students;
     }
+
+    @Override
+    public List<Category> getCategories(Long studentId) {
+        List<StudentCategory>studentCategories =studentCategoryRepository.findAll();
+        List<Category> categories = new ArrayList<>();
+        for(StudentCategory sc: studentCategories){
+            if(sc.getStudent().getUserId()==studentId){
+                categories.add(sc.getCategory());
+            }
+        }
+        return categories;
+    }
 }

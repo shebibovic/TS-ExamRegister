@@ -6,6 +6,7 @@ import com.project.examportalbackend.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -37,5 +38,16 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteCategory(Long categoryId) {
         categoryRepository.delete(getCategory(categoryId));
+    }
+
+    @Override
+    public List<Category> getCategoriesFromProfessor(Long professorId) {
+        List<Category> categories = categoryRepository.findAll();
+        List<Category> professorCategory = new ArrayList<>();
+        for( Category c: categories){
+            if(c.getProfesor().getUserId()==professorId)
+                professorCategory.add(c);
+        }
+        return professorCategory;
     }
 }
