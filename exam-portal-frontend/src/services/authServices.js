@@ -23,7 +23,7 @@ const register = async (user) => {
 const login = async (username, password) => {
   try {
     const { data } = await axios.post("/api/login", {
-      username: username,
+      email: username,
       password: password,
     });
 

@@ -25,6 +25,9 @@ const RegisterPage = () => {
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const [usernameExistsError, setUsernameExistsError] = useState('');
+  const emailRegex = /^.*@.*\..*$/;
+  const passwordRegex = /^(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{8,}$/;
+
 
 
   const dispatch = useDispatch();
@@ -55,16 +58,22 @@ const RegisterPage = () => {
     if (!username.trim()) {
       setUsernameError('Email is required');
       isValid = false;
-    } else {
+    }
+    if (!emailRegex.test(username)) {
+      setUsernameError('Email must be in e-mail format');
+      isValid = false;
+    }
+    else {
       setUsernameError('');
     }
 
-    if (password.length < 8) {
-      setPasswordError('Password must be at least 8 characters long');
+    if (!passwordRegex.test(password)) {
+      setPasswordError('Password must contain at least 8 characters including 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character');
       isValid = false;
     } else {
       setPasswordError('');
     }
+
 
     if (password !== confirmPassword) {
       setConfirmPasswordError('Passwords do not match');
