@@ -45,7 +45,6 @@ public class ExamPortalBackendApplication {
 //			var admin1 = new User(
 //					"Admin",
 //					"Admin",
-//					"admin1",
 //					"knurikic1@etf.unsa.ba",
 //					"password",
 //					"0501035",
@@ -53,7 +52,6 @@ public class ExamPortalBackendApplication {
 //			var student1 = new User(
 //					"Student1",
 //					"Nedi",
-//					"student1",
 //					"knurikic10@etf.unsa.ba",
 //					"password",
 //					"0501035",
@@ -61,7 +59,6 @@ public class ExamPortalBackendApplication {
 //			var student2 = new User(
 //					"Student2",
 //					"Nedi",
-//					"student2",
 //					"knurikic2@etf.unsa.ba",
 //					"password",
 //					"0501035",
@@ -69,7 +66,6 @@ public class ExamPortalBackendApplication {
 //			var student3 = new User(
 //					"Student3",
 //					"Nedi",
-//					"student3",
 //					"knurikic4@etf.unsa.ba",
 //					"password",
 //					"0501035",
@@ -77,7 +73,6 @@ public class ExamPortalBackendApplication {
 //			var student4 = new User(
 //					"Student4",
 //					"Nedi",
-//					"student4",
 //					"knurikic5@etf.unsa.ba",
 //					"password",
 //					"0501035",
@@ -85,7 +80,6 @@ public class ExamPortalBackendApplication {
 //			var student5 = new User(
 //					"STudent5",
 //					"Nedi",
-//					"student5",
 //					"knurikic6@etf.unsa.ba",
 //					"password",
 //					"0501035",
@@ -94,7 +88,6 @@ public class ExamPortalBackendApplication {
 //			var student6 = new User(
 //					"Student6",
 //					"Nedi",
-//					"Student6",
 //					"knurikic7@etf.unsa.ba",
 //					"password",
 //					"0501035",
@@ -103,9 +96,7 @@ public class ExamPortalBackendApplication {
 //			var prof1 = new User(
 //					"Profesor1",
 //					"Sani",
-//					"profesor1",
 //					"knurikic3@etf.unsa.ba",
-//
 //					"password",
 //					"0501035",
 //					professorRole);
@@ -113,9 +104,7 @@ public class ExamPortalBackendApplication {
 //			var prof2 = new User(
 //					"Profesor2",
 //					"Sani",
-//					"profesor2",
 //					"knurikic9@etf.unsa.ba",
-//
 //					"password",
 //					"0501035",
 //					professorRole);

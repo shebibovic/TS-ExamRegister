@@ -61,11 +61,10 @@ public class AuthServiceImpl implements AuthService {
     }
 
     public LoginResponse loginUserService(LoginRequest loginRequest) throws Exception {
-
-        authenticate(loginRequest.getUsernameOrEmail(), loginRequest.getPassword());
-        UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(loginRequest.getUsernameOrEmail());
+        authenticate(loginRequest.getEmail(), loginRequest.getPassword());
+        UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(loginRequest.getEmail());
         String token = jwtUtil.generateToken(userDetails);
-        return new LoginResponse(userRepository.findByUsernameOrEmail(loginRequest.getUsernameOrEmail(), loginRequest.getUsernameOrEmail()), token);
+        return new LoginResponse(userRepository.findByEmail(loginRequest.getEmail()), token);
     }
 
 

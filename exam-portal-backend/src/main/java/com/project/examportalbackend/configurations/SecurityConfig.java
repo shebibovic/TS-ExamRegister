@@ -40,18 +40,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.cors();
-        http.csrf().disable()
+        http.cors().and().csrf().disable();
+        http
                 .authorizeRequests()
 
-                .antMatchers("/api/*").permitAll()
                 .antMatchers("/api/login").permitAll()
-
-
-                .antMatchers(HttpMethod.POST, "/api/category/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/category/**").permitAll()
-                .antMatchers(HttpMethod.PUT, "/api/category/**").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/api/category/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/**").permitAll()
+                .antMatchers(HttpMethod.PUT, "/api/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/api/**").permitAll()
 
                 .antMatchers(HttpMethod.POST, "/api/quiz/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/quiz/**").permitAll()
@@ -62,11 +59,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/question/**").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/question/**").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/api/question/**").permitAll()
-
-                .antMatchers(HttpMethod.POST, "/api/quizResult/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/quizResult/all/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/quizResult/**").permitAll()
-
 
 
                 .anyRequest().denyAll()
