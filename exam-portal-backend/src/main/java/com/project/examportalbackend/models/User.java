@@ -35,13 +35,10 @@ public class User implements UserDetails {
 
     @NotEmpty(message = "Username is required!")
     @Column(name = "username", unique = true)
+    @Email
     //@Pattern(regexp = "^[\\w\\.-]+@[a-zA-Z\\d\\.-]+\\.[a-zA-Z]{2,}$", message ="Incorrect Email format")
-    private String username;
-
-    @NotEmpty(message = "Email is required!")
-    @Column(name = "email", unique = true)
-    @Email(message = "Wrong email format")
     private String email;
+
 
     @NotEmpty(message = "Password is required!")
     @Size(min = 8, message = "Password can't be less than 8 characters!")
@@ -80,6 +77,11 @@ public class User implements UserDetails {
     }
 
     @Override
+    public String getUsername() {
+        return this.getEmail();
+    }
+
+    @Override
     public boolean isAccountNonExpired() {
         return true;
     }
@@ -99,11 +101,10 @@ public class User implements UserDetails {
         return isActive;
     }
 
-    public User(String firstName, String lastName, String username, String email, String password,
+    public User(String firstName, String lastName, String email, String password,
                 String phoneNumber, Role userRole) {
        this.firstName=firstName;
        this.lastName=lastName;
-       this.username=username;
        this.email = email;
        this.password=password;
        this.phoneNumber=phoneNumber;

@@ -44,23 +44,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
 
-                .antMatchers("/api/login").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/**").permitAll()
-                .antMatchers(HttpMethod.PUT, "/api/**").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/api/**").permitAll()
-
-                .antMatchers(HttpMethod.POST, "/api/quiz/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/quiz/**").permitAll()
-                .antMatchers(HttpMethod.PUT, "/api/quiz/**").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/api/quiz/**").permitAll()
-
-                .antMatchers(HttpMethod.POST, "/api/question/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/question/**").permitAll()
-                .antMatchers(HttpMethod.PUT, "/api/question/**").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/api/question/**").permitAll()
-
-
+                .antMatchers("/api/**").permitAll()
+                .antMatchers( "/api/**").authenticated()
                 .anyRequest().denyAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
