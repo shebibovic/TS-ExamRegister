@@ -1,6 +1,6 @@
 package com.project.examportalbackend.controllers;
 
-import com.project.examportalbackend.models.Category;
+import com.project.examportalbackend.models.Subject;
 import com.project.examportalbackend.models.Quiz;
 import com.project.examportalbackend.services.CategoryService;
 import com.project.examportalbackend.services.QuizService;
@@ -37,8 +37,8 @@ public class QuizController {
 
     @GetMapping(value = "/", params = "catId")
     public ResponseEntity<?> getQuizByCategory(@RequestParam Long catId) {
-        Category category = categoryService.getCategory(catId);
-        return ResponseEntity.ok(quizService.getQuizByCategory(category));
+        Subject subject = categoryService.getCategory(catId);
+        return ResponseEntity.ok(quizService.getQuizByCategory(subject));
     }
 
     @PutMapping("/{quizId}")

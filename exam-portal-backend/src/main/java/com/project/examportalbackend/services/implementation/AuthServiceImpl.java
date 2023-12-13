@@ -48,22 +48,27 @@ public class AuthServiceImpl implements AuthService {
 
         User temp = userRepository.findByUsername(user.getUsername());
         if (temp != null) {
-            throw new Exception("User Already Exists");
-        } else {
+            throw new Exception("User with username: " + user.getUsername() + " already exists;");
+        }
+        temp = userRepository.findByEmail(user.getEmail());
+        if(temp != null) {
+            throw new Exception("User with email: " + user.getEmail() + " already exists;");
+        }
             Role role = roleRepository.findById(user.getRole().getRoleName()).orElse(null);
             user.setRole(role);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             return userRepository.save(user);
-        }
     }
 
     public LoginResponse loginUserService(LoginRequest loginRequest) throws Exception {
 
-        authenticate(loginRequest.getUsername(), loginRequest.getPassword());
-        UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(loginRequest.getUsername());
+        authenticate(loginRequest.getUsernameOrEmail(), loginRequest.getPassword());
+        UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(loginRequest.getUsernameOrEmail());
         String token = jwtUtil.generateToken(userDetails);
-        return new LoginResponse(userRepository.findByUsername(loginRequest.getUsername()), token);
+        return new LoginResponse(userRepository.findByUsernameOrEmail(loginRequest.getUsernameOrEmail(), loginRequest.getUsernameOrEmail()), token);
     }
+
+
 
     private void authenticate(String username, String password) throws Exception {
         try {

@@ -1,6 +1,6 @@
 package com.project.examportalbackend.services;
 
-import com.project.examportalbackend.models.Category;
+import com.project.examportalbackend.models.Subject;
 import com.project.examportalbackend.models.Quiz;
 
 import java.util.List;
@@ -19,5 +19,5 @@ public interface QuizService {
     void deleteQuiz(Long quizId);
 
     // Extra methods
-    List<Quiz> getQuizByCategory(Category category);
+    List<Quiz> getQuizByCategory(Subject subject);
 }

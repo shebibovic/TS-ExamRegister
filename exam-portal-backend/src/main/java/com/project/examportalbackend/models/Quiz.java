@@ -1,9 +1,7 @@
 package com.project.examportalbackend.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,6 +13,8 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "quizzes")
 public class Quiz {
 
@@ -28,20 +28,18 @@ public class Quiz {
     @Column(name = "description", length = 5000)
     private String description;
 
-    @Column(name = "is_active")
-    private boolean iActive;
-
-    @Column(name = "num_of_questions")
-    private int numOfQuestions;
-
     @ManyToOne(fetch = FetchType.EAGER)
-    private Category category;
-
-    @OneToMany(mappedBy = "quiz", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<Question> questions = new HashSet<>();
+    private Subject subject;
 
-    @OneToMany(mappedBy = "quiz", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany
     @JsonIgnore
-    private List<QuizResult> quizResults = new ArrayList<>();
+    private List<User> registeredStudents = new ArrayList<>();
+
+    public Quiz(String title, String description, Subject subject){
+        this.title = title;
+        this.description = description;
+        this.subject = subject;
+    }
+
 }

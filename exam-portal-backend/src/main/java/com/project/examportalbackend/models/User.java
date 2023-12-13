@@ -1,18 +1,17 @@
 package com.project.examportalbackend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,10 +33,15 @@ public class User implements UserDetails {
     @Column(name = "last_name")
     private String lastName;
 
-    @NotEmpty(message = "Email is required!")
+    @NotEmpty(message = "Username is required!")
     @Column(name = "username", unique = true)
-   //@Pattern(regexp = "^[\\w\\.-]+@[a-zA-Z\\d\\.-]+\\.[a-zA-Z]{2,}$", message ="Incorrect Email format")
+    //@Pattern(regexp = "^[\\w\\.-]+@[a-zA-Z\\d\\.-]+\\.[a-zA-Z]{2,}$", message ="Incorrect Email format")
     private String username;
+
+    @NotEmpty(message = "Email is required!")
+    @Column(name = "email", unique = true)
+    @Email(message = "Wrong email format")
+    private String email;
 
     @NotEmpty(message = "Password is required!")
     @Size(min = 8, message = "Password can't be less than 8 characters!")
@@ -55,8 +59,18 @@ public class User implements UserDetails {
     private boolean isActive = true;
 
     @ManyToOne
-    @JoinColumn(name = "user_role",referencedColumnName = "role_name", nullable = false)
+    @JoinColumn(name = "user_role",referencedColumnName = "role_name")
     private Role role;
+
+    @ManyToMany
+    @JsonIgnore
+    private List<Subject> subjects = new ArrayList<>();
+
+    @ManyToMany
+    @JsonIgnore
+    private List<Quiz> registeredExams = new ArrayList<>();
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -85,14 +99,14 @@ public class User implements UserDetails {
         return isActive;
     }
 
-    public User(String firstName, String lastName, String username, String password,
-                String phoneNumber, boolean isActive, Role userRole) {
+    public User(String firstName, String lastName, String username, String email, String password,
+                String phoneNumber, Role userRole) {
        this.firstName=firstName;
        this.lastName=lastName;
        this.username=username;
+       this.email = email;
        this.password=password;
        this.phoneNumber=phoneNumber;
-       this.isActive=isActive;
        this.role=userRole;
     }
 }

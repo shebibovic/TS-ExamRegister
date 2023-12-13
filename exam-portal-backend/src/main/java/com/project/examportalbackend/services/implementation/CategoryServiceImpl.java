@@ -1,6 +1,6 @@
 package com.project.examportalbackend.services.implementation;
 
-import com.project.examportalbackend.models.Category;
+import com.project.examportalbackend.models.Subject;
 import com.project.examportalbackend.repository.CategoryRepository;
 import com.project.examportalbackend.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,23 +16,23 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryRepository categoryRepository;
 
     @Override
-    public Category addCategory(Category category) {
-        return categoryRepository.save(category);
+    public Subject addCategory(Subject subject) {
+        return categoryRepository.save(subject);
     }
 
     @Override
-    public List<Category> getCategories() {
+    public List<Subject> getCategories() {
         return categoryRepository.findAll();
     }
 
     @Override
-    public Category getCategory(Long catId) {
+    public Subject getCategory(Long catId) {
         return categoryRepository.findById(catId).isPresent() ? categoryRepository.findById(catId).get() : null;
     }
 
     @Override
-    public Category updateCategory(Category category) {
-        return categoryRepository.save(category);
+    public Subject updateCategory(Subject subject) {
+        return categoryRepository.save(subject);
     }
 
     @Override
@@ -41,13 +41,13 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> getCategoriesFromProfessor(Long professorId) {
-        List<Category> categories = categoryRepository.findAll();
-        List<Category> professorCategory = new ArrayList<>();
-        for( Category c: categories){
-            if(c.getProfesor().getUserId()==professorId)
-                professorCategory.add(c);
+    public List<Subject> getCategoriesFromProfessor(Long professorId) {
+        List<Subject> categories = categoryRepository.findAll();
+        List<Subject> professorSubject = new ArrayList<>();
+        for( Subject c: categories){
+            if(c.getProfessor().getUserId()==professorId)
+                professorSubject.add(c);
         }
-        return professorCategory;
+        return professorSubject;
     }
 }

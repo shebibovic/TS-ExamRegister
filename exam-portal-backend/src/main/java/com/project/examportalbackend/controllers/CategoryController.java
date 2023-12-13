@@ -1,10 +1,9 @@
 package com.project.examportalbackend.controllers;
 
-import com.project.examportalbackend.models.Category;
+import com.project.examportalbackend.models.Subject;
 import com.project.examportalbackend.models.User;
 import com.project.examportalbackend.repository.UserRepository;
 import com.project.examportalbackend.services.CategoryService;
-import com.project.examportalbackend.services.StudentCategoryService;
 import com.project.examportalbackend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,12 +28,10 @@ public class CategoryController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private StudentCategoryService studentCategoryService;
 
     @PostMapping("/")
-    public ResponseEntity<?> addCategory(@RequestBody Category category) {
-        return ResponseEntity.ok(categoryService.addCategory(category));
+    public ResponseEntity<?> addCategory(@RequestBody Subject subject) {
+        return ResponseEntity.ok(categoryService.addCategory(subject));
     }
     //@GetMapping("/{userId}")
     //public ResponseEntity<?> getProfesor(@PathVariable Long profesorId) {
@@ -52,9 +49,9 @@ public class CategoryController {
     }
 
     @PutMapping("/{categoryId}")
-    public ResponseEntity<?> updateCategory(@PathVariable Long categoryId, @RequestBody Category category) {
+    public ResponseEntity<?> updateCategory(@PathVariable Long categoryId, @RequestBody Subject subject) {
         if (categoryService.getCategory(categoryId) != null) {
-            return ResponseEntity.ok(categoryService.updateCategory(category));
+            return ResponseEntity.ok(categoryService.updateCategory(subject));
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Category with id : " + String.valueOf(categoryId) + ", doesn't exists");
     }
@@ -70,17 +67,9 @@ public class CategoryController {
         return userRepository.findAll();
     }
 
-    @PostMapping("/addStudents")
-    public ResponseEntity<?>addStudentsCategory( @RequestBody Long categoryId,
-                                                 @RequestBody Long studentId) {
 
-        return ResponseEntity.ok(studentCategoryService.addStudentCategory(categoryId, studentId));
-    }
 
-    @GetMapping("/students/{id}")
-    public ResponseEntity<?> getStudents(@PathVariable Long id) {
-        return ResponseEntity.ok(studentCategoryService.getStudents(id));
-    } //geta studente na predmetu po idu predmeta
+//
 
     @GetMapping("/professor/{categoryId}")
     public ResponseEntity<?> getProfesor(@PathVariable Long categoryId) {
@@ -102,9 +91,6 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getCategoriesFromProfessor(professorId));
     }
 
-    @GetMapping("/student/{studentId}")
-    private ResponseEntity<?> getStudentsSubjects(@PathVariable Long studentId){
-        return ResponseEntity.ok(studentCategoryService.getCategories(studentId));
-    }
+
 
 }

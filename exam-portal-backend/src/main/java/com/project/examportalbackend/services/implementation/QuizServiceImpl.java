@@ -1,6 +1,6 @@
 package com.project.examportalbackend.services.implementation;
 
-import com.project.examportalbackend.models.Category;
+import com.project.examportalbackend.models.Subject;
 import com.project.examportalbackend.models.Quiz;
 import com.project.examportalbackend.repository.QuizRepository;
 import com.project.examportalbackend.services.QuizService;
@@ -41,7 +41,7 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public List<Quiz> getQuizByCategory(Category category) {
-        return quizRepository.findByCategory(category);
+    public List<Quiz> getQuizByCategory(Subject subject) {
+        return quizRepository.findBySubject(subject);
     }
 }

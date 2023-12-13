@@ -1,20 +1,20 @@
 package com.project.examportalbackend.services;
 
-import com.project.examportalbackend.models.Category;
+import com.project.examportalbackend.models.Subject;
 
 import java.util.List;
 
 public interface CategoryService {
 
-    Category addCategory(Category category);
+    Subject addCategory(Subject subject);
 
-    List<Category> getCategories();
+    List<Subject> getCategories();
 
-    Category getCategory(Long catId);
+    Subject getCategory(Long catId);
 
-    Category updateCategory(Category category);
+    Subject updateCategory(Subject subject);
 
     void deleteCategory(Long categoryId);
 
-    List<Category> getCategoriesFromProfessor(Long professorId);
+    List<Subject> getCategoriesFromProfessor(Long professorId);
 }
