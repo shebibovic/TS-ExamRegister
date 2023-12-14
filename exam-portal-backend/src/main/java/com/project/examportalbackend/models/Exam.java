@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -15,18 +15,24 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "quizzes")
-public class Quiz {
+@Table(name = "exams")
+public class Exam {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long quizId;
+    private Long examId;
 
     @Column(name = "title")
     private String title;
 
     @Column(name = "description", length = 5000)
     private String description;
+
+    @NotNull
+    private Date registrationDeadlineDate;
+
+    @NotNull
+    private Date startDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnore
@@ -36,10 +42,16 @@ public class Quiz {
     @JsonIgnore
     private List<User> registeredStudents = new ArrayList<>();
 
-    public Quiz(String title, String description, Subject subject){
+    public Exam(String title, String description, Subject subject, Date registrationDeadlineDate, Date startDate){
         this.title = title;
         this.description = description;
         this.subject = subject;
+        this.registrationDeadlineDate = registrationDeadlineDate;
+        this.startDate = startDate;
+    }
+
+    public boolean isActive(){
+        return new Date().before(this.startDate);
     }
 
 }

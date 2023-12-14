@@ -59,13 +59,13 @@ public class User implements UserDetails {
     @JoinColumn(name = "user_role",referencedColumnName = "role_name")
     private Role role;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "students")
     @JsonIgnore
     private List<Subject> subjects = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "registeredStudents")
     @JsonIgnore
-    private List<Quiz> registeredExams = new ArrayList<>();
+    private List<Exam> registeredExams = new ArrayList<>();
 
 
 
