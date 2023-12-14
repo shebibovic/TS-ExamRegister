@@ -15,15 +15,14 @@ const AdminSubjectID = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const params = useParams();
-    const catId = params.catId;
+    const categoryId = params.subjectId;
     const profId = params.professorId;
 
     const oldCategory = useSelector((state) =>
-        state.categoriesReducer.categories.filter((cat) => cat.catId == catId)
-    )[0];
-    const [title, setTitle] = useState(oldCategory ? oldCategory.title : "");
-    const [description, setDescription] = useState(
-        oldCategory ? oldCategory.description : ""
+        state.categoriesReducer.categories.find((cat) => cat.categoryId === categoryId)
+    );
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState(""
     );
     const token = localStorage.getItem("jwtToken");
     const [users, setUsers] = useState([]);
@@ -33,31 +32,30 @@ const AdminSubjectID = () => {
 
 
     useEffect(() => {
-        const fetchSelectedUser = async () => {
+        const fetchSelectedCategory = async () => {
             try {
-                // Make an API call to fetch selected users for the category
-                const response = await fetch(`/api/category/${catId}`, {
-                    //const response = await fetch(`/api/category/${catId}/users`, {
-                    //sad fetcha sve usere jer ovo fali u controllerima
+                const response = await fetch(`/api/category/${categoryId}`, {
+
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${token}`, // Dodajte ovu liniju kako biste poslali token
+                        "Content-Type": "application/json", // Ovisno o potrebi, možda trebate dodati i Content-Type
                     },
                 });
-
                 if (response.ok) {
-                    const selectedUserData = await response.json();
-                    setSelectedUser(selectedUserData);
-                    setProfesorName(selectedUserData.profesor.firstName + " " + selectedUserData.profesor.lastName);
+                    const selectedCategoryData = await response.json();
+                    setTitle(selectedCategoryData.title);
+                    setDescription(selectedCategoryData.description);
+                    setProfesorName(selectedCategoryData.profesor.firstName + " " + selectedCategoryData.profesor.lastName);
                 } else {
-                    throw new Error("Failed to fetch selected PROFESSORS");
+                    throw new Error("Failed to fetch selected category");
                 }
             } catch (error) {
-                console.error("Error fetching selected PROFESSORS:", error);
+                console.error("Error fetching selected category:", error);
             }
         };
 
-        fetchSelectedUser();
-    }, [catId, token]);
+        fetchSelectedCategory();
+    }, [categoryId, token]);
 
     return (
         <div className="adminUpdateCategoryPage__container">

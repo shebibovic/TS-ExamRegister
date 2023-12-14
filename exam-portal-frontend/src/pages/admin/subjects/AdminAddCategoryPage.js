@@ -19,6 +19,7 @@ const AdminAddCategoryPage = () => {
   const [users, setUsers] = useState([]); // State to hold the list of users
   const [professor, setProfessor] = useState([]);
   const token = localStorage.getItem("jwtToken");
+  const user = JSON.parse(localStorage.getItem("user"));
   const [selectedStudents, setSelectedStudents] = useState([]);
 
   const dispatch = useDispatch();
@@ -29,25 +30,28 @@ const AdminAddCategoryPage = () => {
     const category = {
       title: title,
       description: description,
-      userId: selectedUser, // Include selected professor ID in category data
-      students: selectedStudents
+      userId: selectedUser,
+      students: selectedStudents,
     };
     addCategory(dispatch, category, token).then((data) => {
-      console.log("OVO SAD GLEDAMO" + category.students);
-      console.log(category.userId);
       if (data.type === categoriesConstants.ADD_CATEGORY_SUCCESS) {
         swal("Subject Added!", `${title} successfully added`, "success");
       } else {
         swal("Subject Not Added!", `${title} not added`, "error");
       }
-      // navigate("/adminCategories");
     });
   };
+
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("/api/category/profesors");
+        const response = await fetch("/api/category/profesors", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Dodajte ovu liniju kako biste poslali token
+            "Content-Type": "application/json", // Ovisno o potrebi, možda trebate dodati i Content-Type
+          },
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch users");
         }
@@ -59,7 +63,12 @@ const AdminAddCategoryPage = () => {
       }
 
       try {
-        const response = await fetch("/api/category/students");
+        const response = await fetch("/api/category/students", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Dodajte ovu liniju kako biste poslali token
+            "Content-Type": "application/json", // Ovisno o potrebi, možda trebate dodati i Content-Type
+          },
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch students");
         }
@@ -72,7 +81,7 @@ const AdminAddCategoryPage = () => {
     };
 
     fetchUsers();
-  }, [token]);
+  }, [dispatch, token]);
 
 
   return (
@@ -119,7 +128,7 @@ const AdminAddCategoryPage = () => {
               <option value="">Choose Professor</option>
               {professor.map((user) => (
                   <option key={user.userId} value={user.userId}>
-                    {user.username}
+                    {user.firstName} {user.lastName}
                   </option>
               ))}
             </Form.Select>
@@ -132,7 +141,8 @@ const AdminAddCategoryPage = () => {
                       key={users.userId}
                       type="checkbox"
                       id={`user-${users.userId}`}
-                      label={users.username}
+
+                      label={users.email}
                       onChange={(e) => {
                         const isChecked = e.target.checked;
                         if (isChecked) {

@@ -17,22 +17,33 @@ export const register = async (dispatch, user) => {
   }
 };
 
-export const login = async (dispatch, username, password) => {
+export const login = async (dispatch, email, password) => {
   dispatch({ type: authConstants.USER_LOGIN_REQUEST });
-  const data = await authServices.login(username, password);
-  if (data && data.user) {
-    // Extract user roles from the response and include them in the payload
-    const { user, roles } = data.user;
-    const userDataWithRoles = { ...user, roles }; // assuming roles are directly available in data.user.roles
+  try {
+    const data = await authServices.login(email, password);
 
-    return dispatch({
-      type: authConstants.USER_LOGIN_SUCCESS,
-      payload: userDataWithRoles,
-    });
-  } else {
+    if (data && data.user && data.user.role && data.user.role.roleName) {
+      const { user } = data;
+      const userDataWithRoles = {
+        ...user,
+        roles: [{ roleName: user.role.roleName }], // Create an array with a role object containing roleName
+      };
+
+      return dispatch({
+        type: authConstants.USER_LOGIN_SUCCESS,
+        payload: userDataWithRoles,
+      });
+    } else {
+      return dispatch({
+        type: authConstants.USER_LOGIN_FAILURE,
+        payload: data,
+      });
+    }
+  } catch (error) {
+    console.error("authService:login() Error: ", error.response.statusText);
     return dispatch({
       type: authConstants.USER_LOGIN_FAILURE,
-      payload: data,
+      payload: error.response.statusText,
     });
   }
 };

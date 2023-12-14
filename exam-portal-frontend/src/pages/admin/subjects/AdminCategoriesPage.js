@@ -21,8 +21,9 @@ const AdminCategoriesPage = () => {
   const categoriesReducer = useSelector((state) => state.categoriesReducer);
   const [categories, setCategories] = useState(categoriesReducer.categories);
 
-  const categoryClickHandler = (catId) => {
-    navigate(`/adminCategories/${catId}`);
+  const categoryClickHandler = (subjectId) => {
+    console.log(subjectId)
+    navigate(`/adminCategories/${subjectId}`);
   };
 
   const addNewCategoryHandler = () => {
@@ -31,7 +32,7 @@ const AdminCategoriesPage = () => {
 
   const updateCategoryHandler = (event, category) => {
     event.stopPropagation();
-    navigate(`/adminUpdateCategory/${category.catId}/`);
+    navigate(`/adminUpdateCategory/${category.subjectId}/`);
   };
 
   const deleteCategoryHandler = (event, category) => {
@@ -44,7 +45,7 @@ const AdminCategoriesPage = () => {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        deleteCategory(dispatch, category.catId, token).then((data) => {
+        deleteCategory(dispatch, category.subjectId, token).then((data) => {
           if (data.type === categoriesConstants.DELETE_CATEGORY_SUCCESS) {
             swal(
               "Subject Deleted!",
@@ -75,6 +76,7 @@ const AdminCategoriesPage = () => {
         setCategories(data.payload);
       });
     }
+
   }, []);
 
   return (
@@ -99,10 +101,10 @@ const AdminCategoriesPage = () => {
                   <ListGroup.Item
                     style={{ borderWidth: "0px" }}
                     className="d-flex"
-                    onClick={() => categoryClickHandler(cat.catId)}
+                    onClick={() => categoryClickHandler(cat.subjectId)}
                   >
                     <div className="ms-2 me-auto">
-                      <div className="fw-bold">{cat.title}</div>
+                      <div className="fw-bold">{cat.title} </div>
                       {cat.description}
                     </div>
 

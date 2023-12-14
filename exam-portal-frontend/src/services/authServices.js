@@ -31,6 +31,7 @@ const login = async (username, password) => {
       localStorage.setItem("user", JSON.stringify(data.user));
       localStorage.setItem("jwtToken", data.jwtToken);
       console.log("authService:login() Success: ", data.user);
+      console.log("rolaaa_____", data.user.role.roleName); //ispravno
       return data;
     } else {
       console.error("authService:login() Error: ", data);

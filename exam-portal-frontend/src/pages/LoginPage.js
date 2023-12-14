@@ -9,7 +9,7 @@ import Loader from "../components/Loader";
 import * as authConstants from "../constants/authConstants";
 
 const LoginPage = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [passwordType, setPasswordType] = useState("password");
@@ -34,13 +34,15 @@ const LoginPage = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    login(dispatch, username, password).then((data) => {
+    login(dispatch, email, password).then((data) => {
       if (data.type === authConstants.USER_LOGIN_SUCCESS) {
-        const isAdmin = data.payload && data.payload.roles && data.payload.roles.some((r) => r["roleName"] === "ADMIN");
+        const isAdmin =
+            user && user.roles.roleName === "ADMIN";
         if (isAdmin) {
           navigate("/adminProfile");
         } else {
           navigate("/profile");
+
         }
       } else if (data.type === authConstants.USER_LOGIN_FAILURE) {
         setErrorMessage("User does not exist. Wrong email or password.");
@@ -54,7 +56,7 @@ const LoginPage = () => {
     console.log("User Roles:", user && user.roles);
 
     if (token && user && user.roles && user.roles.length > 0) {
-      const isAdmin = user.roles.some((r) => r.roleName === "ADMIN");
+      const isAdmin = user.roles.roleName === "ADMIN";
       if (isAdmin) {
         navigate("/adminProfile");
       } else {
@@ -67,14 +69,14 @@ const LoginPage = () => {
       <FormContainer>
         <h1>Sign In</h1>
         <Form onSubmit={submitHandler}>
-          <Form.Group className="my-3" controlId="username">
+          <Form.Group className="my-3" controlId="email">
             <Form.Label>Email</Form.Label>
             <Form.Control
                 type="text"
                 placeholder="Enter Your Email"
-                value={username}
+                value={email}
                 onChange={(e) => {
-                  setUsername(e.target.value);
+                  setEmail(e.target.value);
                 }}
             ></Form.Control>
           </Form.Group>

@@ -27,18 +27,7 @@ const UserProfilePage = () => {
     fetchQuizzes(dispatch, token);
   }, [dispatch, navigate, token]);
 
-  useEffect(() => {
-    console.log("Token:", token);
-    console.log("User:", user);
-    console.log("User Roles:", user && user.role.roleName);
 
-    if (token && user && user.role && user.role.length > 0) {
-      user.role.map((r) => {
-        if (r["roleName"] === "ADMIN") return navigate("/adminProfile");
-        else return navigate("/profile");
-      });
-    }
-  }, []);
   useEffect(() => {
     console.log("User Roles:", user && user.role);
   }, [user]);

@@ -28,11 +28,22 @@ const AdminProfilePage = () => {
     fetchQuizzes(dispatch, token);
   }, [dispatch, navigate, token, loginReducer.user]);
 
+  // Check if user and user role exist before accessing properties
   const user = loginReducer.user;
+  const isAdmin = user && user.role && user.role.roleName === "ADMIN";
+
+  useEffect(() => {
+    if (isAdmin) {
+      navigate("/adminProfile"); // Redirect to admin profile if user is an admin
+    } else {
+      navigate("/profile"); // Redirect to user profile if not an admin
+    }
+  }, [isAdmin, navigate]);
 
   if (!user) {
     return <div>Loading...</div>; // You might want to show a loading indicator while fetching user data
   }
+
 
   return (
       <div className="adminProfilePage__container">
