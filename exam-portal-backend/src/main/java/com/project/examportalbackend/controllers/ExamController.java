@@ -37,7 +37,7 @@ public class ExamController {
 
     @PreAuthorize("hasAuthority('STUDENT')")
     @GetMapping("/student")
-    public ResponseEntity<List<Exam>> getStudentActiveExams() {
+    public ResponseEntity<List<Exam>> getStudentActiveExams() throws Exception{
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ResponseEntity.ok(examService.getActiveExamsByStudent(user.getUserId()));
     }

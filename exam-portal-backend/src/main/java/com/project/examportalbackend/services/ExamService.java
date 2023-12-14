@@ -21,5 +21,5 @@ public interface ExamService {
     // Extra methods
     List<Exam> getExamBySubject(Subject subject);
 
-    List<Exam> getActiveExamsByStudent(long studentId);
+    List<Exam> getActiveExamsByStudent(long studentId) throws Exception;
 }
