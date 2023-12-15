@@ -5,7 +5,7 @@ const fetchCategories = async (token) => {
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
-    const { data } = await axios.get("/api/category/", config);
+    const { data } = await axios.get("/api/subject/subjects", config);
     console.log("categoryService:fetchCategories() Success: ", data);
     return data;
   } catch (error) {
