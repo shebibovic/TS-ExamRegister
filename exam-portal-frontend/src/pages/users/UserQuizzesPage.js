@@ -14,7 +14,7 @@ const UserQuizzesPage = () => {
   const token = localStorage.getItem("jwtToken");
 
   const quizzesReducer = useSelector((state) => state.quizzesReducer);
-  const [quizzes, setQuizzes] = useState(quizzesReducer.quizzes);
+  const [quizzes, setQuizzes] = useState([]);
 
   useEffect(() => {
     if (quizzes.length === 0) {
@@ -37,7 +37,7 @@ const UserQuizzesPage = () => {
       <div className="userQuizzesPage__content">
         {quizzes ? (
           <Row>
-            {quizzes.map((q, index) => {
+            {quizzes && quizzes.map((q, index) => {
               if ((catId && catId == q.category.catId) || catId == null)
                 return (
                   <Col
