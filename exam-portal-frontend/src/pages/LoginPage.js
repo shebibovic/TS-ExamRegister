@@ -36,14 +36,8 @@ const LoginPage = () => {
     e.preventDefault();
     login(dispatch, email, password).then((data) => {
       if (data.type === authConstants.USER_LOGIN_SUCCESS) {
-        const isAdmin =
-            user && user.roles.roleName === "ADMIN";
-        if (isAdmin) {
-          navigate("/adminProfile");
-        } else {
-          navigate("/profile");
-
-        }
+        // No need to rely on the local storage user data here
+        navigate("/profile"); // Redirect to a loading page after successful login
       } else if (data.type === authConstants.USER_LOGIN_FAILURE) {
         setErrorMessage("User does not exist. Wrong email or password.");
       }
@@ -51,19 +45,19 @@ const LoginPage = () => {
   };
 
   useEffect(() => {
-    console.log("Token:", token);
-    console.log("User:", user);
-    console.log("User Roles:", user && user.roles);
+    if (token) {
+      // Assuming loginReducer.user will contain user information after successful login
+      if (loginReducer.user && loginReducer.user.roles) {
+        const isAdmin = "ADMIN";
+      loginReducer.user.roles.forEach(role => {
+          role.roleName = isAdmin; // Ovdje će se prikazati roleName za svaku ulogu
+        });
 
-    if (token && user && user.roles && user.roles.length > 0) {
-      const isAdmin = user.roles.roleName === "ADMIN";
-      if (isAdmin) {
-        navigate("/adminProfile");
-      } else {
-        navigate("/profile");
+
       }
     }
-  }, []);
+  }, [token, loginReducer.user]);
+
 
   return (
       <FormContainer>
