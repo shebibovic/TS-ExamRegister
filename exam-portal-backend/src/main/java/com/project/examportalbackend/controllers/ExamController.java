@@ -3,6 +3,7 @@ package com.project.examportalbackend.controllers;
 import com.project.examportalbackend.models.Subject;
 import com.project.examportalbackend.models.Exam;
 import com.project.examportalbackend.models.User;
+import com.project.examportalbackend.services.AuthService;
 import com.project.examportalbackend.services.SubjectService;
 import com.project.examportalbackend.services.ExamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @CrossOrigin
@@ -25,6 +27,9 @@ public class ExamController {
     @Autowired
     private SubjectService subjectService;
 
+    @Autowired
+    private AuthService authService;
+    
     @PostMapping("/")
     public ResponseEntity<?> addExam(@RequestBody Exam exam) {
         return ResponseEntity.ok(examService.addExam(exam));
@@ -36,20 +41,47 @@ public class ExamController {
     }
 
     @PreAuthorize("hasAuthority('STUDENT')")
-    @GetMapping("/student")
-    public ResponseEntity<List<Exam>> getStudentActiveExams() throws Exception{
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return ResponseEntity.ok(examService.getActiveExamsByStudent(user.getUserId()));
+    @GetMapping("/student/active-exams")
+    public ResponseEntity<List<Exam>> getStudentActiveExams() throws AccessDeniedException {
+        User student = authService.getUserFromToken();
+        return ResponseEntity.ok(examService.getActiveExamsByStudent(student.getUserId()));
     }
+
+    @PreAuthorize("hasAuthority('STUDENT')")
+    @GetMapping("/student/inactive-exams")
+    public ResponseEntity<List<Exam>> getStudentInactiveExams() throws AccessDeniedException {
+        User student = authService.getUserFromToken();
+        return ResponseEntity.ok(examService.getInactiveExamsByStudent(student.getUserId()));
+    }
+
+    @PreAuthorize("hasAuthority('STUDENT')")
+    @PostMapping("/student/register-exam/{examId}")
+    public ResponseEntity<String> registerExamForStudent(@PathVariable long examId) throws AccessDeniedException {
+        User student = authService.getUserFromToken();
+        Exam exam = examService.registerExamForStudent(student.getUserId(),examId);
+        return ResponseEntity.ok(
+                "Successfully registered student " + student.getFullName() + " for exam " + exam.getTitle());
+    }
+
+    @PreAuthorize("hasAuthority('STUDENT')")
+    @PostMapping("/student/unregister-exam/{examId}")
+    public ResponseEntity<String> unregisterExamForStudent(@PathVariable long examId) throws AccessDeniedException {
+        User student = authService.getUserFromToken();
+        Exam exam = examService.unregisterExamForStudent(student.getUserId(),examId);
+        return ResponseEntity.ok(
+                "Successfully unregistered student " + student.getFullName() + " from exam " + exam.getTitle());
+
+    }
+
 
     @GetMapping("/{examId}")
     public ResponseEntity<?> getExam(@PathVariable Long examId) {
         return ResponseEntity.ok(examService.getExam(examId));
     }
 
-    @GetMapping(value = "/", params = "catId")
-    public ResponseEntity<?> getExamBySubject(@RequestParam Long catId) {
-        Subject subject = subjectService.getSubject(catId);
+    @GetMapping(value = "/", params = "subjectId")
+    public ResponseEntity<?> getExamBySubject(@RequestParam Long subjectId) {
+        Subject subject = subjectService.getSubject(subjectId);
         return ResponseEntity.ok(examService.getExamBySubject(subject));
     }
 

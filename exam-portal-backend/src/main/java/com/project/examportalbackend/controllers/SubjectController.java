@@ -3,6 +3,7 @@ package com.project.examportalbackend.controllers;
 import com.project.examportalbackend.models.Subject;
 import com.project.examportalbackend.models.User;
 import com.project.examportalbackend.repository.UserRepository;
+import com.project.examportalbackend.services.AuthService;
 import com.project.examportalbackend.services.SubjectService;
 import com.project.examportalbackend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @CrossOrigin
@@ -29,6 +31,9 @@ public class SubjectController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private AuthService authService;
+
 
     @PostMapping("/")
     public ResponseEntity<?> addSubject(@RequestBody Subject subject) {
@@ -37,10 +42,9 @@ public class SubjectController {
 
     @PreAuthorize("hasAuthority('STUDENT')")
     @GetMapping("/student")
-    public ResponseEntity<List<Subject>> getSubjects() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        return ResponseEntity.ok(subjectService.getSubjectsByStudentId(user.getUserId()));
+    public ResponseEntity<List<Subject>> getSubjects() throws AccessDeniedException {
+        User student = authService.getUserFromToken();
+        return ResponseEntity.ok(subjectService.getSubjectsByStudentId(student.getUserId()));
     }
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     @GetMapping("/subjects")

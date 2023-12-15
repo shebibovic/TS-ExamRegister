@@ -1,5 +1,6 @@
 package com.project.examportalbackend.services.implementation;
 
+import com.project.examportalbackend.exception.exceptions.ResourceNotFoundException;
 import com.project.examportalbackend.models.Subject;
 import com.project.examportalbackend.models.User;
 import com.project.examportalbackend.repository.SubjectRepository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -31,10 +33,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUser(Long studentId) {
-        User u = userRepository.getById(studentId);
-        // if(u.getRole().getRoleName()!="PROFESSOR") throw new IllegalArgumentException();
-        return u;
+    public User getUser(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isEmpty()){
+            throw new ResourceNotFoundException("User with id:" + userId + "doesn't exist");
+        }
+        return user.get();
     }
 
     @Override

@@ -76,6 +76,10 @@ public class User implements UserDetails {
         return authorities;
     }
 
+    public String getFullName(){
+        return this.firstName + " " + this.lastName;
+    }
+
     @Override
     public String getUsername() {
         return this.getEmail();
