@@ -162,5 +162,8 @@ public class AddStaticData {
 
         predmet1.addExam(exam1);
         predmet2.addExam(exam2);
+
+        subjectService.addSubject(predmet1);
+        subjectService.addSubject(predmet2);
     }
 }

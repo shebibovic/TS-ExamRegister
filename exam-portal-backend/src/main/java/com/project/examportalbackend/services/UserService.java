@@ -10,7 +10,7 @@ public interface UserService {
 
     List<User> getUsers();
 
-    User getUser(Long studentId);
+    User getUser(Long userId);
 
     List<User> getAllProfesors();
 
