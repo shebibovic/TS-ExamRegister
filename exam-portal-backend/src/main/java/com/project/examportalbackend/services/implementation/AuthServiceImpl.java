@@ -14,12 +14,14 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -67,7 +69,18 @@ public class AuthServiceImpl implements AuthService {
         return new LoginResponse(userRepository.findByEmail(loginRequest.getEmail()), token);
     }
 
+    public Role getUserRoleByUserId(long userId) throws Exception {
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isPresent()){
+            return user.get().getRole();
+        } else {
+            throw new Exception("User doesn't exist"); //TODO make a custom exception
+        }
+    }
 
+    public boolean isUserRole(long userId, String roleName) throws Exception {
+        return getUserRoleByUserId(userId).getRoleName().equals(roleName);
+    }
 
     private void authenticate(String username, String password) throws Exception {
         try {

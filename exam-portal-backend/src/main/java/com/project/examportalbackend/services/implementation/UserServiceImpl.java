@@ -2,7 +2,7 @@ package com.project.examportalbackend.services.implementation;
 
 import com.project.examportalbackend.models.Subject;
 import com.project.examportalbackend.models.User;
-import com.project.examportalbackend.repository.CategoryRepository;
+import com.project.examportalbackend.repository.SubjectRepository;
 import com.project.examportalbackend.repository.UserRepository;
 import com.project.examportalbackend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private SubjectRepository subjectRepository;
 
 
     @Override
@@ -57,11 +57,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getProfessor(Long categoryId) {
+    public User getProfessor(Long subjectId) {
         List<User> users = userRepository.findAll();
-        List<Subject> categories = categoryRepository.findAll();
-        for(Subject subject :categories){
-            if(subject.getSubjectId()==categoryId)
+        List<Subject> subjects = subjectRepository.findAll();
+        for(Subject subject :subjects){
+            if(subject.getSubjectId()==subjectId)
                 return subject.getProfessor();
         }
         return null;

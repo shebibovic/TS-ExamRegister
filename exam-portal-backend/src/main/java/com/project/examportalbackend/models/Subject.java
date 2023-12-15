@@ -32,7 +32,7 @@ public class Subject {
 
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Quiz> quizzes = new ArrayList<>();
+    private List<Exam> exams = new ArrayList<>();
 
     @ManyToMany
     @JsonIgnore
@@ -43,13 +43,14 @@ public class Subject {
         this.description = description;
     }
 
+    //TODO Pomjeriti metodu addStudent u service, stoji zasad samo radi statickih podataka
+
     public void addStudent(User user){
-        //provjera je user li student
         students.add(user);
     }
 
-    public void addQuiz(Quiz quiz){
-        quizzes.add(quiz);
+    public void addExam(Exam exam){
+        this.exams.add(exam);
     }
 
 }
