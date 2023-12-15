@@ -42,6 +42,11 @@ public class SubjectController {
 
         return ResponseEntity.ok(subjectService.getSubjectsByStudentId(user.getUserId()));
     }
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @GetMapping("/subjects")
+    public ResponseEntity<List<Subject>> getAllSubjects(){
+        return ResponseEntity.ok(subjectService.getSubjects());
+    }
 
     @GetMapping("/{subjectId}")
     public ResponseEntity<?> getSubject(@PathVariable Long subjectId) {
