@@ -13,43 +13,41 @@ import { fetchCategories } from "../../../actions/categoriesActions";
 const AdminAddQuiz = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [maxMarks, setMaxMarks] = useState(0);
-  const [numberOfQuestions, setNumberOfQuestions] = useState(0);
   const [isActive, setIsActive] = useState(false);
-  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [selectedSubject, setSelectedSubject] = useState("");
+  const [subject, setSubject] = useState([]);
 
   const categoriesReducer = useSelector((state) => state.categoriesReducer);
-  const [categories, setCategories] = useState(categoriesReducer.categories);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [examDate, setExamDate] = useState("");
+  const [registrationDeadline, setRegistrationDeadline] = useState("");
 
   const onClickPublishedHandler = () => {
     setIsActive(!isActive);
   };
 
-  const onSelectCategoryHandler = (e) => {
-    setSelectedCategoryId(e.target.value);
-  };
 
   const token = localStorage.getItem("jwtToken");
 
   const submitHandler = (e) => {
     e.preventDefault();
-    if (selectedCategoryId !== null && selectedCategoryId !== "n/a") {
+    if (selectedSubject.catId !== null && selectedSubject.catId !== "n/a") {
       const quiz = {
         title: title,
         description: description,
         isActive: isActive,
-        category: {
-          catId: selectedCategoryId,
-          title: categories.filter((cat) => cat.catId == selectedCategoryId)[0]["title"],
-          description: categories.filter((cat) => cat.catId == selectedCategoryId)[0]["description"],
+        subject: {
+          catId: parseInt(selectedSubject.catId),
+          title: selectedSubject.title,
+          description: selectedSubject.description,
         },
-        examDate: examDate, // Include exam date in the quiz object
+        startDate: examDate, // Include exam date in the quiz object
+        registrationDeadlineDate: registrationDeadline
       };
       addQuiz(dispatch, quiz, token).then((data) => {
+        console.log(quiz.category.title+"<-----!!")
         if (data.type === quizzesConstants.ADD_QUIZ_SUCCESS)
           swal("Exam Added!", `${quiz.title} succesfully added`, "success");
         else {
@@ -61,17 +59,41 @@ const AdminAddQuiz = () => {
     }
   };
 
+  /////////////////////////////////
+  useEffect(() => {
+    const fetchSubjects = async () => {
+      try {
+        const response = await fetch("/api/subject/subjects/professor", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Dodajte ovu liniju kako biste poslali token
+            "Content-Type": "application/json", // Ovisno o potrebi, možda trebate dodati i Content-Type
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch professors");
+        }
+        const userData = await response.json();
+        console.log(userData); // Log fetched user data
+        setSubject(userData);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    fetchSubjects();
+  }, [dispatch, token]);
+////////////////////////////////////////
   useEffect(() => {
     if (!localStorage.getItem("jwtToken")) navigate("/");
   }, []);
 
-  useEffect(() => {
+/*  useEffect(() => {
     if (categories.length === 0) {
       fetchCategories(dispatch, token).then((data) => {
         setCategories(data.payload);
       });
-    }
-  }, []);
+    } 
+  }, []);*/
 
   return (
       <div className="adminAddQuizPage__container">
@@ -144,24 +166,23 @@ const AdminAddQuiz = () => {
 
               <div className="my-3">
                 <label htmlFor="category-select">Choose a Subject:</label>
+
                 <Form.Select
                     aria-label="Choose Subject"
                     id="category-select"
-                    onChange={onSelectCategoryHandler}
+                    onChange={(e) => setSelectedSubject(e.target.value)}
+                    value={selectedSubject}
                 >
                   <option value="n/a">Choose Subject</option>
-                  {categories ? (
-                      categories.map((cat, index) => (
-                          <option key={index} value={cat.catId}>
+                  {subject ? (
+                      subject.map((cat) => (
+                          <option key={cat.catId} value={cat.catId}>
                             {cat.title}
                           </option>
                       ))
                   ) : (
                       <option value="">Choose one from below</option>
                   )}
-                  {/* <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option> */}
                 </Form.Select>
 
                 <Form.Group className="my-3" controlId="examDate">
@@ -170,6 +191,15 @@ const AdminAddQuiz = () => {
                       type="date"
                       value={examDate}
                       onChange={(e) => setExamDate(e.target.value)}
+                  ></Form.Control>
+                </Form.Group>
+
+                <Form.Group className="my-3" controlId="registrationDeadline">
+                  <Form.Label>Registration deadline</Form.Label>
+                  <Form.Control
+                      type="date"
+                      value={registrationDeadline}
+                      onChange={(e) => setRegistrationDeadline(e.target.value)}
                   ></Form.Control>
                 </Form.Group>
 
