@@ -9,6 +9,7 @@ import FormContainer from "../../../components/FormContainer";
 import * as quizzesConstants from "../../../constants/quizzesConstants";
 import { addQuiz } from "../../../actions/quizzesActions";
 import { fetchCategories } from "../../../actions/categoriesActions";
+import quizzesService from "../../../services/quizzesServices";
 
 const AdminAddQuiz = () => {
   const [title, setTitle] = useState("");
@@ -20,6 +21,7 @@ const AdminAddQuiz = () => {
 
   const categoriesReducer = useSelector((state) => state.categoriesReducer);
   const [categories, setCategories] = useState(categoriesReducer.categories);
+
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -35,29 +37,41 @@ const AdminAddQuiz = () => {
 
   const token = localStorage.getItem("jwtToken");
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    if (selectedCategoryId !== null && selectedCategoryId !== "n/a") {
-      const quiz = {
-        title: title,
-        description: description,
-        isActive: isActive,
-        category: {
-          catId: selectedCategoryId,
-          title: categories.filter((cat) => cat.catId == selectedCategoryId)[0]["title"],
-          description: categories.filter((cat) => cat.catId == selectedCategoryId)[0]["description"],
-        },
-        examDate: examDate, // Include exam date in the quiz object
-      };
-      addQuiz(dispatch, quiz, token).then((data) => {
-        if (data.type === quizzesConstants.ADD_QUIZ_SUCCESS)
-          swal("Exam Added!", `${quiz.title} succesfully added`, "success");
-        else {
-          swal("Exam Not Added!", `${quiz.title} not added`, "error");
+    try {
+      if (selectedCategoryId !== null && selectedCategoryId !== "n/a") {
+        const selectedCategory = categories.find((cat) => cat.catId === selectedCategoryId);
+
+        if (selectedCategory) {
+          const quiz = {
+            title: title,
+            description: description,
+            isActive: isActive,
+            category: {
+              catId: selectedCategoryId,
+              title: selectedCategory.title,
+              description: selectedCategory.description,
+            },
+            examDate: examDate,
+          };
+
+          const response = await quizzesService.addQuiz(quiz, token);
+          if (response && response.isAdded) {
+            swal("Exam Added!", `${quiz.title} successfully added`, "success");
+            // Optionally, you can redirect the user or perform other actions upon successful addition
+          } else {
+            swal("Error!", "Failed to add the quiz", "error");
+          }
+        } else {
+          swal("Error!", "Selected category not found", "error");
         }
-      });
-    } else {
-      alert("Select valid category!");
+      } else {
+        alert("Select a valid category!");
+      }
+    } catch (error) {
+      console.error("Error adding quiz:", error);
+      swal("Error!", "Failed to add the quiz", "error");
     }
   };
 
@@ -66,12 +80,18 @@ const AdminAddQuiz = () => {
   }, []);
 
   useEffect(() => {
+    // Update local state when Redux store changes
+    setCategories(categoriesReducer.categories);
+  }, [categoriesReducer.categories]);
+
+  useEffect(() => {
     if (categories.length === 0) {
       fetchCategories(dispatch, token).then((data) => {
-        setCategories(data.payload);
+        // Update Redux store with fetched categories
+        dispatch({ type: 'UPDATE_CATEGORIES', payload: data.payload }); // Update this action type as per your reducer
       });
     }
-  }, []);
+  }, [categories.length, dispatch, token]);
 
   return (
       <div className="adminAddQuizPage__container">
