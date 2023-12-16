@@ -36,8 +36,13 @@ const LoginPage = () => {
     e.preventDefault();
     login(dispatch, email, password).then((data) => {
       if (data.type === authConstants.USER_LOGIN_SUCCESS) {
-        // No need to rely on the local storage user data here
-        navigate("/profile"); // Redirect to a loading page after successful login
+        if (data.role.roleName === 'ADMIN') {
+          navigate("/adminProfile"); // Redirect to admin profile for admins
+        } else if (data.role.roleName === 'PROFESSOR') {
+          navigate("/professorProfile"); // Redirect to professor profile for professors
+        } else {
+          navigate("/profile"); // Redirect to user profile for other roles
+        }
       } else if (data.type === authConstants.USER_LOGIN_FAILURE) {
         setErrorMessage("User does not exist. Wrong email or password.");
       }
@@ -46,21 +51,25 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (token) {
-      // Assuming loginReducer.user will contain user information after successful login
       if (loginReducer.user && loginReducer.user.roles) {
-        const isAdmin = "ADMIN";
-      loginReducer.user.roles.forEach(role => {
-          role.roleName = isAdmin; // Ovdje će se prikazati roleName za svaku ulogu
-        if (isAdmin){
-          return navigate("/adminProfile");
-        }
-        else
-        {
-          return navigate("/profile");
-        }
+        let isAdmin = false;
+        let isProfessor = false;
+
+        loginReducer.user.roles.forEach(role => {
+          if (role.roleName === "ADMIN") {
+            isAdmin = true;
+          } else if (role.roleName === "PROFESSOR") {
+            isProfessor = true;
+          }
         });
 
-
+        if (isAdmin) {
+          return navigate("/adminProfile");
+        } else if (isProfessor) {
+          return navigate("/professorProfile");
+        } else {
+          return navigate("/profile");
+        }
       }
     }
   }, [token, loginReducer.user]);

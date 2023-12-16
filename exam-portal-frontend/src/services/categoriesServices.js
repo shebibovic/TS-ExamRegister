@@ -17,29 +17,38 @@ const fetchCategories = async (token) => {
   }
 };
 
-const addCategory = async (cat, token) => {
+const addCategory = async (cat, token, userRole) => {
   try {
+    if (userRole !== 'ADMIN') {
+      // Check if the user is not an admin, prevent adding the category
+      throw new Error('Unauthorized access: Only ADMIN can add categories.');
+    }
+
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
-    const professor= {
-      userId : parseInt(cat.userId),
-      role: {roleName:"PROFESSOR"}
-    }
-    const category ={
+    const professor = {
+      userId: parseInt(cat.userId),
+      role: { roleName: "PROFESSOR" }
+    };
+    const category = {
       title: cat.title,
       description: cat.description,
       professor: professor
-    }
+    };
     const { data } = await axios.post("/api/subject/", category, config);
     console.log("categoryService:addCategory() Success: ", data);
     return { data: data, isAdded: true, error: null };
   } catch (error) {
     console.error(
-      "categoryService:addCategory() Error: ",
-      error.response.statusText
+        "categoryService:addCategory() Error: ",
+        error.response ? error.response.statusText : error.message
     );
-    return { data: null, isAdded: false, error: error.response.statusText };
+    return {
+      data: null,
+      isAdded: false,
+      error: error.response ? error.response.statusText : error.message
+    };
   }
 };
 

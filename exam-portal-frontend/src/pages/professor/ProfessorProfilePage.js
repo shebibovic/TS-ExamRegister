@@ -28,6 +28,16 @@ const ProfessorProfilePage = () => {
     }, [dispatch, navigate, token, loginReducer.user]);
 
     const user = loginReducer.user;
+    const isProfessor = user && user.role && user.role.roleName === "PROFESSOR";
+
+    useEffect(() => {
+        if (isProfessor) {
+            navigate("/professorProfile"); // Redirect to admin profile if user is an admin
+        } else {
+            navigate("/profile"); // Redirect to user profile if not an admin
+        }
+    }, [isProfessor, navigate]);
+
 
     if (!user) {
         return <div>Loading...</div>; // You might want to show a loading indicator while fetching user data

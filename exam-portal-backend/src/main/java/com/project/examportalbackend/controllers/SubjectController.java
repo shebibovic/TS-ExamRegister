@@ -46,7 +46,7 @@ public class SubjectController {
         User student = authService.getUserFromToken();
         return ResponseEntity.ok(subjectService.getSubjectsByStudentId(student.getUserId()));
     }
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'PROFESSOR')")
     @GetMapping("/subjects")
     public ResponseEntity<List<Subject>> getAllSubjects(){
         return ResponseEntity.ok(subjectService.getSubjects());
