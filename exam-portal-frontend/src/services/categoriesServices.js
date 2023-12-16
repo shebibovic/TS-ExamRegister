@@ -17,11 +17,20 @@ const fetchCategories = async (token) => {
   }
 };
 
-const addCategory = async (category, token) => {
+const addCategory = async (cat, token) => {
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
+    const professor= {
+      userId : parseInt(cat.userId),
+      role: {roleName:"PROFESSOR"}
+    }
+    const category ={
+      title: cat.title,
+      description: cat.description,
+      professor: professor
+    }
     const { data } = await axios.post("/api/subject/", category, config);
     console.log("categoryService:addCategory() Success: ", data);
     return { data: data, isAdded: true, error: null };
