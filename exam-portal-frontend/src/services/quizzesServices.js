@@ -8,18 +8,18 @@ const fetchQuizzes = async (token, catId) => {
 
     let quizzes = null;
     if (catId === null) {
-      const { data } = await axios.get("/api/quiz/", config);
+      const { data } = await axios.get("/api/exam/", config); // Updated URL
       quizzes = data;
     } else {
-      const { data } = await axios.get(`/api/quiz/?catId=${catId}`, config);
+      const { data } = await axios.get(`/api/exam/${catId}/`, config); // Updated URL
       quizzes = data;
     }
     console.log("quizzesServices:fetchQuizzes() Success: ", quizzes);
     return quizzes;
   } catch (error) {
     console.error(
-      "quizzesServices:fetchQuizzes() Error: ",
-      error.response.statusText
+        "quizzesServices:fetchQuizzes() Error: ",
+        error.response.statusText
     );
     return error.response.statusText;
   }
@@ -30,17 +30,18 @@ const addQuiz = async (quiz, token) => {
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
-    const { data } = await axios.post("/api/quiz/", quiz, config);
+    const { data } = await axios.post("/api/quiz/", quiz, config); // Update the URL if needed
     console.log("quizzesServices:addQuiz()  Success: ", data);
     return { data: data, isAdded: true, error: null };
   } catch (error) {
     console.error(
-      "quizzesServices:addQuiz()  Error: ",
-      error.response.statusText
+        "quizzesServices:addQuiz()  Error: ",
+        error.response.statusText
     );
     return { data: null, isAdded: false, error: error.response.statusText };
   }
 };
+
 
 const deleteQuiz = async (quizId, token) => {
   try {

@@ -15,11 +15,12 @@ const AdminSubjectID = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const params = useParams();
-    const categoryId = params.subjectId;
+    console.log("paramsss: ", params);
+    const subjectId = params.catId;
     const profId = params.professorId;
 
     const oldCategory = useSelector((state) =>
-        state.categoriesReducer.categories.find((cat) => cat.categoryId === categoryId)
+        state.categoriesReducer.categories.find((cat) => cat.subjectId === subjectId)
     );
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState(""
@@ -34,28 +35,40 @@ const AdminSubjectID = () => {
     useEffect(() => {
         const fetchSelectedCategory = async () => {
             try {
-                const response = await fetch(`/api/category/${categoryId}`, {
-
+                const response = await fetch(`/api/subject/${subjectId}`, {
                     headers: {
-                        Authorization: `Bearer ${token}`, // Dodajte ovu liniju kako biste poslali token
-                        "Content-Type": "application/json", // Ovisno o potrebi, možda trebate dodati i Content-Type
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
                     },
                 });
                 if (response.ok) {
                     const selectedCategoryData = await response.json();
+                    console.log("selectedCategoryData", selectedCategoryData); 
                     setTitle(selectedCategoryData.title);
                     setDescription(selectedCategoryData.description);
-                    setProfesorName(selectedCategoryData.profesor.firstName + " " + selectedCategoryData.profesor.lastName);
+                    setProfesorName(
+                        selectedCategoryData.professor.firstName +
+                        " " +
+                        selectedCategoryData.professor.lastName
+                    );
+                    setSelectedUsers(selectedCategoryData.students);
+                    console.log("STUDEBNTI: ", selectedCategoryData)
                 } else {
-                    throw new Error("Failed to fetch selected category");
+                    throw new Error("Failed to fetch selected subject");
                 }
             } catch (error) {
-                console.error("Error fetching selected category:", error);
+                console.error("Error fetching selected subject:", error);
             }
         };
 
         fetchSelectedCategory();
-    }, [categoryId, token]);
+    }, [subjectId, token]);
+
+    useEffect(() => {
+        console.log("Title:", title);
+        console.log("Description:", description);
+        console.log("Profesor Name:", profesorName);
+    }, [title, description, profesorName]);
 
     return (
         <div className="adminUpdateCategoryPage__container">
@@ -68,6 +81,7 @@ const AdminSubjectID = () => {
                     <p><strong>Subject Name:</strong> {title}</p>
                     <p><strong>Description:</strong> {description}</p>
                     <p><strong>Professor:</strong> {profesorName}</p>
+
                 </div>
             </div>
         </div>

@@ -51,6 +51,13 @@ const LoginPage = () => {
         const isAdmin = "ADMIN";
       loginReducer.user.roles.forEach(role => {
           role.roleName = isAdmin; // Ovdje će se prikazati roleName za svaku ulogu
+        if (isAdmin){
+          return navigate("/adminProfile");
+        }
+        else
+        {
+          return navigate("/profile");
+        }
         });
 
 

@@ -19,15 +19,15 @@ const RegisteredExams = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     const userId = user ? user.userId : null;
 
-    useEffect(() => {
-        if (quizResults == null)
-            fetchQuizResult(dispatch, userId, token).then((data) => {
-                if (data.type === quizResultConstants.FETCH_QUIZ_RESULT_SUCCESS) {
-                    setQuizResults(data.payload);
-                }
-            });
-    }, []);
-
+ //   useEffect(() => {
+ //       if (quizResults == null)
+ //           fetchQuizResult(dispatch, userId, token).then((data) => {
+ //               if (data.type === quizResultConstants.FETCH_QUIZ_RESULT_SUCCESS) {
+ //                   setQuizResults(data.payload);
+ //               }
+ //           });
+ //   }, []);
+ //
     useEffect(() => {
         if (!localStorage.getItem("jwtToken")) navigate("/");
     }, []);

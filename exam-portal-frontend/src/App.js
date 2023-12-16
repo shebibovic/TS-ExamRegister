@@ -60,7 +60,7 @@ const App = () => {
         <Route path="/quiz/*" element={<UserQuizzesPage />} />
         <Route path="/quizManual/" element={<UserQuizManualPage />} />
         <Route path="/questions/" element={<UserQuestionsPage />} />
-        <Route path="/quizResults/" element={<UserQuizResultPage />} />
+
         <Route path="/registeredExams/" element={<RegisteredExams />} />
         <Route path="/adminCategories/:catId" element={<AdminSubjectID />} />
         <Route path="/adminQuizzes/:catId" element={<AdminExamID />} />
