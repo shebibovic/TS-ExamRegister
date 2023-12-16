@@ -10,8 +10,8 @@ const fetchCategories = async (token) => {
     return data;
   } catch (error) {
     console.error(
-      "categoryService:fetchCategories() Error: ",
-      error.response.statusText
+        "categoryService:fetchCategories() Error: ",
+        error.response.statusText
     );
     return error.response.statusText;
   }
@@ -61,8 +61,8 @@ const deleteCategory = async (catId, token) => {
     };
   } catch (error) {
     console.error(
-      "categoryService:deleteCategory()  Error: ",
-      error.response.statusText
+        "categoryService:deleteCategory()  Error: ",
+        error.response.statusText
     );
     return {
       isDeleted: false,
@@ -77,9 +77,9 @@ const updateCategory = async (category, token) => {
       headers: { Authorization: `Bearer ${token}` },
     };
     const { data } = await axios.put(
-      `/api/category/${category.catId}/`,
-      category,
-      config
+        `/api/subject/${category.catId}/`,
+        category,
+        config
     );
     console.log("categoryService:updateCategory()  Success: ", data);
     return {
@@ -89,8 +89,8 @@ const updateCategory = async (category, token) => {
     };
   } catch (error) {
     console.error(
-      "categoryService:updateCategory()  Error: ",
-      error.response.statusText
+        "categoryService:updateCategory()  Error: ",
+        error.response.statusText
     );
     return {
       data: null,
