@@ -19,10 +19,6 @@ const fetchCategories = async (token) => {
 
 const addCategory = async (cat, token, userRole) => {
   try {
-    if (userRole !== 'ADMIN') {
-      // Check if the user is not an admin, prevent adding the category
-      throw new Error('Unauthorized access: Only ADMIN can add categories.');
-    }
 
     const config = {
       headers: { Authorization: `Bearer ${token}` },
