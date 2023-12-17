@@ -46,7 +46,7 @@ public class SubjectController {
         User student = authService.getUserFromToken();
         return ResponseEntity.ok(subjectService.getSubjectsByStudentId(student.getUserId()));
     }
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+
     @GetMapping("/subjects")
     public ResponseEntity<List<Subject>> getAllSubjects(){
         return ResponseEntity.ok(subjectService.getSubjects());
@@ -95,9 +95,10 @@ public class SubjectController {
     }
 
     //getanje profesorovih predmeta
-    @GetMapping("/subjects/{professorId}")
-    public ResponseEntity<?> getProfessorSubjects(@PathVariable Long professorId){
-        return ResponseEntity.ok(subjectService.getSubjectsFromProfessor(professorId));
+    @GetMapping("/subjects/professor")
+    public ResponseEntity<?> getProfessorSubjects(){
+        User professor = authService.getUserFromToken();
+        return ResponseEntity.ok(subjectService.getSubjectsFromProfessor(professor.getUserId()));
     }
 
 
