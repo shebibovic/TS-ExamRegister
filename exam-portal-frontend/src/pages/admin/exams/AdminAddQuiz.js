@@ -8,7 +8,6 @@ import Sidebar from "../../../components/Sidebar";
 import FormContainer from "../../../components/FormContainer";
 import * as quizzesConstants from "../../../constants/quizzesConstants";
 import { addQuiz } from "../../../actions/quizzesActions";
-import { fetchCategories } from "../../../actions/categoriesActions";
  
 const AdminAddQuiz = () => {
   const [title, setTitle] = useState("");

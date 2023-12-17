@@ -33,7 +33,7 @@ const ProfessorQuizzesPage = () => {
             dangerMode: true,
         }).then((willDelete) => {
             if (willDelete) {
-                deleteQuiz(dispatch, quiz.quizId, token).then((data) => {
+                deleteQuiz(dispatch, quiz.examId, token).then((data) => {
                     if (data.type === quizzesConstants.DELETE_QUIZ_SUCCESS) {
                         swal(
                             "Quiz Deleted!",

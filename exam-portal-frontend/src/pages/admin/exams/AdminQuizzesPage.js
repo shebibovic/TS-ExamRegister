@@ -9,7 +9,6 @@ import Loader from "../../../components/Loader";
 import { deleteQuiz, fetchQuizzes } from "../../../actions/quizzesActions";
 import * as quizzesConstants from "../../../constants/quizzesConstants";
 import swal from "sweetalert";
-import { Link } from "react-router-dom";
 
 const AdminQuizzesPage = () => {
   const navigate = useNavigate();
