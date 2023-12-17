@@ -27,7 +27,7 @@ const ProfessorQuizzesPage = () => {
     const deleteQuizHandler = (quiz) => {
         swal({
             title: "Are you sure?",
-            text: "Once deleted, you will not be able to recover this quiz!",
+            text: "Once deleted, you will not be able to recover this exam!",
             icon: "warning",
             buttons: true,
             dangerMode: true,
@@ -36,12 +36,12 @@ const ProfessorQuizzesPage = () => {
                 deleteQuiz(dispatch, quiz.examId, token).then((data) => {
                     if (data.type === quizzesConstants.DELETE_QUIZ_SUCCESS) {
                         swal(
-                            "Quiz Deleted!",
+                            "Exam Deleted!",
                             `${quiz.title} succesfully deleted`,
                             "success"
                         );
                     } else {
-                        swal("Quiz Not Deleted!", `${quiz.title} not deleted`, "error");
+                        swal("Exam Not Deleted!", `${quiz.title} not deleted`, "error");
                     }
                 });
             } else {
@@ -71,7 +71,7 @@ const ProfessorQuizzesPage = () => {
                 <h2>Quizzes</h2>
                 {quizzes ? (
                     quizzes.length === 0 ? (
-                        <Message>No quizzes are present. Try adding some quizzes.</Message>
+                        <Message>No exams are present. Try adding some exam.</Message>
                     ) : (
                         quizzes.map((quiz, index) => {
                             if ((catId && quiz.category.catId == catId) || (catId == null))
@@ -116,7 +116,7 @@ const ProfessorQuizzesPage = () => {
                     className="adminQuizzesPage__content--button"
                     onClick={addNewQuizHandler}
                 >
-                    Add Quiz
+                    Add Exam
                 </Button>
             </div>
         </div>
