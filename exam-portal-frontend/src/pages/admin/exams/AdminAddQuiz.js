@@ -9,28 +9,26 @@ import FormContainer from "../../../components/FormContainer";
 import * as quizzesConstants from "../../../constants/quizzesConstants";
 import { addQuiz } from "../../../actions/quizzesActions";
 import { fetchCategories } from "../../../actions/categoriesActions";
-
+ 
 const AdminAddQuiz = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isActive, setIsActive] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState("");
   const [subject, setSubject] = useState([]);
-
-  const categoriesReducer = useSelector((state) => state.categoriesReducer);
-
+ 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [examDate, setExamDate] = useState("");
   const [registrationDeadline, setRegistrationDeadline] = useState("");
-
+ 
   const onClickPublishedHandler = () => {
     setIsActive(!isActive);
   };
-
-
+ 
+ 
   const token = localStorage.getItem("jwtToken");
-
+ 
   const submitHandler = (e) => {
     e.preventDefault();
     if (selectedSubject.catId !== null && selectedSubject.catId !== "n/a") {
@@ -39,15 +37,13 @@ const AdminAddQuiz = () => {
         description: description,
         isActive: isActive,
         subject: {
-          catId: parseInt(selectedSubject.catId),
-          title: selectedSubject.title,
-          description: selectedSubject.description,
+          subjectId: parseInt(selectedSubject)
         },
         startDate: examDate, // Include exam date in the quiz object
         registrationDeadlineDate: registrationDeadline
       };
-      addQuiz(dispatch, quiz, token).then((data) => {
-        console.log(quiz.category.title+"<-----!!")
+     addQuiz(dispatch, quiz, token).then((data) => {
+      console.log(quiz.subject.subjectId+"EHHH OVDJEE SAMMMM SAAAAAD!!!!!")
         if (data.type === quizzesConstants.ADD_QUIZ_SUCCESS)
           swal("Exam Added!", `${quiz.title} succesfully added`, "success");
         else {
@@ -58,7 +54,7 @@ const AdminAddQuiz = () => {
       alert("Select valid category!");
     }
   };
-
+ 
   /////////////////////////////////
   useEffect(() => {
     const fetchSubjects = async () => {
@@ -73,28 +69,28 @@ const AdminAddQuiz = () => {
           throw new Error("Failed to fetch professors");
         }
         const userData = await response.json();
-        console.log(userData); // Log fetched user data
+        console.log(userData[1].subjectId+"<------------------------------------hesteg"); // Log fetched user data
         setSubject(userData);
       } catch (error) {
         console.error("Error fetching users:", error);
       }
     };
-
+ 
     fetchSubjects();
   }, [dispatch, token]);
 ////////////////////////////////////////
   useEffect(() => {
     if (!localStorage.getItem("jwtToken")) navigate("/");
   }, []);
-
+ 
 /*  useEffect(() => {
     if (categories.length === 0) {
       fetchCategories(dispatch, token).then((data) => {
         setCategories(data.payload);
       });
-    } 
+    }
   }, []);*/
-
+ 
   return (
       <div className="adminAddQuizPage__container">
         <div className="adminAddQuizPage__sidebar">
@@ -115,7 +111,7 @@ const AdminAddQuiz = () => {
                     }}
                 ></Form.Control>
               </Form.Group>
-
+ 
               <Form.Group className="my-3" controlId="description">
                 <Form.Label>Description</Form.Label>
                 <Form.Control
@@ -130,7 +126,7 @@ const AdminAddQuiz = () => {
                     }}
                 ></Form.Control>
               </Form.Group>
-
+ 
               {/* <Form.Group className="my-3" controlId="maxMarks">
               <Form.Label>Maximum Marks</Form.Label>
               <Form.Control
@@ -142,7 +138,7 @@ const AdminAddQuiz = () => {
                 }}
               ></Form.Control>
             </Form.Group> */}
-
+ 
               {/* <Form.Group className="my-3" controlId="numberOfQuestions">
               <Form.Label>Number of Questions</Form.Label>
               <Form.Control
@@ -154,7 +150,7 @@ const AdminAddQuiz = () => {
                 }}
               ></Form.Control>
             </Form.Group> */}
-
+ 
               <Form.Check
                   className="my-3"
                   type="switch"
@@ -163,10 +159,10 @@ const AdminAddQuiz = () => {
                   onChange={onClickPublishedHandler}
                   checked={isActive}
               />
-
+ 
               <div className="my-3">
                 <label htmlFor="category-select">Choose a Subject:</label>
-
+ 
                 <Form.Select
                     aria-label="Choose Subject"
                     id="category-select"
@@ -176,7 +172,7 @@ const AdminAddQuiz = () => {
                   <option value="n/a">Choose Subject</option>
                   {subject ? (
                       subject.map((cat) => (
-                          <option key={cat.catId} value={cat.catId}>
+                          <option key={cat.subjectId} value={cat.subjectId}>
                             {cat.title}
                           </option>
                       ))
@@ -184,7 +180,7 @@ const AdminAddQuiz = () => {
                       <option value="">Choose one from below</option>
                   )}
                 </Form.Select>
-
+ 
                 <Form.Group className="my-3" controlId="examDate">
                   <Form.Label>Exam Date</Form.Label>
                   <Form.Control
@@ -193,7 +189,7 @@ const AdminAddQuiz = () => {
                       onChange={(e) => setExamDate(e.target.value)}
                   ></Form.Control>
                 </Form.Group>
-
+ 
                 <Form.Group className="my-3" controlId="registrationDeadline">
                   <Form.Label>Registration deadline</Form.Label>
                   <Form.Control
@@ -202,8 +198,8 @@ const AdminAddQuiz = () => {
                       onChange={(e) => setRegistrationDeadline(e.target.value)}
                   ></Form.Control>
                 </Form.Group>
-
-
+ 
+ 
               </div>
               <Button
                   className="my-5 adminAddQuizPage__content--button"
@@ -218,5 +214,5 @@ const AdminAddQuiz = () => {
       </div>
   );
 };
-
+ 
 export default AdminAddQuiz;
