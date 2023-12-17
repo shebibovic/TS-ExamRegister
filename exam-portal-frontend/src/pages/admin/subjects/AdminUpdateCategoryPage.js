@@ -30,17 +30,31 @@ const AdminUpdateCategoryPage = () => {
   const [professor, setProfessor] = useState([]);
   const [selectedStudents, setSelectedStudents] = useState([]);
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    const category = { catId: catId, title: title, description: description, userId: selectedUser, students: selectedUsers };
-    updateCategory(dispatch, category, token).then((data) => {
-      if (data.type === categoriesConstants.UPDATE_CATEGORY_SUCCESS) {
-        swal("Subject Updated!", `${title} succesfully updated`, "success");
-      } else {
-        swal("Subject Not Updated!", `${title} not updated`, "error");
+    const category = {
+      catId: catId,
+      title: title,
+      description: description,
+      userId: selectedUser,
+      students: selectedStudents,
+    };
+
+    try {
+      dispatch({ type: categoriesConstants.UPDATE_CATEGORY_REQUEST });
+      const updateResponse = await updateCategory(dispatch, category, token);
+      if (updateResponse.isUpdated) {
+        dispatch({
+          type: categoriesConstants.UPDATE_CATEGORY_SUCCESS,
+          payload: updateResponse.data,
+        });
+        swal("Subject Updated!", `${title} successfully updated`, "success");
       }
-    });
-    navigate("/adminCategories");
+      navigate("/adminCategories");
+    } catch (error) {
+      console.error("Error updating category:", error);
+      // Handle error (e.g., show an error message)
+    }
   };
 
 
