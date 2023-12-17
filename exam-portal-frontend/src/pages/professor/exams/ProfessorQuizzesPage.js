@@ -23,6 +23,13 @@ const ProfessorQuizzesPage = () => {
     const addNewQuizHandler = () => {
         navigate("/professorAddQuiz");
     };
+    // Funkcija za formatiranje datuma
+const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const formattedDate = date.toLocaleDateString(); // Prikaz datuma bez vremena
+    return formattedDate;
+};
+
 
     const deleteQuizHandler = (quiz) => {
         swal({
@@ -80,11 +87,20 @@ const ProfessorQuizzesPage = () => {
                                         className="adminQuizzesPage__content--quizzesList"
                                         key={index}
                                     >
-                                        <ListGroup.Item className="align-items-start" action>
-                                            <div className="ms-2 me-auto">
-                                                <div className="fw-bold">{quiz.title}</div>
-                                                <p style={{ color: "grey" }}>{quiz.title}</p>
-                                                {<p className="my-3">{quiz.description}</p>}
+                                        <ListGroup.Item className="align-items-start" action key={index}>
+                                            <div className="ms-2">
+                                                <div className="d-flex justify-content-between">
+                                                    <div>
+                                                        <div className="fw-bold">{quiz.title}</div>
+                                                        <p style={{ color: "grey" }}>{quiz.title}</p>
+                                                        {<p className="my-3">{quiz.description}</p>}
+                                                    </div>
+                                                    {/* Prikazivanje datuma */}
+                                                    <div className="text-end">
+                                                        <p>Exam Date: {formatDate(quiz.startDate)}</p>
+                                                        <p>Registration deadline: {formatDate(quiz.registrationDeadlineDate)}</p>
+                                                    </div>
+                                                </div>
                                                 <div className="adminQuizzesPage__content--ButtonsList">
                                                     <div
                                                         onClick={() => deleteQuizHandler(quiz)}
@@ -102,8 +118,8 @@ const ProfessorQuizzesPage = () => {
                                                     >{`Delete`}</div>
                                                 </div>
                                             </div>
-                                            {/* <Badge bg="primary" pill></Badge> */}
                                         </ListGroup.Item>
+
                                     </ListGroup>
                                 );
                         })
