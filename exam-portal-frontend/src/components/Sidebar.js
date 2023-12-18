@@ -31,11 +31,6 @@ const Sidebar = ({ children }) => {
       icon: <MdQuiz />,
     },
     {
-      path: "/adminAddQuiz",
-      name: "Add Exam",
-      icon: <MdQueue />,
-    },
-    {
       path: "/addUser",
       name: "Add User",
       icon: <FaUserPlus />,

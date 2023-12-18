@@ -14,8 +14,7 @@ const ProfessorAddQuiz = () => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [isActive, setIsActive] = useState(false);
-    const [selectedSubject, setSelectedSubject] = useState("");
-    const [subject, setSubject] = useState([]);
+    const [selectedSubject, setSubject] = useState("");
    
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -33,14 +32,13 @@ const ProfessorAddQuiz = () => {
             title: title,
             description: description,
             isActive: isActive,
-            subject: {
-              subjectId: parseInt(selectedSubject)
-            },
+            subjectId: parseInt(selectedSubject.subjectId),
+
             startDate: examDate, // Include exam date in the quiz object
             registrationDeadlineDate: registrationDeadline
           };
          addQuiz(dispatch, quiz, token).then((data) => {
-          console.log(quiz.subject.subjectId+"EHHH OVDJEE SAMMMM SAAAAAD!!!!!")
+
             if (data.type === quizzesConstants.ADD_QUIZ_SUCCESS)
               swal("Exam Added!", `${quiz.title} succesfully added`, "success");
             else {
@@ -86,7 +84,7 @@ const ProfessorAddQuiz = () => {
           </div>
           <div className="adminAddQuizPage__content">
             <FormContainer>
-              <h2>Add Exam</h2>
+              <h2>Add Exam for {selectedSubject.title} </h2>
               <Form onSubmit={submitHandler}>
                 <Form.Group className="my-3" controlId="title">
                   <Form.Label>Title</Form.Label>
@@ -140,28 +138,9 @@ const ProfessorAddQuiz = () => {
               </Form.Group> */}
    
 
-   
+
                 <div className="my-3">
-                  <label htmlFor="category-select">Choose a Subject:</label>
-   
-                  <Form.Select
-                      aria-label="Choose Subject"
-                      id="category-select"
-                      onChange={(e) => setSelectedSubject(e.target.value)}
-                      value={selectedSubject}
-                  >
-                    <option value="n/a">Choose Subject</option>
-                    {subject ? (
-                        subject.map((cat) => (
-                            <option key={cat.subjectId} value={cat.subjectId}>
-                              {cat.title}
-                            </option>
-                        ))
-                    ) : (
-                        <option value="">Choose one from below</option>
-                    )}
-                  </Form.Select>
-   
+
                   <Form.Group className="my-3" controlId="examDate">
                     <Form.Label>Exam Date</Form.Label>
                     <Form.Control

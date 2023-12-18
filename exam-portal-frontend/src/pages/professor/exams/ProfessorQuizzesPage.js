@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./ProfessorQuizzesPage.css";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, ListGroup } from "react-bootstrap";
 import Message from "../../../components/Message";
@@ -17,6 +18,8 @@ const ProfessorQuizzesPage = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const catId = urlParams.get("catId");
     const token = localStorage.getItem("jwtToken");
+    const params = useParams();
+    const examId = params.examId;
 
     const quizzesReducer = useSelector((state) => state.quizzesReducer);
     const [quizzes, setQuizzes] = useState(quizzesReducer.quizzes);
@@ -62,6 +65,7 @@ const formatDate = (dateString) => {
             fetchQuizzes(dispatch, token).then((data) => {
                 setQuizzes(data.payload);
             });
+
         }
     }, []);
 
@@ -82,17 +86,19 @@ const formatDate = (dateString) => {
                     ) : (
                         quizzes.map((quiz, index) => {
                             if ((catId && quiz.category.catId == catId) || (catId == null))
+                                console.log(quiz);
                                 return (
                                     <ListGroup
                                         className="adminQuizzesPage__content--quizzesList"
                                         key={index}
                                     >
-                                        <ListGroup.Item className="align-items-start" action key={index}>
+                                        <Link to={`/quiz/${quiz.examId}`} style={{ textDecoration: 'none' }}>
+                                            <ListGroup.Item className="align-items-start" action key={index}>
                                             <div className="ms-2">
                                                 <div className="d-flex justify-content-between">
                                                     <div>
                                                         <div className="fw-bold">{quiz.title}</div>
-                                                        <p style={{ color: "grey" }}>{quiz.title}</p>
+                                                        <p style={{ color: "grey" }}>{quiz.examId}</p>
                                                         {<p className="my-3">{quiz.description}</p>}
                                                     </div>
                                                     {/* Prikazivanje datuma */}
@@ -118,7 +124,8 @@ const formatDate = (dateString) => {
                                                     >{`Delete`}</div>
                                                 </div>
                                             </div>
-                                        </ListGroup.Item>
+                                            </ListGroup.Item>
+                                        </Link>
 
                                     </ListGroup>
                                 );

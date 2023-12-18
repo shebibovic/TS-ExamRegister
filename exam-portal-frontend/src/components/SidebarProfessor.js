@@ -24,6 +24,11 @@ const SidebarProfessor = ({ children }) => {
             name: "Exams",
             icon: <MdQuiz />,
         },
+        {
+            path: "/professorAddQuiz",
+            name: "Add Exam",
+            icon: <MdQueue />,
+        },
     ];
     return (
         <div

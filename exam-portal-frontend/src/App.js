@@ -30,6 +30,7 @@ import ProfessorAddQuiz from "./pages/professor/exams/ProfessorAddQuiz";
 import ProfessorSubjectID from "./pages/professor/subjects/ProfessorSubjectID";
 import UserSubjects from "./pages/users/UserSubjects";
 import UserSubjectID from "./pages/users/UserSubjectID";
+import QuizDetails from "./pages/professor/exams/QuizDetails";
 
 
 const App = () => {
@@ -76,6 +77,7 @@ const App = () => {
 
         <Route path="/userSubjects" element={<UserSubjects />} />
         <Route path="/userCategories/:catId" element={<UserSubjectID />} />
+        <Route path="/quiz/:quizId" element={<QuizDetails />} />
       </Routes>
     </Router>
   );

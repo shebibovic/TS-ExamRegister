@@ -84,22 +84,7 @@ const AdminQuizzesPage = () => {
                                 <div className="fw-bold">{quiz.title}</div>
                                 <p style={{ color: "grey" }}>{quiz.title}</p>
                                 {<p className="my-3">{quiz.description}</p>}
-                                <div className="adminQuizzesPage__content--ButtonsList">
-                                  <div
-                                      onClick={() => deleteQuizHandler(quiz)}
-                                      style={{
-                                        border: "1px solid grey",
-                                        color: "white",
-                                        backgroundColor: "#ff0b0bdb",
-                                        width: "100px",
-                                        padding: "2px",
-                                        textAlign: "center",
-                                        borderRadius: "5px",
-                                        height: "35px",
-                                        margin: "0px 4px",
-                                      }}
-                                  >{`Delete`}</div>
-                                </div>
+
                               </div>
                               {/* <Badge bg="primary" pill></Badge> */}
                             </ListGroup.Item>
@@ -110,13 +95,7 @@ const AdminQuizzesPage = () => {
           ) : (
               <Loader />
           )}
-          <Button
-              variant=""
-              className="adminQuizzesPage__content--button"
-              onClick={addNewQuizHandler}
-          >
-            Add Quiz
-          </Button>
+
         </div>
       </div>
   );

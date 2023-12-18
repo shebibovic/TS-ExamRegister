@@ -81,6 +81,9 @@ const ProfessorSubjectID = () => {
                     <p><strong>Subject Name:</strong> {title}</p>
                     <p><strong>Description:</strong> {description}</p>
                     <p><strong>Professor:</strong> {profesorName}</p>
+                    <ul><strong>Students:</strong>
+                        <li></li>
+                    </ul>
 
                 </div>
             </div>

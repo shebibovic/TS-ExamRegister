@@ -81,6 +81,9 @@ const AdminSubjectID = () => {
                     <p><strong>Subject Name:</strong> {title}</p>
                     <p><strong>Description:</strong> {description}</p>
                     <p><strong>Professor:</strong> {profesorName}</p>
+                    <ul>Students:
+                        <li></li>
+                    </ul>
 
                 </div>
             </div>
