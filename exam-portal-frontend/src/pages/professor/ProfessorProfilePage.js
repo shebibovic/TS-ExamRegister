@@ -74,10 +74,7 @@ const ProfessorProfilePage = () => {
                                 {user.role.roleName}
                             </td>
                         </tr>
-                        <tr>
-                            <td>Account Status</td>
-                            <td>{`${user.enabled}`}</td>
-                        </tr>
+
                         </tbody>
                     </Table>
                 </div>

@@ -19,9 +19,9 @@ const SidebarUser = ({ children }) => {
       icon: <FaUserAlt />,
     },
     {
-      path: "/registeredExams",
-      name: "Registered Exams",
-      icon: <TbReport />,
+      path: "/userSubjects",
+      name: "Subjects",
+      icon: <TbLayoutGrid />,
     },
     {
       path: "/quizzes",
@@ -30,8 +30,8 @@ const SidebarUser = ({ children }) => {
     },
   ]);
 
-  const [isOpen, setIsOpen] = useState(false);
-  const toggle = () => setIsOpen(!isOpen);
+  //const [isOpen, setIsOpen] = useState(false);
+  //const toggle = () => setIsOpen(!isOpen);
 
 
 
@@ -40,13 +40,13 @@ const SidebarUser = ({ children }) => {
       className="container"
       style={{ display: "flex", width: "auto", margin: "0px", padding: "0px" }}
     >
-      <div style={{ width: isOpen ? "12em" : "3em" }} className="sidebar">
+      <div style={{ width: "12em"}} className="sidebar">
         <div className="top_section">
           {/* <h1 style={{ display: isOpen ? "block" : "none" }} className="logo">
             Logo
           </h1> */}
-          <div style={{ marginLeft: isOpen ? "50px" : "0px" }} className="bars">
-            <FaBars onClick={toggle} />
+          <div style={{ marginLeft:"50px"}} className="bars">
+            <FaBars />
           </div>
         </div>
         {menuItems.map((item, index) => (
@@ -58,7 +58,7 @@ const SidebarUser = ({ children }) => {
           >
             <div className="icon">{item.icon}</div>
             <div
-              style={{ display: isOpen ? "block" : "none" }}
+              style={{ display:"block" }}
               className="link_text"
             >
               {item.name}

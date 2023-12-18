@@ -28,6 +28,8 @@ import ProfessorCategoriesPage from "./pages/professor/subjects/ProfessorCategor
 import ProfessorQuizzesPage from "./pages/professor/exams/ProfessorQuizzesPage";
 import ProfessorAddQuiz from "./pages/professor/exams/ProfessorAddQuiz";
 import ProfessorSubjectID from "./pages/professor/subjects/ProfessorSubjectID";
+import UserSubjects from "./pages/users/UserSubjects";
+import UserSubjectID from "./pages/users/UserSubjectID";
 
 
 const App = () => {
@@ -61,7 +63,6 @@ const App = () => {
         <Route path="/quizManual/" element={<UserQuizManualPage />} />
         <Route path="/questions/" element={<UserQuestionsPage />} />
 
-        <Route path="/registeredExams/" element={<RegisteredExams />} />
         <Route path="/adminCategories/:catId" element={<AdminSubjectID />} />
         <Route path="/adminQuizzes/:catId" element={<AdminExamID />} />
         <Route path="/professorProfile" element={<ProfessorProfilePage />} />
@@ -71,6 +72,10 @@ const App = () => {
         <Route path="/professorQuizzes" element={<ProfessorQuizzesPage />} />
         <Route path="/professorAddQuiz" element={<ProfessorAddQuiz />} />
         <Route path="/professorCategories/:catId" element={<ProfessorSubjectID />} />
+
+
+        <Route path="/userSubjects" element={<UserSubjects />} />
+        <Route path="/userCategories/:catId" element={<UserSubjectID />} />
       </Routes>
     </Router>
   );

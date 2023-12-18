@@ -1,98 +1,102 @@
 import React, { useEffect, useState } from "react";
+import "./UserQuizzesPage.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import SidebarUser from "../../components/SidebarUser";
-import "./UserQuizzesPage.css";
-import { fetchQuizzes } from "../../actions/quizzesActions";
-import { Card, Col, Row } from "react-bootstrap";
+import { Button, ListGroup } from "react-bootstrap";
+import Message from "../../components/Message";
+import Sidebar from "../../components/SidebarUser";
+import Loader from "../../components/Loader";
+import { deleteQuiz, fetchQuizzes } from "../../actions/quizzesActions";
+import * as quizzesConstants from "../../constants/quizzesConstants";
+import swal from "sweetalert";
+import { Link } from "react-router-dom";
 
 const UserQuizzesPage = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const urlParams = new URLSearchParams(window.location.search);
-  const catId = urlParams.get("catId");
-  const token = localStorage.getItem("jwtToken");
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const urlParams = new URLSearchParams(window.location.search);
+    const catId = urlParams.get("catId");
+    const token = localStorage.getItem("jwtToken");
 
-  const quizzesReducer = useSelector((state) => state.quizzesReducer);
-  const [quizzes, setQuizzes] = useState([]);
+    const quizzesReducer = useSelector((state) => state.quizzesReducer);
+    const [quizzes, setQuizzes] = useState(quizzesReducer.quizzes);
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const formattedDate = date.toLocaleDateString(); // Prikaz datuma bez vremena
+        return formattedDate;
+    };
 
-  useEffect(() => {
-    if (quizzes.length === 0) {
-      fetchQuizzes(dispatch, token).then((data) => {
-        setQuizzes(data.payload);
-      });
-    }
-  }, []);
 
-  useEffect(() => {
-    if (!localStorage.getItem("jwtToken")) navigate("/");
-  }, []);
+    useEffect(() => {
+        if (quizzes.length === 0) {
+            fetchQuizzes(dispatch, token).then((data) => {
+                setQuizzes(data.payload);
+            });
+        }
+    }, []);
 
-  return (
-      <div className="userQuizzesPage__container">
-        <div className="userQuizzesPage__sidebar">
-          <SidebarUser />
+    useEffect(() => {
+        if (!localStorage.getItem("jwtToken")) navigate("/");
+    }, []);
+
+    return (
+        <div className="adminQuizzesPage__container">
+            <div className="adminQuizzesPage__sidebar">
+                <Sidebar />
+            </div>
+            <div className="adminQuizzesPage__content">
+                <h2>Exams</h2>
+                {quizzes ? (
+                    quizzes.length === 0 ? (
+                        <Message>No exams are present. Try adding some exam.</Message>
+                    ) : (
+                        quizzes.map((quiz, index) => {
+                            if ((catId && quiz.category.catId == catId) || (catId == null))
+                                return (
+                                    <ListGroup
+                                        className="adminQuizzesPage__content--quizzesList"
+                                        key={index}
+                                    >
+                                        <ListGroup.Item className="align-items-start" action key={index}>
+                                            <div className="ms-2">
+                                                <div className="d-flex justify-content-between">
+                                                    <div>
+                                                        <div className="fw-bold">{quiz.title}</div>
+                                                        <p style={{ color: "grey" }}>{quiz.title}</p> 
+                                                        {<p className="my-3">{quiz.description}</p>}
+                                                    </div>
+                                                    {/* Prikazivanje datuma */}
+                                                    <div className="text-end">
+                                                        <p>Exam Date: {formatDate(quiz.startDate)}</p>
+                                                        <p>Registration deadline: {formatDate(quiz.registrationDeadlineDate)}</p>
+                                                        <Button
+                                                            variant="primary"
+                                                            onClick={() => {
+                                                                // Akcija koja se izvršava na klik
+                                                                // Ovdje možete dodati logiku za registraciju
+                                                                // Na primjer, poziv funkcije za registraciju
+                                                            }}
+                                                        >
+                                                            Register exam
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                                <div className="adminQuizzesPage__content--ButtonsList">
+
+                                                </div>
+                                            </div>
+                                        </ListGroup.Item>
+
+                                    </ListGroup>
+                                );
+                        })
+                    )
+                ) : (
+                    <Loader />
+                )}
+            </div>
         </div>
-
-        <div className="userQuizzesPage__content">
-          {quizzes ? (
-              <Row>
-                {quizzes && quizzes.map((q, index) => {
-                  if ((catId && catId == q.category.catId) || catId == null)
-                    return (
-                        <Col
-                            key={index}
-                            xl={3}
-                            lg={4}
-                            md={6}
-                            sm={6}
-                            xs={12}
-                            style={{}}
-                        >
-                          <Card
-                              bg="light"
-                              text="dark"
-                              style={{
-                                width: "100%",
-                                height: "95%",
-                                padding: "5px",
-                                margin: "auto",
-                                marginTop: "5px",
-                                minWidth: "0px",
-                                wordWrap: "break-word",
-                              }}
-                              className="mb-2"
-                          >
-                            <Card.Body>
-                              <Card.Title>{q.title}</Card.Title>
-                              <Card.Subtitle className="mb-2 text-muted">
-                                {q.title}
-                              </Card.Subtitle>
-                              <Card.Text>{q.description}</Card.Text>
-                              <div className="userQuizzesPage__content--ButtonsList">
-                                <div
-                                    className="userQuizzesPage__content--Button"
-                                    onClick={() =>
-                                        navigate(`/quizManual?quizId=${q.quizId}`)
-                                    }
-                                    style={{cursor: "pointer"}}
-                                >
-                                  {`Register`}
-                                </div>
-
-                              </div>
-                            </Card.Body>
-                          </Card>
-                        </Col>
-                    );
-                })}
-              </Row>
-          ) : (
-              <p>No Quizzes Available</p>
-          )}
-        </div>
-      </div>
-  );
+    );
 };
 
 export default UserQuizzesPage;

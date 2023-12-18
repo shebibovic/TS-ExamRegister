@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
-import "./ProfessorCategoriesPage.css";
+import "../admin/subjects/AdminCategoriesPage.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, ListGroup } from "react-bootstrap";
-import * as categoriesConstants from "../../../constants/categoriesConstants";
-import Loader from "../../../components/Loader";
-import Message from "../../../components/Message";
-import Sidebar from "../../../components/SidebarProfessor";
+import * as categoriesConstants from "../../constants/categoriesConstants";
+import Loader from "../../components/Loader";
+import Message from "../../components/Message";
+import Sidebar from "../../components/SidebarUser";
 import {
     deleteCategory,
     fetchCategories,
-} from "../../../actions/categoriesActions";
+} from "../../actions/categoriesActions";
 import swal from "sweetalert";
 
-const ProfessorCategoriesPage = () => {
+const UserSubjects = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const token = localStorage.getItem("jwtToken");
@@ -23,41 +23,10 @@ const ProfessorCategoriesPage = () => {
 
     const categoryClickHandler = (subjectId) => {
         console.log(subjectId)
-        navigate(`/professorCategories/${subjectId}`);
+        navigate(`/userCategories/${subjectId}`);
     };
 
 
-
-    const deleteCategoryHandler = (event, category) => {
-        event.stopPropagation();
-        swal({
-            title: "Are you sure?",
-            text: "Once deleted, you will not be able to recover this subject!",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        }).then((willDelete) => {
-            if (willDelete) {
-                deleteCategory(dispatch, category.catId, token).then((data) => {
-                    if (data.type === categoriesConstants.DELETE_CATEGORY_SUCCESS) {
-                        swal(
-                            "Subject Deleted!",
-                            `${category.title} succesfully deleted`,
-                            "success"
-                        );
-                    } else {
-                        swal(
-                            "Subject Not Deleted!",
-                            `${category.title} not deleted`,
-                            "error"
-                        );
-                    }
-                });
-            } else {
-                swal(`${category.title} is safe`);
-            }
-        });
-    };
 
     useEffect(() => {
         if (!localStorage.getItem("jwtToken")) navigate("/");
@@ -65,11 +34,29 @@ const ProfessorCategoriesPage = () => {
 
     useEffect(() => {
         if (categories.length === 0) {
-            fetchCategories(dispatch, token).then((data) => {
-                setCategories(data.payload);
-            });
+            const fetchCategories = async () => {
+                try {
+                    const response = await fetch("/api/subject/student", {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            "Content-Type": "application/json",
+                        },
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        setCategories(data); // Postavljanje dohvaćenih predmeta u stanje
+                    } else {
+                        throw new Error("Failed to fetch categories");
+                    }
+                } catch (error) {
+                    console.error("Error fetching categories:", error);
+                }
+            };
+
+            fetchCategories();
         }
-    }, []);
+    }, [categories, token]);
 
     return (
         <div className="adminCategoriesPage__container">
@@ -107,7 +94,6 @@ const ProfessorCategoriesPage = () => {
                                                 margin: "auto 2px",
                                             }}
                                         >
-
                                         </div>
                                     </ListGroup.Item>
                                 </ListGroup>
@@ -117,10 +103,9 @@ const ProfessorCategoriesPage = () => {
                 ) : (
                     <Loader />
                 )}
-
             </div>
         </div>
     );
 };
 
-export default ProfessorCategoriesPage;
+export default UserSubjects;

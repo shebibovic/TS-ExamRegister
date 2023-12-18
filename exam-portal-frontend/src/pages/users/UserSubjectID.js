@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-import "./ProfessorCategoriesPage.css";
+import "../admin/subjects/AdminUpdateCategoryPage.css";
 import { Button, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import swal from "sweetalert";
 import { useParams } from "react-router-dom";
-import * as categoriesConstants from "../../../constants/categoriesConstants";
-import FormContainer from "../../../components/FormContainer";
-import Sidebar from "../../../components/SidebarProfessor";
-import { updateCategory } from "../../../actions/categoriesActions";
+import * as categoriesConstants from "../../constants/categoriesConstants";
+import FormContainer from "../../components/FormContainer";
+import Sidebar from "../../components/SidebarUser";
+import { updateCategory } from "../../actions/categoriesActions";
 import { useNavigate } from "react-router-dom";
 
-const ProfessorSubjectID = () => {
+const UserSubjectID = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -70,6 +70,8 @@ const ProfessorSubjectID = () => {
         console.log("Profesor Name:", profesorName);
     }, [title, description, profesorName]);
 
+    // ... ostatak vašeg koda
+
     return (
         <div className="adminUpdateCategoryPage__container">
             <div className="adminUpdateCategoryPage__sidebar">
@@ -81,11 +83,23 @@ const ProfessorSubjectID = () => {
                     <p><strong>Subject Name:</strong> {title}</p>
                     <p><strong>Description:</strong> {description}</p>
                     <p><strong>Professor:</strong> {profesorName}</p>
+                    <Button
 
+                        variant="primary"
+                        onClick={() => {
+                            navigate(`/quizzes`);
+                            // Akcija koja se izvršava na klik
+                            // Ovdje možete dodati logiku za registraciju
+                            // Na primjer, poziv funkcije za registraciju
+                        }}
+                    >
+                        Check exams
+                    </Button>
                 </div>
             </div>
         </div>
     );
-};
 
-export default ProfessorSubjectID;
+};
+export default UserSubjectID;
+

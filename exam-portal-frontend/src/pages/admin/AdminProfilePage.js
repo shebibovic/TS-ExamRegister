@@ -76,10 +76,7 @@ const AdminProfilePage = () => {
                 {user.role.roleName}
               </td>
             </tr>
-            <tr>
-              <td>Status</td>
-              <td>{`${user.active}`}</td>
-            </tr>
+
             </tbody>
           </Table>
         </div>

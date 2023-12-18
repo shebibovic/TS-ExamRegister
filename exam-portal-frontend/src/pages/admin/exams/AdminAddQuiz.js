@@ -150,15 +150,7 @@ const AdminAddQuiz = () => {
               ></Form.Control>
             </Form.Group> */}
  
-              <Form.Check
-                  className="my-3"
-                  type="switch"
-                  id="publish-switch"
-                  label="Publish Exam"
-                  onChange={onClickPublishedHandler}
-                  checked={isActive}
-              />
- 
+
               <div className="my-3">
                 <label htmlFor="category-select">Choose a Subject:</label>
  
