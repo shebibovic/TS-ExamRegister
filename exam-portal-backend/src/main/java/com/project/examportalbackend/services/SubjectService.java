@@ -19,5 +19,5 @@ public interface SubjectService {
 
     void deleteSubject(Long subjectId);
 
-    List<Subject> getSubjectsFromProfessor(Long professorId);
+    Subject getSubjectFromProfessor(long professorId) throws AccessDeniedException;
 }

@@ -3,6 +3,7 @@ package com.project.examportalbackend.controllers;
 import com.project.examportalbackend.models.Subject;
 import com.project.examportalbackend.models.Exam;
 import com.project.examportalbackend.models.User;
+import com.project.examportalbackend.models.dto.request.ExamRequestDto;
 import com.project.examportalbackend.services.AuthService;
 import com.project.examportalbackend.services.SubjectService;
 import com.project.examportalbackend.services.ExamService;
@@ -10,9 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 
@@ -31,13 +32,28 @@ public class ExamController {
     private AuthService authService;
     
     @PostMapping("/")
-    public ResponseEntity<?> addExam(@RequestBody Exam exam) {
-        return ResponseEntity.ok(examService.addExam(exam));
+    public ResponseEntity<?> addExam(@Valid @RequestBody ExamRequestDto examRequestDto) {
+        return ResponseEntity.ok(examService.addExam(examRequestDto));
     }
 
     @GetMapping("/")
     public ResponseEntity<?> getExams() {
         return ResponseEntity.ok(examService.getExams());
+    }
+
+
+    @PreAuthorize("hasAuthority('PROFESSOR')")
+    @GetMapping("/professor/active-exams")
+    public ResponseEntity<List<Exam>> getProfessorActiveExams() throws AccessDeniedException {
+        User professor = authService.getUserFromToken();
+        return ResponseEntity.ok(examService.getActiveExamsByProfessor(professor.getUserId()));
+    }
+
+    @PreAuthorize("hasAuthority('PROFESSOR')")
+    @GetMapping("/professor/inactive-exams")
+    public ResponseEntity<List<Exam>> getProfessorInactiveExams() throws AccessDeniedException {
+        User professor = authService.getUserFromToken();
+        return ResponseEntity.ok(examService.getInactiveExamsByProfessor(professor.getUserId()));
     }
 
     @PreAuthorize("hasAuthority('STUDENT')")

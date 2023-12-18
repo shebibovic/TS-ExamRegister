@@ -3,8 +3,9 @@ package com.project.examportalbackend.utils.constants;
 public enum ErrorTypeMessages {
     RESOURCE_NOT_FOUND("Resource not found"),
     UNAUTHORIZED("Unauthorized access"),
+    BAD_REQUEST("Bad request"),
+    METHOD_ARGUMENT_INVALID("Validation error");
 
-    BAD_REQUEST("Bad request");
 
 
     private final String errorTypeMessage;

@@ -96,9 +96,9 @@ public class SubjectController {
 
     //getanje profesorovih predmeta
     @GetMapping("/subjects/professor")
-    public ResponseEntity<?> getProfessorSubjects(){
+    public ResponseEntity<Subject> getProfessorSubjects() throws AccessDeniedException {
         User professor = authService.getUserFromToken();
-        return ResponseEntity.ok(subjectService.getSubjectsFromProfessor(professor.getUserId()));
+        return ResponseEntity.ok(subjectService.getSubjectFromProfessor(professor.getUserId()));
     }
 
 
