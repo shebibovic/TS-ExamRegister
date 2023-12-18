@@ -55,10 +55,10 @@ public class ExamController {
         return ResponseEntity.ok("Successfully updated exam " + "exam");
     }
 
-//    @GetMapping("/")
-//    public ResponseEntity<?> getExams() {
-//        return ResponseEntity.ok(examService.getExams());
-//    }
+    @GetMapping("/")
+    public ResponseEntity<?> getExams() {
+        return ResponseEntity.ok(examService.getExams());
+    }
 
 
     @PreAuthorize("hasAuthority('PROFESSOR')")
@@ -108,28 +108,28 @@ public class ExamController {
     }
 
 
-//    @GetMapping("/{examId}")
-//    public ResponseEntity<?> getExam(@PathVariable Long examId) {
-//        return ResponseEntity.ok(examService.getExam(examId));
-//    }
-//
-//    @GetMapping(value = "/", params = "subjectId")
-//    public ResponseEntity<?> getExamBySubject(@RequestParam Long subjectId) {
-//        Subject subject = subjectService.getSubject(subjectId);
-//        return ResponseEntity.ok(examService.getExamBySubject(subject));
-//    }
-//
-//    @PutMapping("/{examId}")
-//    public ResponseEntity<?> updateExam(@PathVariable Long examId, @RequestBody Exam exam) {
-//        if (examService.getExam(examId) != null) {
-//            return ResponseEntity.ok(examService.updateExam(exam));
-//        }
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Exam with id : " + String.valueOf(examId) + ", doesn't exists");
-//    }
-//
-//    @DeleteMapping("/{examId}")
-//    public ResponseEntity<?> deleteExam(@PathVariable Long examId) {
-//        examService.deleteExam(examId);
-//        return ResponseEntity.ok(true);
-//    }
+    @GetMapping("/{examId}")
+    public ResponseEntity<?> getExam(@PathVariable Long examId) {
+        return ResponseEntity.ok(examService.getExam(examId));
+    }
+
+    @GetMapping(value = "/", params = "subjectId")
+    public ResponseEntity<?> getExamBySubject(@RequestParam Long subjectId) {
+        Subject subject = subjectService.getSubject(subjectId);
+        return ResponseEntity.ok(examService.getExamBySubject(subject));
+    }
+
+    @PutMapping("/{examId}")
+    public ResponseEntity<?> updateExam(@PathVariable Long examId, @RequestBody Exam exam) {
+        if (examService.getExam(examId) != null) {
+            return ResponseEntity.ok(examService.updateExam(exam));
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Exam with id : " + String.valueOf(examId) + ", doesn't exists");
+    }
+
+    @DeleteMapping("/{examId}")
+    public ResponseEntity<?> deleteExam(@PathVariable Long examId) {
+        examService.deleteExam(examId);
+        return ResponseEntity.ok(true);
+    }
 }

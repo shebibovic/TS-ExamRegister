@@ -21,16 +21,15 @@ public interface ExamService {
 
 
 
-//    List<Exam> getExams();
+    List<Exam> getExams();
 
     Exam getExam(long examId);
 
-//    Exam updateExam(Exam exam);
+    Exam updateExam(Exam exam);
 
-//    void deleteExam(Long examId);
+    void deleteExam(Long examId);
 
-    // Extra methods
-//    List<Exam> getExamBySubject(Subject subject);
+    List<Exam> getExamBySubject(Subject subject);
 
     List<Exam> getActiveExamsByStudent(long studentId) throws AccessDeniedException;
 

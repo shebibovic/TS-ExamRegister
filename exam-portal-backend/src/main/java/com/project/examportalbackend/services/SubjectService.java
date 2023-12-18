@@ -12,13 +12,13 @@ public interface SubjectService {
 
     List<Subject> getSubjectsByStudentId(long studentId) throws AccessDeniedException;
 
-//    List<Subject> getSubjects();
+    List<Subject> getSubjects();
 
     Subject getSubject(long subjectId);
 
-//    Subject updateSubject(Subject subject);
+    Subject updateSubject(Subject subject);
 
-//    void deleteSubject(Long subjectId);
+    void deleteSubject(Long subjectId);
 
     Subject getSubjectFromProfessor(long professorId) throws AccessDeniedException;
 

@@ -78,10 +78,10 @@ public class ExamServiceImpl implements ExamService {
         examRepository.delete(exam);
     }
 
-//    @Override
-//    public List<Exam> getExams() {
-//        return examRepository.findAll();
-//    }
+    @Override
+    public List<Exam> getExams() {
+        return examRepository.findAll();
+    }
 
     @Override
     public Exam getExam(long examId) {
@@ -92,20 +92,20 @@ public class ExamServiceImpl implements ExamService {
         return exam.get();
     }
 
-//    @Override
-//    public Exam updateExam(Exam exam) {
-//        return examRepository.save(exam);
-//    }
-//
-//    @Override
-//    public void deleteExam(Long examId) {
-//        examRepository.deleteById(examId);
-//    }
-//
-//    @Override
-//    public List<Exam> getExamBySubject(Subject subject) {
-//        return examRepository.findBySubject(subject);
-//    }
+    @Override
+    public Exam updateExam(Exam exam) {
+        return examRepository.save(exam);
+    }
+
+    @Override
+    public void deleteExam(Long examId) {
+        examRepository.deleteById(examId);
+    }
+
+    @Override
+    public List<Exam> getExamBySubject(Subject subject) {
+        return examRepository.findBySubject(subject);
+    }
 
     @Override
     public List<Exam> getActiveExamsByStudent(long studentId) throws AccessDeniedException {
