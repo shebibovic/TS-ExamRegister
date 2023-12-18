@@ -29,7 +29,7 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('PROFESSOR')")
     @GetMapping("/professor/subject-students")
-    public ResponseEntity<List<User>> getStudentActiveExams() throws AccessDeniedException {
+    public ResponseEntity<List<User>> getStudentsForProfessorSubject() throws AccessDeniedException {
         User professor = authService.getUserFromToken();
         return ResponseEntity.ok(userService.getAllStudentsFromSubjectForProfessor(professor.getUserId()));
     }
