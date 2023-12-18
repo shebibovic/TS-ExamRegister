@@ -35,6 +35,28 @@ const UserQuizzesPage = () => {
         }
     }, []);
 
+    const registerForExam = async (quizId) => {
+        try {
+            const token = localStorage.getItem("jwtToken");
+    
+            const response = await fetch(`/api/exam/student/register-exam/${quizId}`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            });
+    
+            if (!response.ok) {
+                throw new Error("Failed to register for the exam");
+            }
+            swal("Success!", "You have successfully registered for the exam.", "success");
+        } catch (error) {
+            // U slučaju greške pri registraciji, možete prikazati poruku ili obavijestiti korisnika
+            swal("Error!", "Failed to register for the exam. Please try again.", "error");
+        }
+    };
+
     useEffect(() => {
         if (!localStorage.getItem("jwtToken")) navigate("/");
     }, []);
@@ -71,11 +93,7 @@ const UserQuizzesPage = () => {
                                                         <p>Registration deadline: {formatDate(quiz.registrationDeadlineDate)}</p>
                                                         <Button
                                                             variant="primary"
-                                                            onClick={() => {
-                                                                // Akcija koja se izvršava na klik
-                                                                // Ovdje možete dodati logiku za registraciju
-                                                                // Na primjer, poziv funkcije za registraciju
-                                                            }}
+                                                            onClick={() => registerForExam(quiz.examId)}
                                                         >
                                                             Register exam
                                                         </Button>

@@ -20,7 +20,7 @@ const ProfessorQuizzesPage = () => {
     const token = localStorage.getItem("jwtToken");
     const params = useParams();
     const examId = params.examId;
-
+    const [selectedSubject, setSubject] = useState("");
     const quizzesReducer = useSelector((state) => state.quizzesReducer);
     const [quizzes, setQuizzes] = useState(quizzesReducer.quizzes);
     const addNewQuizHandler = () => {
@@ -59,6 +59,27 @@ const formatDate = (dateString) => {
             }
         });
     };
+    useEffect(() => {
+        const fetchSubjects = async () => {
+          try {
+            const response = await fetch("/api/subject/professor", {
+              headers: {
+                Authorization: `Bearer ${token}`, // Dodajte ovu liniju kako biste poslali token
+                "Content-Type": "application/json", // Ovisno o potrebi, možda trebate dodati i Content-Type
+              },
+            });
+            if (!response.ok) {
+              throw new Error("Failed to fetch professors");
+            }
+            const userData = await response.json();
+            setSubject(userData);
+          } catch (error) {
+            console.error("Error fetching users:", error);
+          }
+        };
+     
+        fetchSubjects();
+      }, [dispatch, token]);
 
     useEffect(() => {
         if (quizzes.length === 0) {
@@ -79,7 +100,7 @@ const formatDate = (dateString) => {
                 <Sidebar />
             </div>
             <div className="adminQuizzesPage__content">
-                <h2>Quizzes</h2>
+                <h2>Exams</h2>
                 {quizzes ? (
                     quizzes.length === 0 ? (
                         <Message>No exams are present. Try adding some exam.</Message>
@@ -98,7 +119,7 @@ const formatDate = (dateString) => {
                                                 <div className="d-flex justify-content-between">
                                                     <div>
                                                         <div className="fw-bold">{quiz.title}</div>
-                                                        <p style={{ color: "grey" }}>{quiz.examId}</p>
+                                                        {<p className="my-3">{selectedSubject.title}</p>} 
                                                         {<p className="my-3">{quiz.description}</p>}
                                                     </div>
                                                     {/* Prikazivanje datuma */}

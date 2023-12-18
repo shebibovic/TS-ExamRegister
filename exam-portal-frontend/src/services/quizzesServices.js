@@ -30,7 +30,7 @@ const addQuiz = async (quiz, token) => {
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
-    const { data } = await axios.post("/api/exam/", quiz, config); // Update the URL if needed
+    const { data } = await axios.post("/api/exam/professor/add/", quiz, config); // Update the URL if needed
     console.log("quizzesServices:addQuiz()  Success: ", data);
     return { data: data, isAdded: true, error: null };
   } catch (error) {

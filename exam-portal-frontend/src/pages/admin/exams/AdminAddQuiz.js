@@ -42,7 +42,7 @@ const AdminAddQuiz = () => {
         registrationDeadlineDate: registrationDeadline
       };
      addQuiz(dispatch, quiz, token).then((data) => {
-      console.log(quiz.subject.subjectId+"EHHH OVDJEE SAMMMM SAAAAAD!!!!!")
+     
         if (data.type === quizzesConstants.ADD_QUIZ_SUCCESS)
           swal("Exam Added!", `${quiz.title} succesfully added`, "success");
         else {
