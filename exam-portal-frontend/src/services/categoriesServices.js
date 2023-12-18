@@ -10,27 +10,41 @@ const fetchCategories = async (token) => {
     return data;
   } catch (error) {
     console.error(
-      "categoryService:fetchCategories() Error: ",
-      error.response.statusText
+        "categoryService:fetchCategories() Error: ",
+        error.response.statusText
     );
     return error.response.statusText;
   }
 };
 
-const addCategory = async (category, token) => {
+const addCategory = async (cat, token, userRole) => {
   try {
+
     const config = {
       headers: { Authorization: `Bearer ${token}` },
+    };
+    const professor = {
+      userId: parseInt(cat.userId),
+      role: { roleName: "PROFESSOR" }
+    };
+    const category = {
+      title: cat.title,
+      description: cat.description,
+      professor: professor
     };
     const { data } = await axios.post("/api/subject/", category, config);
     console.log("categoryService:addCategory() Success: ", data);
     return { data: data, isAdded: true, error: null };
   } catch (error) {
     console.error(
-      "categoryService:addCategory() Error: ",
-      error.response.statusText
+        "categoryService:addCategory() Error: ",
+        error.response ? error.response.statusText : error.message
     );
-    return { data: null, isAdded: false, error: error.response.statusText };
+    return {
+      data: null,
+      isAdded: false,
+      error: error.response ? error.response.statusText : error.message
+    };
   }
 };
 
@@ -47,8 +61,8 @@ const deleteCategory = async (catId, token) => {
     };
   } catch (error) {
     console.error(
-      "categoryService:deleteCategory()  Error: ",
-      error.response.statusText
+        "categoryService:deleteCategory()  Error: ",
+        error.response.statusText
     );
     return {
       isDeleted: false,
@@ -63,9 +77,9 @@ const updateCategory = async (category, token) => {
       headers: { Authorization: `Bearer ${token}` },
     };
     const { data } = await axios.put(
-      `/api/category/${category.catId}/`,
-      category,
-      config
+        `/api/subject/${category.catId}/`,
+        category,
+        config
     );
     console.log("categoryService:updateCategory()  Success: ", data);
     return {
@@ -75,8 +89,8 @@ const updateCategory = async (category, token) => {
     };
   } catch (error) {
     console.error(
-      "categoryService:updateCategory()  Error: ",
-      error.response.statusText
+        "categoryService:updateCategory()  Error: ",
+        error.response.statusText
     );
     return {
       data: null,

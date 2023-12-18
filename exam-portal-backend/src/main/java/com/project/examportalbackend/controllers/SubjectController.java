@@ -46,7 +46,7 @@ public class SubjectController {
         User student = authService.getUserFromToken();
         return ResponseEntity.ok(subjectService.getSubjectsByStudentId(student.getUserId()));
     }
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+
     @GetMapping("/subjects")
     public ResponseEntity<List<Subject>> getAllSubjects(){
         return ResponseEntity.ok(subjectService.getSubjects());
@@ -94,9 +94,11 @@ public class SubjectController {
         return ResponseEntity.ok(userService.getAllStudents());
     }
 
-    @GetMapping("/subjects/{professorId}")
-    public ResponseEntity<?> getProfessorSubjects(@PathVariable long professorId) throws AccessDeniedException {
-        return ResponseEntity.ok(subjectService.getSubjectFromProfessor(professorId));
+    //getanje profesorovih predmeta
+    @GetMapping("/subjects/professor")
+    public ResponseEntity<Subject> getProfessorSubjects() throws AccessDeniedException {
+        User professor = authService.getUserFromToken();
+        return ResponseEntity.ok(subjectService.getSubjectFromProfessor(professor.getUserId()));
     }
 
 

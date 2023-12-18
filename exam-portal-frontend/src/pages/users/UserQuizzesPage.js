@@ -14,7 +14,7 @@ const UserQuizzesPage = () => {
   const token = localStorage.getItem("jwtToken");
 
   const quizzesReducer = useSelector((state) => state.quizzesReducer);
-  const [quizzes, setQuizzes] = useState(quizzesReducer.quizzes);
+  const [quizzes, setQuizzes] = useState([]);
 
   useEffect(() => {
     if (quizzes.length === 0) {
@@ -29,86 +29,69 @@ const UserQuizzesPage = () => {
   }, []);
 
   return (
-    <div className="userQuizzesPage__container">
-      <div className="userQuizzesPage__sidebar">
-        <SidebarUser />
-      </div>
+      <div className="userQuizzesPage__container">
+        <div className="userQuizzesPage__sidebar">
+          <SidebarUser />
+        </div>
 
-      <div className="userQuizzesPage__content">
-        {quizzes ? (
-          <Row>
-            {quizzes.map((q, index) => {
-              if ((catId && catId == q.category.catId) || catId == null)
-                return (
-                  <Col
-                    key={index}
-                    xl={3}
-                    lg={4}
-                    md={6}
-                    sm={6}
-                    xs={12}
-                    style={{}}
-                  >
-                    <Card
-                      bg="light"
-                      text="dark"
-                      style={{
-                        width: "100%",
-                        height: "95%",
-                        padding: "5px",
-                        margin: "auto",
-                        marginTop: "5px",
-                        minWidth: "0px",
-                        wordWrap: "break-word",
-                      }}
-                      className="mb-2"
-                    >
-                      <Card.Body>
-                        <Card.Title>{q.title}</Card.Title>
-                        <Card.Subtitle className="mb-2 text-muted">
-                          {q.category.title}
-                        </Card.Subtitle>
-                        <Card.Text>{q.description}</Card.Text>
-                        <div className="userQuizzesPage__content--ButtonsList">
-                          <div
-                            className="userQuizzesPage__content--Button"
-                            onClick={() =>
-                              navigate(`/quizManual?quizId=${q.quizId}`)
-                            }
-                            style={{cursor: "pointer"}}
+        <div className="userQuizzesPage__content">
+          {quizzes ? (
+              <Row>
+                {quizzes && quizzes.map((q, index) => {
+                  if ((catId && catId == q.category.catId) || catId == null)
+                    return (
+                        <Col
+                            key={index}
+                            xl={3}
+                            lg={4}
+                            md={6}
+                            sm={6}
+                            xs={12}
+                            style={{}}
+                        >
+                          <Card
+                              bg="light"
+                              text="dark"
+                              style={{
+                                width: "100%",
+                                height: "95%",
+                                padding: "5px",
+                                margin: "auto",
+                                marginTop: "5px",
+                                minWidth: "0px",
+                                wordWrap: "break-word",
+                              }}
+                              className="mb-2"
                           >
-                            {`Start`}
-                          </div>
+                            <Card.Body>
+                              <Card.Title>{q.title}</Card.Title>
+                              <Card.Subtitle className="mb-2 text-muted">
+                                {q.title}
+                              </Card.Subtitle>
+                              <Card.Text>{q.description}</Card.Text>
+                              <div className="userQuizzesPage__content--ButtonsList">
+                                <div
+                                    className="userQuizzesPage__content--Button"
+                                    onClick={() =>
+                                        navigate(`/quizManual?quizId=${q.quizId}`)
+                                    }
+                                    style={{cursor: "pointer"}}
+                                >
+                                  {`Register`}
+                                </div>
 
-                          <div
-                            className="userQuizzesPage__content--Button"
-                            onClick={() => console.log("View")}
-                            style={{ color: "black", backgroundColor: "white" }}
-                          >{`${q.numOfQuestions * 2} Minutes`}</div>
-
-                          <div
-                            className="userQuizzesPage__content--Button"
-                            onClick={() => console.log("View")}
-                            style={{ color: "black", backgroundColor: "white" }}
-                          >{`${q.numOfQuestions} Questions`}</div>
-
-                          <div
-                            className="userQuizzesPage__content--Button"
-                            onClick={() => console.log("View")}
-                            style={{ color: "black", backgroundColor: "white" }}
-                          >{`Marks : ${q.numOfQuestions * 5}`}</div>
-                        </div>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                );
-            })}
-          </Row>
-        ) : (
-          <p>No Quizzes Available</p>
-        )}
+                              </div>
+                            </Card.Body>
+                          </Card>
+                        </Col>
+                    );
+                })}
+              </Row>
+          ) : (
+              <p>No Quizzes Available</p>
+          )}
+        </div>
       </div>
-    </div>
   );
 };
 

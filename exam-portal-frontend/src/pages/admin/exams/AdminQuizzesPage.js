@@ -9,7 +9,6 @@ import Loader from "../../../components/Loader";
 import { deleteQuiz, fetchQuizzes } from "../../../actions/quizzesActions";
 import * as quizzesConstants from "../../../constants/quizzesConstants";
 import swal from "sweetalert";
-import { Link } from "react-router-dom";
 
 const AdminQuizzesPage = () => {
   const navigate = useNavigate();
@@ -83,7 +82,7 @@ const AdminQuizzesPage = () => {
                             <ListGroup.Item className="align-items-start" action>
                               <div className="ms-2 me-auto">
                                 <div className="fw-bold">{quiz.title}</div>
-                                <p style={{ color: "grey" }}>{quiz.category.title}</p>
+                                <p style={{ color: "grey" }}>{quiz.title}</p>
                                 {<p className="my-3">{quiz.description}</p>}
                                 <div className="adminQuizzesPage__content--ButtonsList">
                                   <div

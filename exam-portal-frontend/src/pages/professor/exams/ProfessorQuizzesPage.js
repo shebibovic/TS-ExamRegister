@@ -23,25 +23,32 @@ const ProfessorQuizzesPage = () => {
     const addNewQuizHandler = () => {
         navigate("/professorAddQuiz");
     };
+    // Funkcija za formatiranje datuma
+const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const formattedDate = date.toLocaleDateString(); // Prikaz datuma bez vremena
+    return formattedDate;
+};
+
 
     const deleteQuizHandler = (quiz) => {
         swal({
             title: "Are you sure?",
-            text: "Once deleted, you will not be able to recover this quiz!",
+            text: "Once deleted, you will not be able to recover this exam!",
             icon: "warning",
             buttons: true,
             dangerMode: true,
         }).then((willDelete) => {
             if (willDelete) {
-                deleteQuiz(dispatch, quiz.quizId, token).then((data) => {
+                deleteQuiz(dispatch, quiz.examId, token).then((data) => {
                     if (data.type === quizzesConstants.DELETE_QUIZ_SUCCESS) {
                         swal(
-                            "Quiz Deleted!",
+                            "Exam Deleted!",
                             `${quiz.title} succesfully deleted`,
                             "success"
                         );
                     } else {
-                        swal("Quiz Not Deleted!", `${quiz.title} not deleted`, "error");
+                        swal("Exam Not Deleted!", `${quiz.title} not deleted`, "error");
                     }
                 });
             } else {
@@ -71,7 +78,7 @@ const ProfessorQuizzesPage = () => {
                 <h2>Quizzes</h2>
                 {quizzes ? (
                     quizzes.length === 0 ? (
-                        <Message>No quizzes are present. Try adding some quizzes.</Message>
+                        <Message>No exams are present. Try adding some exam.</Message>
                     ) : (
                         quizzes.map((quiz, index) => {
                             if ((catId && quiz.category.catId == catId) || (catId == null))
@@ -80,11 +87,20 @@ const ProfessorQuizzesPage = () => {
                                         className="adminQuizzesPage__content--quizzesList"
                                         key={index}
                                     >
-                                        <ListGroup.Item className="align-items-start" action>
-                                            <div className="ms-2 me-auto">
-                                                <div className="fw-bold">{quiz.title}</div>
-                                                <p style={{ color: "grey" }}>{quiz.category.title}</p>
-                                                {<p className="my-3">{quiz.description}</p>}
+                                        <ListGroup.Item className="align-items-start" action key={index}>
+                                            <div className="ms-2">
+                                                <div className="d-flex justify-content-between">
+                                                    <div>
+                                                        <div className="fw-bold">{quiz.title}</div>
+                                                        <p style={{ color: "grey" }}>{quiz.title}</p>
+                                                        {<p className="my-3">{quiz.description}</p>}
+                                                    </div>
+                                                    {/* Prikazivanje datuma */}
+                                                    <div className="text-end">
+                                                        <p>Exam Date: {formatDate(quiz.startDate)}</p>
+                                                        <p>Registration deadline: {formatDate(quiz.registrationDeadlineDate)}</p>
+                                                    </div>
+                                                </div>
                                                 <div className="adminQuizzesPage__content--ButtonsList">
                                                     <div
                                                         onClick={() => deleteQuizHandler(quiz)}
@@ -102,8 +118,8 @@ const ProfessorQuizzesPage = () => {
                                                     >{`Delete`}</div>
                                                 </div>
                                             </div>
-                                            {/* <Badge bg="primary" pill></Badge> */}
                                         </ListGroup.Item>
+
                                     </ListGroup>
                                 );
                         })
@@ -116,7 +132,7 @@ const ProfessorQuizzesPage = () => {
                     className="adminQuizzesPage__content--button"
                     onClick={addNewQuizHandler}
                 >
-                    Add Quiz
+                    Add Exam
                 </Button>
             </div>
         </div>

@@ -36,13 +36,12 @@ const LoginPage = () => {
     e.preventDefault();
     login(dispatch, email, password).then((data) => {
       if (data.type === authConstants.USER_LOGIN_SUCCESS) {
-        const isAdmin =
-            user && user.roles.roleName === "ADMIN";
-        if (isAdmin) {
-          navigate("/adminProfile");
+        if (data.role.roleName === 'ADMIN') {
+          navigate("/adminProfile"); // Redirect to admin profile for admins
+        } else if (data.role.roleName === 'PROFESSOR') {
+          navigate("/professorProfile"); // Redirect to professor profile for professors
         } else {
-          navigate("/profile");
-
+          navigate("/profile"); // Redirect to user profile for other roles
         }
       } else if (data.type === authConstants.USER_LOGIN_FAILURE) {
         setErrorMessage("User does not exist. Wrong email or password.");
@@ -51,19 +50,30 @@ const LoginPage = () => {
   };
 
   useEffect(() => {
-    console.log("Token:", token);
-    console.log("User:", user);
-    console.log("User Roles:", user && user.roles);
+    if (token) {
+      if (loginReducer.user && loginReducer.user.roles) {
+        let isAdmin = false;
+        let isProfessor = false;
 
-    if (token && user && user.roles && user.roles.length > 0) {
-      const isAdmin = user.roles.roleName === "ADMIN";
-      if (isAdmin) {
-        navigate("/adminProfile");
-      } else {
-        navigate("/profile");
+        loginReducer.user.roles.forEach(role => {
+          if (role.roleName === "ADMIN") {
+            isAdmin = true;
+          } else if (role.roleName === "PROFESSOR") {
+            isProfessor = true;
+          }
+        });
+
+        if (isAdmin) {
+          return navigate("/adminProfile");
+        } else if (isProfessor) {
+          return navigate("/professorProfile");
+        } else {
+          return navigate("/profile");
+        }
       }
     }
-  }, []);
+  }, [token, loginReducer.user]);
+
 
   return (
       <FormContainer>
