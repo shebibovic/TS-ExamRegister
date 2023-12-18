@@ -33,18 +33,18 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private SubjectService subjectService;
 
-    @Override
-    public User createUser(User user) {
-        return userRepository.save(user);
-    }
+//    @Override
+//    public User createUser(User user) {
+//        return userRepository.save(user);
+//    }
+//
+//    @Override
+//    public List<User> getUsers() {
+//        return userRepository.findAll();
+//    }
 
     @Override
-    public List<User> getUsers() {
-        return userRepository.findAll();
-    }
-
-    @Override
-    public User getUser(Long userId) {
+    public User getUser(long userId) {
         Optional<User> user = userRepository.findById(userId);
         if(user.isEmpty()){
             throw new ResourceNotFoundException("User with id:" + userId + "doesn't exist");
@@ -52,35 +52,35 @@ public class UserServiceImpl implements UserService {
         return user.get();
     }
 
-    @Override
-    public List<User> getAllProfesors() {
-        List<User> users = userRepository.findAll();
-        List<User> profesori = new ArrayList<>();
-        for(User u: users){
-            if(u.getRole().getRoleName().equals("PROFESSOR")) profesori.add(u);
-        }
-        return profesori;
-    }
-    @Override
-    public List<User> getAllStudents() {
-        List<User> users = userRepository.findAll();
-        List<User> studenti = new ArrayList<>();
-        for(User u: users){
-            if(u.getRole().getRoleName().equals("STUDENT")) studenti.add(u);
-        }
-        return studenti;
-    }
+//    @Override
+//    public List<User> getAllProfesors() {
+//        List<User> users = userRepository.findAll();
+//        List<User> profesori = new ArrayList<>();
+//        for(User u: users){
+//            if(u.getRole().getRoleName().equals("PROFESSOR")) profesori.add(u);
+//        }
+//        return profesori;
+//    }
+//    @Override
+//    public List<User> getAllStudents() {
+//        List<User> users = userRepository.findAll();
+//        List<User> studenti = new ArrayList<>();
+//        for(User u: users){
+//            if(u.getRole().getRoleName().equals("STUDENT")) studenti.add(u);
+//        }
+//        return studenti;
+//    }
 
-    @Override
-    public User getProfessor(Long subjectId) {
-        List<User> users = userRepository.findAll();
-        List<Subject> subjects = subjectRepository.findAll();
-        for(Subject subject :subjects){
-            if(subject.getSubjectId()==subjectId)
-                return subject.getProfessor();
-        }
-        return null;
-    }
+//    @Override
+//    public User getProfessor(Long subjectId) {
+//        List<User> users = userRepository.findAll();
+//        List<Subject> subjects = subjectRepository.findAll();
+//        for(Subject subject :subjects){
+//            if(subject.getSubjectId()==subjectId)
+//                return subject.getProfessor();
+//        }
+//        return null;
+//    }
 
     @Override
     public List<User> getAllStudentsFromSubjectForProfessor(long professorId) throws AccessDeniedException {

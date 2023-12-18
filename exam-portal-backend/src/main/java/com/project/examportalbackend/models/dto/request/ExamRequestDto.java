@@ -20,8 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ExamRequestDto {
 
-    private Long examId;
-
+    private long examId = -1;
     @NotNull(message = "Exam must have a title")
     @NotEmpty(message = "Exam title can't be empty")
     @Size(max = 25, message = "Exam title can't have more than 25 characters")
@@ -38,14 +37,4 @@ public class ExamRequestDto {
     @NotNull(message = "Exam must have a start date")
     private Date startDate;
 
-    @NotNull(message = "Exam must have a subject")
-    private long subjectId;
-
-    public ExamRequestDto(String title, String description, long subjectId, Date registrationDeadlineDate, Date startDate){
-        this.title = title;
-        this.description = description;
-        this.subjectId = subjectId;
-        this.registrationDeadlineDate = registrationDeadlineDate;
-        this.startDate = startDate;
-    }
 }

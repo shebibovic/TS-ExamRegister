@@ -7,18 +7,18 @@ import java.util.List;
 
 public interface UserService {
 
-    User createUser(User user);
+//    User createUser(User user);
 
-    List<User> getUsers();
+//    List<User> getUsers();
 
-    User getUser(Long userId);
+    User getUser(long userId);
 
-    List<User> getAllProfesors();
+//    List<User> getAllProfesors();
 
-    List<User> getAllStudents();
+//    List<User> getAllStudents();
 
     List<User> getAllStudentsFromSubjectForProfessor(long professorId) throws AccessDeniedException;
 
 
-    User getProfessor(Long profesorId);
+//    User getProfessor(Long profesorId);
 }

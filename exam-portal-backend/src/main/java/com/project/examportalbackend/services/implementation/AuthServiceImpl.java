@@ -84,7 +84,7 @@ public class AuthServiceImpl implements AuthService {
 
     public void verifyUserRole(long userId, String roleName) throws AccessDeniedException {
         if(!getUserRoleByUserId(userId).getRoleName().equals(roleName)){
-            throw new AccessDeniedException("User must be a student");
+            throw new AccessDeniedException("User must be a " + roleName);
         }
     }
 
@@ -92,9 +92,9 @@ public class AuthServiceImpl implements AuthService {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
-            throw new Exception("USER_DISABLED", e);
+            throw new DisabledException("User " + username + " is disabled", e);
         } catch (BadCredentialsException e) {
-            throw new Exception("INVALID_CREDENTIALS", e);
+            throw new BadCredentialsException("Incorrect email or password", e);
         }
     }
 }

@@ -34,9 +34,4 @@ public class AuthController {
     public LoginResponse loginUser(@RequestBody LoginRequest loginRequest) throws Exception {
         return authService.loginUserService(loginRequest);
     }
-    @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
 }

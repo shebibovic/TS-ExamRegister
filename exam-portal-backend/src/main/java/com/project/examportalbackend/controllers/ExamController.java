@@ -30,16 +30,35 @@ public class ExamController {
 
     @Autowired
     private AuthService authService;
-    
-    @PostMapping("/")
-    public ResponseEntity<?> addExam(@Valid @RequestBody ExamRequestDto examRequestDto) {
-        return ResponseEntity.ok(examService.addExam(examRequestDto));
+
+    @PreAuthorize("hasAuthority('PROFESSOR')")
+    @PostMapping("/professor/add")
+    public ResponseEntity<String> addExamByProfessor(@Valid @RequestBody ExamRequestDto examRequestDto) throws AccessDeniedException {
+        User professor = authService.getUserFromToken();
+        Exam exam = examService.addExamForProfessor(examRequestDto, professor.getUserId());
+        return ResponseEntity.ok("Successfully added exam " + exam.getTitle());
     }
 
-    @GetMapping("/")
-    public ResponseEntity<?> getExams() {
-        return ResponseEntity.ok(examService.getExams());
+    @PreAuthorize("hasAuthority('PROFESSOR')")
+    @DeleteMapping("/professor/delete/{examId}")
+    public ResponseEntity<String> deleteExamByProfessor(@PathVariable long examId) throws AccessDeniedException {
+        User professor = authService.getUserFromToken();
+        examService.deleteExamForProfessor(examId, professor.getUserId());
+        return ResponseEntity.ok("Successfully deleted exam");
     }
+
+    @PreAuthorize("hasAuthority('PROFESSOR')")
+    @PostMapping("/professor/update")
+    public ResponseEntity<String> updateExamByProfessor(@Valid @RequestBody ExamRequestDto examRequestDto) throws AccessDeniedException {
+        User professor = authService.getUserFromToken();
+        Exam exam = examService.updateExamForProfessor(examRequestDto, professor.getUserId());
+        return ResponseEntity.ok("Successfully updated exam " + "exam");
+    }
+
+//    @GetMapping("/")
+//    public ResponseEntity<?> getExams() {
+//        return ResponseEntity.ok(examService.getExams());
+//    }
 
 
     @PreAuthorize("hasAuthority('PROFESSOR')")
@@ -75,8 +94,7 @@ public class ExamController {
     public ResponseEntity<String> registerExamForStudent(@PathVariable long examId) throws AccessDeniedException {
         User student = authService.getUserFromToken();
         Exam exam = examService.registerExamForStudent(student.getUserId(),examId);
-        return ResponseEntity.ok(
-                "Successfully registered student " + student.getFullName() + " for exam " + exam.getTitle());
+        return ResponseEntity.ok("Successfully registered student " + student.getFullName() + " for exam " + exam.getTitle());
     }
 
     @PreAuthorize("hasAuthority('STUDENT')")
@@ -90,28 +108,28 @@ public class ExamController {
     }
 
 
-    @GetMapping("/{examId}")
-    public ResponseEntity<?> getExam(@PathVariable Long examId) {
-        return ResponseEntity.ok(examService.getExam(examId));
-    }
-
-    @GetMapping(value = "/", params = "subjectId")
-    public ResponseEntity<?> getExamBySubject(@RequestParam Long subjectId) {
-        Subject subject = subjectService.getSubject(subjectId);
-        return ResponseEntity.ok(examService.getExamBySubject(subject));
-    }
-
-    @PutMapping("/{examId}")
-    public ResponseEntity<?> updateExam(@PathVariable Long examId, @RequestBody Exam exam) {
-        if (examService.getExam(examId) != null) {
-            return ResponseEntity.ok(examService.updateExam(exam));
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Exam with id : " + String.valueOf(examId) + ", doesn't exists");
-    }
-
-    @DeleteMapping("/{examId}")
-    public ResponseEntity<?> deleteExam(@PathVariable Long examId) {
-        examService.deleteExam(examId);
-        return ResponseEntity.ok(true);
-    }
+//    @GetMapping("/{examId}")
+//    public ResponseEntity<?> getExam(@PathVariable Long examId) {
+//        return ResponseEntity.ok(examService.getExam(examId));
+//    }
+//
+//    @GetMapping(value = "/", params = "subjectId")
+//    public ResponseEntity<?> getExamBySubject(@RequestParam Long subjectId) {
+//        Subject subject = subjectService.getSubject(subjectId);
+//        return ResponseEntity.ok(examService.getExamBySubject(subject));
+//    }
+//
+//    @PutMapping("/{examId}")
+//    public ResponseEntity<?> updateExam(@PathVariable Long examId, @RequestBody Exam exam) {
+//        if (examService.getExam(examId) != null) {
+//            return ResponseEntity.ok(examService.updateExam(exam));
+//        }
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Exam with id : " + String.valueOf(examId) + ", doesn't exists");
+//    }
+//
+//    @DeleteMapping("/{examId}")
+//    public ResponseEntity<?> deleteExam(@PathVariable Long examId) {
+//        examService.deleteExam(examId);
+//        return ResponseEntity.ok(true);
+//    }
 }

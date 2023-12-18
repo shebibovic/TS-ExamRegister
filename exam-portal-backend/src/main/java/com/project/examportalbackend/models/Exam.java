@@ -60,6 +60,14 @@ public class Exam {
         this.startDate = startDate;
     }
 
+    public Exam(long examId, String title, String description, Subject subject, Date registrationDeadlineDate, Date startDate){
+        this.examId = examId;
+        this.title = title;
+        this.description = description;
+        this.subject = subject;
+        this.registrationDeadlineDate = registrationDeadlineDate;
+        this.startDate = startDate;
+    }
     public boolean isActive(){
         return new Date().before(this.startDate);
     }

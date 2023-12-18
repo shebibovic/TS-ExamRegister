@@ -1,6 +1,8 @@
 package com.project.examportalbackend.services.implementation;
 
+import com.project.examportalbackend.exception.exceptions.ResourceNotFoundException;
 import com.project.examportalbackend.models.Subject;
+import com.project.examportalbackend.models.User;
 import com.project.examportalbackend.repository.SubjectRepository;
 import com.project.examportalbackend.services.AuthService;
 import com.project.examportalbackend.services.SubjectService;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SubjectServiceImpl implements SubjectService {
@@ -25,26 +28,30 @@ public class SubjectServiceImpl implements SubjectService {
     public Subject addSubject(Subject subject) {
         return subjectRepository.save(subject);
     }
-
+//
+//    @Override
+//    public List<Subject> getSubjects() {
+//        return subjectRepository.findAll();
+//    }
+//
     @Override
-    public List<Subject> getSubjects() {
-        return subjectRepository.findAll();
+    public Subject getSubject(long subjectId) {
+        Optional<Subject> subject = subjectRepository.findById(subjectId);
+        if(subject.isEmpty()){
+            throw new ResourceNotFoundException("Subject with id:" + subjectId + "doesn't exist");
+        }
+        return subject.get();
     }
-
-    @Override
-    public Subject getSubject(Long subjectId) {
-        return subjectRepository.findById(subjectId).isPresent() ? subjectRepository.findById(subjectId).get() : null;
-    }
-
-    @Override
-    public Subject updateSubject(Subject subject) {
-        return subjectRepository.save(subject);
-    }
-
-    @Override
-    public void deleteSubject(Long subjectId) {
-        subjectRepository.delete(getSubject(subjectId));
-    }
+//
+//    @Override
+//    public Subject updateSubject(Subject subject) {
+//        return subjectRepository.save(subject);
+//    }
+//
+//    @Override
+//    public void deleteSubject(Long subjectId) {
+//        subjectRepository.delete(getSubject(subjectId));
+//    }
 
     @Override
     public Subject getSubjectFromProfessor(long professorId) throws AccessDeniedException {
@@ -60,5 +67,12 @@ public class SubjectServiceImpl implements SubjectService {
     public List<Subject> getSubjectsByStudentId(long studentId) throws AccessDeniedException {
         authService.verifyUserRole(studentId, Roles.STUDENT.toString());
         return subjectRepository.findByStudentsUserId(studentId);
+    }
+
+    @Override
+    public void verifySubjectHasStudent(User student, Subject subject){
+        if(!subject.getStudents().contains(student)){
+            throw new IllegalArgumentException("Student " + student.getFullName() + " doesn't attend the subject " + subject.getTitle());
+        }
     }
 }

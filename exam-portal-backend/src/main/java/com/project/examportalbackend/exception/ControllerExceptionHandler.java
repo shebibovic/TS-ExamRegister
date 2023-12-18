@@ -4,6 +4,8 @@ import com.project.examportalbackend.exception.exceptions.ResourceNotFoundExcept
 import com.project.examportalbackend.utils.constants.ErrorTypeMessages;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -67,6 +69,51 @@ public class ControllerExceptionHandler {
                 new Date(),
                 errorResult,
                 ErrorTypeMessages.METHOD_ARGUMENT_INVALID.toString()
+        );
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorMessage constraintViolationException(ConstraintViolationException ex) {
+
+        Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
+
+        Set<String> messages = new HashSet<>(constraintViolations.size());
+        messages.addAll(constraintViolations.stream()
+                .map(constraintViolation -> String.format("%s", constraintViolation.getMessage()))
+                .toList());
+
+        String message = String.join(",", messages);
+
+        return new ErrorMessage(
+                HttpStatus.BAD_REQUEST.value(),
+                new Date(),
+                message,
+                ErrorTypeMessages.METHOD_ARGUMENT_INVALID.toString()
+        );
+    }
+
+    @ExceptionHandler(DisabledException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorMessage disabledException(DisabledException ex) {
+
+        return new ErrorMessage(
+                HttpStatus.BAD_REQUEST.value(),
+                new Date(),
+                ex.getMessage(),
+                ErrorTypeMessages.AUTHENTICATION_ERROR.toString()
+        );
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorMessage badCredentialsException(BadCredentialsException ex) {
+
+        return new ErrorMessage(
+                HttpStatus.BAD_REQUEST.value(),
+                new Date(),
+                ex.getMessage(),
+                ErrorTypeMessages.AUTHENTICATION_ERROR.toString()
         );
     }
 }

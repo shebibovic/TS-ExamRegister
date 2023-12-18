@@ -13,18 +13,24 @@ public interface ExamService {
 
     Exam addExam(Exam exam);
 
-    Exam addExam(ExamRequestDto exam);
+    Exam addExamForProfessor(ExamRequestDto exam, long professorId) throws AccessDeniedException;
 
-    List<Exam> getExams();
+    Exam updateExamForProfessor(ExamRequestDto exam, long professorId) throws AccessDeniedException;
+
+    void deleteExamForProfessor(long examId, long professorId) throws  AccessDeniedException;
+
+
+
+//    List<Exam> getExams();
 
     Exam getExam(long examId);
 
-    Exam updateExam(Exam exam);
+//    Exam updateExam(Exam exam);
 
-    void deleteExam(Long examId);
+//    void deleteExam(Long examId);
 
     // Extra methods
-    List<Exam> getExamBySubject(Subject subject);
+//    List<Exam> getExamBySubject(Subject subject);
 
     List<Exam> getActiveExamsByStudent(long studentId) throws AccessDeniedException;
 

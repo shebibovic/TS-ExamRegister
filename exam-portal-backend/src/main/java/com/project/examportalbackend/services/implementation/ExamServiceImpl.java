@@ -39,20 +39,49 @@ public class ExamServiceImpl implements ExamService {
         return examRepository.save(exam);
     }
 
-    public Exam addExam(ExamRequestDto examRequestDto) {
+    public Exam addExamForProfessor(ExamRequestDto examRequestDto, long professorId) throws AccessDeniedException {
+        authService.verifyUserRole(professorId, Roles.PROFESSOR.toString());
+        Subject subject = subjectService.getSubjectFromProfessor(professorId);
+
         Exam exam = new Exam(
                 examRequestDto.getTitle(),
                 examRequestDto.getDescription(),
-                subjectService.getSubject(examRequestDto.getSubjectId()),
+                subject,
                 examRequestDto.getRegistrationDeadlineDate(),
                 examRequestDto.getStartDate());
+
         return examRepository.save(exam);
     }
 
-    @Override
-    public List<Exam> getExams() {
-        return examRepository.findAll();
+    public Exam updateExamForProfessor(ExamRequestDto examRequestDto, long professorId) throws AccessDeniedException {
+        authService.verifyUserRole(professorId, Roles.PROFESSOR.toString());
+        if(examRequestDto.getExamId() == -1){
+            throw new IllegalArgumentException("You must pass the id of the exam you wish to update");
+        }
+        Subject subject = subjectService.getSubjectFromProfessor(professorId);
+
+        Exam exam = new Exam(
+                examRequestDto.getExamId(),
+                examRequestDto.getTitle(),
+                examRequestDto.getDescription(),
+                subject,
+                examRequestDto.getRegistrationDeadlineDate(),
+                examRequestDto.getStartDate());
+
+        return examRepository.save(exam);
     }
+
+    public void deleteExamForProfessor(long examId, long professorId) throws AccessDeniedException {
+        authService.verifyUserRole(professorId, Roles.PROFESSOR.toString());
+        Exam exam = getExam(examId);
+        verifyProfessorHasSubject(exam.getSubject(), professorId);
+        examRepository.delete(exam);
+    }
+
+//    @Override
+//    public List<Exam> getExams() {
+//        return examRepository.findAll();
+//    }
 
     @Override
     public Exam getExam(long examId) {
@@ -63,20 +92,20 @@ public class ExamServiceImpl implements ExamService {
         return exam.get();
     }
 
-    @Override
-    public Exam updateExam(Exam exam) {
-        return examRepository.save(exam);
-    }
-
-    @Override
-    public void deleteExam(Long examId) {
-        examRepository.deleteById(examId);
-    }
-
-    @Override
-    public List<Exam> getExamBySubject(Subject subject) {
-        return examRepository.findBySubject(subject);
-    }
+//    @Override
+//    public Exam updateExam(Exam exam) {
+//        return examRepository.save(exam);
+//    }
+//
+//    @Override
+//    public void deleteExam(Long examId) {
+//        examRepository.deleteById(examId);
+//    }
+//
+//    @Override
+//    public List<Exam> getExamBySubject(Subject subject) {
+//        return examRepository.findBySubject(subject);
+//    }
 
     @Override
     public List<Exam> getActiveExamsByStudent(long studentId) throws AccessDeniedException {
@@ -111,12 +140,9 @@ public class ExamServiceImpl implements ExamService {
         Exam exam = getExam(examId);
         User student = userService.getUser(studentId);
 
-        if(!exam.isActive()){
-            throw new IllegalArgumentException("Exam with id " + examId + " is not active");
-        }
-        if(exam.getRegisteredStudents().contains(student)){
-            throw new IllegalArgumentException("Student with id " + studentId + " is already registered for exam with id " + examId);
-        }
+        verifyExamIsActive(exam);
+        subjectService.verifySubjectHasStudent(student, exam.getSubject());
+        verifyExamRegistration(exam,student,false);
 
         exam.getRegisteredStudents().add(student);
         return examRepository.save(exam);
@@ -126,20 +152,12 @@ public class ExamServiceImpl implements ExamService {
     public Exam unregisterExamForStudent(long studentId, long examId) throws AccessDeniedException {
         authService.verifyUserRole(studentId, Roles.STUDENT.toString());
 
-        Optional<Exam> examOptional = examRepository.findById(examId);
-        if(examOptional.isEmpty()){
-            throw new ResourceNotFoundException("Exam with id: " + examId + " doesn't exist");
-        }
-
-        Exam exam = examOptional.get();
+        Exam exam = getExam(examId);
         User student = userService.getUser(studentId);
 
-        if(!exam.isActive()){
-            throw new IllegalArgumentException("Exam with id " + examId + " is not active");
-        }
-        if(!exam.getRegisteredStudents().contains(student)){
-            throw new IllegalArgumentException("Student with id " + studentId + " is not registered for exam with id " + examId);
-        }
+        verifyExamIsActive(exam);
+        subjectService.verifySubjectHasStudent(student, exam.getSubject());
+        verifyExamRegistration(exam,student,true);
 
         exam.getRegisteredStudents().remove(student);
         return examRepository.save(exam);
@@ -156,6 +174,26 @@ public class ExamServiceImpl implements ExamService {
         }
 
         throw new ResourceNotFoundException("Professor with id " + professorId
-                + " is not assigned to a subject which has exam with id " + examId);
+                + " is not assigned to a subject which has exam " + exam.getTitle());
+    }
+
+    private void verifyExamIsActive(Exam exam){
+        if(!exam.isActive()){
+            throw new IllegalArgumentException("Exam " + exam.getTitle() + " is not active");
+        }
+    }
+
+    private void verifyExamRegistration(Exam exam, User student, boolean shouldContain){
+        if(exam.getRegisteredStudents().contains(student) == !shouldContain){
+            throw new IllegalArgumentException("Student " + student.getFullName()
+                    + (shouldContain ? " is not registered for exam " : " is already registered for exam ")
+                    + exam.getTitle());
+        }
+    }
+
+    private void verifyProfessorHasSubject(Subject subject, long professorId) throws AccessDeniedException {
+        if(subject.getProfessor().getUserId() != professorId){
+            throw new AccessDeniedException("Professor" + subject.getProfessor().getFullName() + "can only delete exams from his subject");
+        }
     }
 }
