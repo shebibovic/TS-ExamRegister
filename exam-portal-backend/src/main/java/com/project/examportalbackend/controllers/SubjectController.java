@@ -94,10 +94,9 @@ public class SubjectController {
         return ResponseEntity.ok(userService.getAllStudents());
     }
 
-    //getanje profesorovih predmeta
     @GetMapping("/subjects/{professorId}")
-    public ResponseEntity<?> getProfessorSubjects(@PathVariable Long professorId){
-        return ResponseEntity.ok(subjectService.getSubjectsFromProfessor(professorId));
+    public ResponseEntity<?> getProfessorSubjects(@PathVariable long professorId) throws AccessDeniedException {
+        return ResponseEntity.ok(subjectService.getSubjectFromProfessor(professorId));
     }
 
 

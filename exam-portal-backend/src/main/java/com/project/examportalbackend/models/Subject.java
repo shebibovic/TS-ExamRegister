@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,13 +24,20 @@ public class Subject {
     private Long subjectId;
 
     @Column(name = "title")
+    @NotNull(message = "Subject must have a title")
+    @NotEmpty(message = "Subject title can't be empty")
+    @Size(max = 50, message = "Subject title can't have more than 50 characters")
     private String title;
 
     @Column(name = "description")
+    @NotNull(message = "Subject must have a description")
+    @NotEmpty(message = "Subject description can't be empty")
+    @Size(max = 250, message = "Subject description can't have more than 250 characters")
     private String description;
 
     @OneToOne
     @JoinColumn(name = "professor_id")
+    @NotNull(message = "Subject must have a professor")
     private User professor;
 
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)

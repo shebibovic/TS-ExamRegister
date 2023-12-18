@@ -4,9 +4,11 @@ import com.project.examportalbackend.exception.exceptions.ResourceNotFoundExcept
 import com.project.examportalbackend.models.Subject;
 import com.project.examportalbackend.models.Exam;
 import com.project.examportalbackend.models.User;
+import com.project.examportalbackend.models.dto.request.ExamRequestDto;
 import com.project.examportalbackend.repository.ExamRepository;
 import com.project.examportalbackend.services.AuthService;
 import com.project.examportalbackend.services.ExamService;
+import com.project.examportalbackend.services.SubjectService;
 import com.project.examportalbackend.services.UserService;
 import com.project.examportalbackend.utils.constants.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,16 +22,30 @@ import java.util.Optional;
 public class ExamServiceImpl implements ExamService {
 
     @Autowired
-    public ExamRepository examRepository;
+    private ExamRepository examRepository;
 
     @Autowired
-    public AuthService authService;
+    private AuthService authService;
 
     @Autowired
-    public UserService userService;
+    private UserService userService;
+
+    @Autowired
+    private SubjectService subjectService;
 
     @Override
     public Exam addExam(Exam exam) {
+        exam.setSubject(subjectService.getSubject(exam.getSubject().getSubjectId()));
+        return examRepository.save(exam);
+    }
+
+    public Exam addExam(ExamRequestDto examRequestDto) {
+        Exam exam = new Exam(
+                examRequestDto.getTitle(),
+                examRequestDto.getDescription(),
+                subjectService.getSubject(examRequestDto.getSubjectId()),
+                examRequestDto.getRegistrationDeadlineDate(),
+                examRequestDto.getStartDate());
         return examRepository.save(exam);
     }
 
@@ -39,8 +55,12 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public Exam getExam(Long examId) {
-        return examRepository.findById(examId).isPresent() ? examRepository.findById(examId).get() : null;
+    public Exam getExam(long examId) {
+        Optional<Exam> exam = examRepository.findById(examId);
+        if(exam.isEmpty()){
+            throw new ResourceNotFoundException("Exam with id " + examId + " doesn't exits");
+        }
+        return exam.get();
     }
 
     @Override
@@ -71,15 +91,24 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
+    public List<Exam> getActiveExamsByProfessor(long professorId) throws AccessDeniedException {
+        authService.verifyUserRole(professorId, Roles.PROFESSOR.toString());
+        Subject subject = subjectService.getSubjectFromProfessor(professorId);
+        return examRepository.findBySubject(subject).stream().filter(Exam::isActive).toList();
+    }
+
+    @Override
+    public List<Exam> getInactiveExamsByProfessor(long professorId) throws AccessDeniedException {
+        authService.verifyUserRole(professorId, Roles.PROFESSOR.toString());
+        Subject subject = subjectService.getSubjectFromProfessor(professorId);
+        return examRepository.findBySubject(subject).stream().filter(item -> !item.isActive()).toList();
+    }
+
+    @Override
     public Exam registerExamForStudent(long studentId, long examId) throws AccessDeniedException {
         authService.verifyUserRole(studentId, Roles.STUDENT.toString());
 
-        Optional<Exam> examOptional = examRepository.findById(examId);
-        if(examOptional.isEmpty()){
-            throw new ResourceNotFoundException("Exam with id: " + examId + " doesn't exist");
-        }
-
-        Exam exam = examOptional.get();
+        Exam exam = getExam(examId);
         User student = userService.getUser(studentId);
 
         if(!exam.isActive()){
@@ -114,5 +143,19 @@ public class ExamServiceImpl implements ExamService {
 
         exam.getRegisteredStudents().remove(student);
         return examRepository.save(exam);
+    }
+
+    @Override
+    public List<User> getProfessorExamRegisteredStudents(long professorId, long examId) throws AccessDeniedException {
+        authService.verifyUserRole(professorId, Roles.PROFESSOR.toString());
+        Subject subject = subjectService.getSubjectFromProfessor(professorId);
+        Exam exam = getExam(examId);
+
+        if(subject.getExams().contains(exam)){
+            return exam.getRegisteredStudents();
+        }
+
+        throw new ResourceNotFoundException("Professor with id " + professorId
+                + " is not assigned to a subject which has exam with id " + examId);
     }
 }

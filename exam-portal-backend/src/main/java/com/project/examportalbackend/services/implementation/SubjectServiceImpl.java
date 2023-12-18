@@ -47,14 +47,13 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public List<Subject> getSubjectsFromProfessor(Long professorId) {
-        List<Subject> subjects = subjectRepository.findAll();
-        List<Subject> professorSubject = new ArrayList<>();
-        for( Subject c: subjects){
-            if(c.getProfessor().getUserId()==professorId)
-                professorSubject.add(c);
+    public Subject getSubjectFromProfessor(long professorId) throws AccessDeniedException {
+        authService.verifyUserRole(professorId,Roles.PROFESSOR.toString());
+        Subject subject = subjectRepository.findByProfessorUserId(professorId);
+        if(subject == null){
+            throw new IllegalArgumentException("Professor doesn't have a subject");
         }
-        return professorSubject;
+        return subject;
     }
 
     @Override

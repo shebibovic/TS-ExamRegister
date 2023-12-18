@@ -1,14 +1,20 @@
 package com.project.examportalbackend.services.implementation;
 
 import com.project.examportalbackend.exception.exceptions.ResourceNotFoundException;
+import com.project.examportalbackend.models.Exam;
 import com.project.examportalbackend.models.Subject;
 import com.project.examportalbackend.models.User;
 import com.project.examportalbackend.repository.SubjectRepository;
 import com.project.examportalbackend.repository.UserRepository;
+import com.project.examportalbackend.services.AuthService;
+import com.project.examportalbackend.services.ExamService;
+import com.project.examportalbackend.services.SubjectService;
 import com.project.examportalbackend.services.UserService;
+import com.project.examportalbackend.utils.constants.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +27,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private SubjectRepository subjectRepository;
 
+    @Autowired
+    private AuthService authService;
+
+    @Autowired
+    private SubjectService subjectService;
 
     @Override
     public User createUser(User user) {
@@ -69,6 +80,13 @@ public class UserServiceImpl implements UserService {
                 return subject.getProfessor();
         }
         return null;
+    }
+
+    @Override
+    public List<User> getAllStudentsFromSubjectForProfessor(long professorId) throws AccessDeniedException {
+        authService.verifyUserRole(professorId, Roles.PROFESSOR.toString());
+        Subject subject = subjectService.getSubjectFromProfessor(professorId);
+        return subject.getStudents();
     }
 
 

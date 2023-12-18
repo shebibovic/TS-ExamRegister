@@ -67,8 +67,6 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<Exam> registeredExams = new ArrayList<>();
 
-
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
