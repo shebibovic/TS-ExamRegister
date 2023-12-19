@@ -13,12 +13,20 @@ public interface UserService {
 
     User getUser(long userId);
 
-//    List<User> getAllProfesors();
+    List<User> getAllProfesors(long adminId) throws AccessDeniedException;
 
-//    List<User> getAllStudents();
+    List<User> getAllStudents();
 
-    List<User> getAllStudentsFromSubjectForProfessor(long professorId) throws AccessDeniedException;
+    List<User> getAllUsers(long adminId) throws AccessDeniedException;
 
+
+    List<User> getAllStudentsFromSubjectForProfessor(long professorId);
+
+    List<User> getAllStudentsFromSubject(long subjectId);
+
+    List<User> getAllAvailableStudentsForSubject(long subjectId);
+
+    List<User> getAvailableProfessors();
 
 //    User getProfessor(Long profesorId);
 }

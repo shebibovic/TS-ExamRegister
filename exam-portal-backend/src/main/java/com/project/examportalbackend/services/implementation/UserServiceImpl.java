@@ -2,6 +2,7 @@ package com.project.examportalbackend.services.implementation;
 
 import com.project.examportalbackend.exception.exceptions.ResourceNotFoundException;
 import com.project.examportalbackend.models.Exam;
+import com.project.examportalbackend.models.Role;
 import com.project.examportalbackend.models.Subject;
 import com.project.examportalbackend.models.User;
 import com.project.examportalbackend.repository.SubjectRepository;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -52,42 +54,45 @@ public class UserServiceImpl implements UserService {
         return user.get();
     }
 
-//    @Override
-//    public List<User> getAllProfesors() {
-//        List<User> users = userRepository.findAll();
-//        List<User> profesori = new ArrayList<>();
-//        for(User u: users){
-//            if(u.getRole().getRoleName().equals("PROFESSOR")) profesori.add(u);
-//        }
-//        return profesori;
-//    }
-//    @Override
-//    public List<User> getAllStudents() {
-//        List<User> users = userRepository.findAll();
-//        List<User> studenti = new ArrayList<>();
-//        for(User u: users){
-//            if(u.getRole().getRoleName().equals("STUDENT")) studenti.add(u);
-//        }
-//        return studenti;
-//    }
-//
-//    @Override
-//    public User getProfessor(Long subjectId) {
-//        List<User> users = userRepository.findAll();
-//        List<Subject> subjects = subjectRepository.findAll();
-//        for(Subject subject :subjects){
-//            if(subject.getSubjectId()==subjectId)
-//                return subject.getProfessor();
-//        }
-//        return null;
-//    }
+    @Override
+    public List<User> getAllProfesors(long adminId) throws AccessDeniedException {
+        authService.verifyUserRole(adminId, Roles.ADMIN.toString());
+        return userRepository.findAll().stream().filter(item -> item.getRole().getRoleName().equals(Roles.PROFESSOR.toString())).toList();
+    }
+    @Override
+    public List<User> getAllStudents() {
+        return userRepository.findAll().stream().filter(item -> item.getRole().getRoleName().equals(Roles.STUDENT.toString())).toList();
+    }
 
     @Override
-    public List<User> getAllStudentsFromSubjectForProfessor(long professorId) throws AccessDeniedException {
-        authService.verifyUserRole(professorId, Roles.PROFESSOR.toString());
+    public List<User> getAllUsers(long adminId) throws AccessDeniedException {
+        authService.verifyUserRole(adminId, Roles.ADMIN.toString());
+        return userRepository.findAll();
+    }
+//
+
+    @Override
+    public List<User> getAllStudentsFromSubjectForProfessor(long professorId) {
         Subject subject = subjectService.getSubjectFromProfessor(professorId);
         return subject.getStudents();
     }
 
+    @Override
+    public List<User> getAllStudentsFromSubject(long subjectId) {
+        Subject subject = subjectService.getSubject(subjectId);
+        return subject.getStudents();
+    }
+
+    @Override
+    public List<User> getAvailableProfessors() {
+        return userRepository.findAll().stream().filter(item -> Objects.equals(item.getRole().getRoleName(), Roles.PROFESSOR.toString())).toList();
+    }
+
+    public List<User> getAllAvailableStudentsForSubject(long subjectId){
+        Subject subject = subjectService.getSubject(subjectId);
+        List<User> subjectUsers = subject.getStudents();
+        List<User> availableStudents = getAllStudents();
+        return availableStudents.stream().filter(student -> !subjectUsers.contains(student)).toList();
+    }
 
 }

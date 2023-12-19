@@ -111,6 +111,24 @@ public class ExamServiceImpl implements ExamService {
 //    }
 
     @Override
+    public List<Exam> getAllExams(long adminId) throws AccessDeniedException {
+        authService.verifyUserRole(adminId, Roles.ADMIN.toString());
+        return examRepository.findAll();
+    }
+
+    @Override
+    public List<Exam> getAllActiveExams(long adminId) throws AccessDeniedException {
+        authService.verifyUserRole(adminId, Roles.ADMIN.toString());
+        return examRepository.findAll().stream().filter(Exam::isActive).toList();
+    }
+
+    @Override
+    public List<Exam> getAllInactiveExams(long adminId) throws AccessDeniedException {
+        authService.verifyUserRole(adminId, Roles.ADMIN.toString());
+        return examRepository.findAll().stream().filter(item -> !item.isActive()).toList();
+    }
+
+    @Override
     public List<ExamResponseDto> getRegisteredActiveExamsByStudent(long studentId) throws AccessDeniedException {
         authService.verifyUserRole(studentId, Roles.STUDENT.toString());
         List<Exam> registeredExams = examRepository.findByRegisteredStudentsUserId(studentId).stream().filter(Exam::isActive).toList();
@@ -169,6 +187,12 @@ public class ExamServiceImpl implements ExamService {
         authService.verifyUserRole(professorId, Roles.PROFESSOR.toString());
         Subject subject = subjectService.getSubjectFromProfessor(professorId);
         return examRepository.findBySubject(subject).stream().filter(item -> !item.isActive()).toList();
+    }
+
+    @Override
+    public List<Exam> getExamsForSubject(long subjectId) {
+        Subject subject = subjectService.getSubject(subjectId);
+        return subject.getExams();
     }
 
 
@@ -236,4 +260,10 @@ public class ExamServiceImpl implements ExamService {
             throw new AccessDeniedException("Professor" + subject.getProfessor().getFullName() + "can only delete exams from his subject");
         }
     }
+
+    public List<User> getExamRegisteredStudents(long examId) {
+        Exam exam = getExam(examId);
+        return exam.getRegisteredStudents();
+    }
+
 }
