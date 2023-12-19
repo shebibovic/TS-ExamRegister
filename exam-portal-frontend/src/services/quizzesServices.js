@@ -21,13 +21,13 @@ const addQuiz = async (quiz, token) => {
 };
 
 
-const deleteQuiz = async (quizId, token) => {
+const deleteQuiz = async (examId, token) => {
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
-    const { data } = await axios.delete(`/api/exam/${quizId}/`, config);
-    console.log("quizzesServices:deleteQuiz()  Success: ", data);
+    const { data } = await axios.delete(`/api/exam/professor/delete/${examId}/`, config);
+   // console.log("quizzesServices:deleteQuiz()  Success: ", data);
     return {
       isDeleted: true,
       error: null,

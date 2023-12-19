@@ -55,6 +55,7 @@ const formatDate = (dateString) => {
         };
         fetchQuizzesForProfessor();
     }, []);
+    
     const deleteQuizHandler = (quiz) => {
         swal({
             title: "Are you sure?",
@@ -101,13 +102,7 @@ const formatDate = (dateString) => {
      
         fetchSubjects();
       }, [dispatch, token]);
-    useEffect(() => {
-        if (quizzes.length === 0) {
-            fetchQuizzes(dispatch, token).then((data) => {
-                setQuizzes(data.payload);
-            });
-        }
-    }, []);
+
     useEffect(() => {
         if (!localStorage.getItem("jwtToken")) navigate("/");
     }, []);
@@ -124,21 +119,22 @@ const formatDate = (dateString) => {
                     ) : (
                         quizzes.map((quiz, index) => {
                             if ((catId && quiz.category.catId == catId) || (catId == null))
-                                console.log(quiz);
                                 return (
                                     <ListGroup
                                         className="adminQuizzesPage__content--quizzesList"
                                         key={index}
                                     >
-                                        <Link to={`/quiz/${quiz.examId}`} style={{ textDecoration: 'none' }}>
+                                        
                                             <ListGroup.Item className="align-items-start" action key={index}>
                                             <div className="ms-2">
                                                 <div className="d-flex justify-content-between">
+                                                <Link to={`/quiz/${quiz.examId}`} style={{ textDecoration: 'none' }}>
                                                     <div>
                                                         <div className="fw-bold">{quiz.title}</div>
                                                         {<p className="my-3">{selectedSubject.title}</p>} 
                                                         {<p className="my-3">{quiz.description}</p>}
                                                     </div>
+                                                    </Link>
                                                     {/* Prikazivanje datuma */}
                                                     <div className="text-end">
                                                         <p>Exam Date: {formatDate(quiz.startDate)}</p>
@@ -163,7 +159,6 @@ const formatDate = (dateString) => {
                                                 </div>
                                             </div>
                                             </ListGroup.Item>
-                                        </Link>
                                     </ListGroup>
                                 );
                         })
