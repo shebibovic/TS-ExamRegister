@@ -35,7 +35,7 @@ const UserSubjectID = () => {
     useEffect(() => {
         const fetchSelectedCategory = async () => {
             try {
-                const response = await fetch(`/api/subject/${subjectId}`, {
+                const response = await fetch(`/api/subject/student/${subjectId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "application/json",
