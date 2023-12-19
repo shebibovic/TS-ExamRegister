@@ -71,7 +71,7 @@ public class SubjectController {
     @GetMapping("/student/{subjectId}")
     public ResponseEntity<Subject> getSubjectByStudent(@PathVariable long subjectId) throws AccessDeniedException {
         User student = authService.getUserFromToken();
-        authService.verifyUserRole(student.getUserId(), Roles.STUDENT.toString());g
+        authService.verifyUserRole(student.getUserId(), Roles.STUDENT.toString());
         return ResponseEntity.ok(subjectService.getSubject(subjectId));
     }
 //
