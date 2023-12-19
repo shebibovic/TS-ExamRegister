@@ -20,7 +20,7 @@ const UserQuizzesPage = () => {
 
     const quizzesReducer = useSelector((state) => state.quizzesReducer);
     const [quizzes, setQuizzes] = useState(quizzesReducer.quizzes);
-    const [otherQuizzes, setOtherQuizzes] = useState([]);
+    const [otherQuizzes, setOtherQuizzes] = useState(quizzesReducer.quizzes);
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const formattedDate = date.toLocaleDateString(); // Prikaz datuma bez vremena
@@ -42,7 +42,7 @@ const UserQuizzesPage = () => {
 
                     if (response.ok) {
                         const data = await response.json();
-                        setQuizzes(data); // Postavljanje dohvaćenih predmeta u stanje
+                        setOtherQuizzes(data); // Postavljanje dohvaćenih predmeta u stanje
                     } else {
                         throw new Error("Failed to fetch exams");
                     }
@@ -51,6 +51,12 @@ const UserQuizzesPage = () => {
                 }
             };
 
+            fetchQuizzesRegistered();
+        }
+    }, [quizzes, token]);
+
+    useEffect(() => {
+        if (otherQuizzes.length === 0) {
             const fetchQuizzesUnregistered = async () => {
                 try {
                     const response = await fetch("/api/exam/student/unregistered-active-exams/", {
@@ -71,11 +77,9 @@ const UserQuizzesPage = () => {
                 }
             };
 
-            fetchQuizzesRegistered();
             fetchQuizzesUnregistered();
         }
-    }, [quizzes, token]);
-
+    }, [otherQuizzes, token]);
 
 
     const registerForExam = async (examId) => {
@@ -156,7 +160,9 @@ const UserQuizzesPage = () => {
                                                     <div className="text-end">
                                                         <p>Exam Date: {formatDate(quiz.startDatbue)}</p>
                                                         <p>Registration deadline: {formatDate(quiz.registrationDeadlineDate)}</p>
-
+                                                        <Button onClick={() => registerForExam(quiz.examId)}>
+                                                            Unregister Exam
+                                                        </Button>
                                                     </div>
                                                 </div>
                                                 <div className="adminQuizzesPage__content--ButtonsList">
@@ -198,7 +204,9 @@ const UserQuizzesPage = () => {
                                                     <div className="text-end">
                                                         <p>Exam Date: {formatDate(otherQuiz.startDate)}</p>
                                                         <p>Registration deadline: {formatDate(otherQuiz.registrationDeadlineDate)}</p>
-
+                                                        <Button onClick={() => unregisterForExam(otherQuiz.examId)}>
+                                                            Register Exam
+                                                        </Button>
                                                     </div>
                                                 </div>
                                                 <div className="adminQuizzesPage__content--ButtonsList">

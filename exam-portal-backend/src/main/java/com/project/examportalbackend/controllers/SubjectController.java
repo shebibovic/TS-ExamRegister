@@ -59,10 +59,10 @@ public class SubjectController {
 //        return ResponseEntity.ok(subjectService.getSubjects());
 //    }
 //
-//    @GetMapping("/{subjectId}")
-//    public ResponseEntity<?> getSubject(@PathVariable Long subjectId) {
-//        return ResponseEntity.ok(subjectService.getSubject(subjectId));
-//    }
+    @GetMapping("/{subjectId}")
+     public ResponseEntity<?> getSubject(@PathVariable Long subjectId) {
+        return ResponseEntity.ok(subjectService.getSubject(subjectId));
+    }
 //
 //    @PutMapping("/{subjectId}")
 //    public ResponseEntity<?> updateSubject(@PathVariable Long subjectId, @RequestBody Subject subject) {
