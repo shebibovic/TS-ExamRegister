@@ -5,6 +5,7 @@ import com.project.examportalbackend.models.Subject;
 import com.project.examportalbackend.models.Exam;
 import com.project.examportalbackend.models.User;
 import com.project.examportalbackend.models.dto.request.ExamRequestDto;
+import com.project.examportalbackend.models.dto.response.ExamResponseDto;
 import com.project.examportalbackend.repository.ExamRepository;
 import com.project.examportalbackend.services.AuthService;
 import com.project.examportalbackend.services.ExamService;
@@ -15,8 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ExamServiceImpl implements ExamService {
@@ -78,10 +81,10 @@ public class ExamServiceImpl implements ExamService {
         examRepository.delete(exam);
     }
 
-    @Override
-    public List<Exam> getExams() {
-        return examRepository.findAll();
-    }
+//    @Override
+//    public List<Exam> getExams() {
+//        return examRepository.findAll();
+//    }
 
     @Override
     public Exam getExam(long examId) {
@@ -92,31 +95,66 @@ public class ExamServiceImpl implements ExamService {
         return exam.get();
     }
 
-    @Override
-    public Exam updateExam(Exam exam) {
-        return examRepository.save(exam);
-    }
+//    @Override
+//    public Exam updateExam(Exam exam) {
+//        return examRepository.save(exam);
+//    }
+//
+//    @Override
+//    public void deleteExam(Long examId) {
+//        examRepository.deleteById(examId);
+//    }
+
+//    @Override
+//    public List<Exam> getExamsBySubject(Subject subject) {
+//        return examRepository.findBySubject(subject);
+//    }
 
     @Override
-    public void deleteExam(Long examId) {
-        examRepository.deleteById(examId);
-    }
-
-    @Override
-    public List<Exam> getExamBySubject(Subject subject) {
-        return examRepository.findBySubject(subject);
-    }
-
-    @Override
-    public List<Exam> getActiveExamsByStudent(long studentId) throws AccessDeniedException {
+    public List<ExamResponseDto> getRegisteredActiveExamsByStudent(long studentId) throws AccessDeniedException {
         authService.verifyUserRole(studentId, Roles.STUDENT.toString());
-        return examRepository.findByRegisteredStudentsUserId(studentId).stream().filter(Exam::isActive).toList();
+        List<Exam> registeredExams = examRepository.findByRegisteredStudentsUserId(studentId).stream().filter(Exam::isActive).toList();
+        return registeredExams.stream().map(
+                item -> new ExamResponseDto(
+                        item.getExamId(),
+                        item.getTitle(),
+                        item.getDescription(),
+                        item.getRegistrationDeadlineDate(),
+                        item.getStartDate(),
+                        item.getSubject().getTitle())).collect(Collectors.toList());
+
     }
 
     @Override
-    public List<Exam> getInactiveExamsByStudent(long studentId) throws AccessDeniedException {
+    public List<ExamResponseDto> getRegisteredInactiveExamsByStudent(long studentId) throws AccessDeniedException {
         authService.verifyUserRole(studentId, Roles.STUDENT.toString());
-        return examRepository.findByRegisteredStudentsUserId(studentId).stream().filter(item -> !item.isActive()).toList();
+        List<Exam> registeredExams = examRepository.findByRegisteredStudentsUserId(studentId).stream().filter(item -> !item.isActive()).toList();
+        return registeredExams.stream().map(
+                item -> new ExamResponseDto(
+                        item.getExamId(),
+                        item.getTitle(),
+                        item.getDescription(),
+                        item.getRegistrationDeadlineDate(),
+                        item.getStartDate(),
+                        item.getSubject().getTitle())).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ExamResponseDto> getUnregisteredActiveExamsByStudent(long studentId) throws AccessDeniedException{
+        authService.verifyUserRole(studentId, Roles.STUDENT.toString());
+        List<Exam> registeredExams = examRepository.findByRegisteredStudentsUserId(studentId).stream().filter(Exam::isActive).toList();
+        List<Subject> studentSubjects = subjectService.getSubjectsByStudentId(studentId);
+        List<Exam> availableExams = new ArrayList<>();
+        for(Subject s: studentSubjects){
+            availableExams.addAll(s.getExams());
+        }
+        return availableExams.stream().filter(item -> !registeredExams.contains(item)).map(item -> new ExamResponseDto(
+                item.getExamId(),
+                item.getTitle(),
+                item.getDescription(),
+                item.getRegistrationDeadlineDate(),
+                item.getStartDate(),
+                item.getSubject().getTitle())).collect(Collectors.toList());
     }
 
     @Override
@@ -132,6 +170,8 @@ public class ExamServiceImpl implements ExamService {
         Subject subject = subjectService.getSubjectFromProfessor(professorId);
         return examRepository.findBySubject(subject).stream().filter(item -> !item.isActive()).toList();
     }
+
+
 
     @Override
     public Exam registerExamForStudent(long studentId, long examId) throws AccessDeniedException {
