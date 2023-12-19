@@ -16,16 +16,7 @@ const UserProfilePage = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const token = localStorage.getItem("jwtToken");
 
-  useEffect(() => {
-    // Redirect to login page if token is not present
-    if (!token) {
-      navigate("/");
-    }
 
-    // Fetch categories and quizzes (assuming these actions require a token)
-    fetchCategories(dispatch, token);
-    fetchQuizzes(dispatch, token);
-  }, [dispatch, navigate, token]);
 
 
   useEffect(() => {

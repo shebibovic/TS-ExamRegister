@@ -20,6 +20,7 @@ const UserQuizzesPage = () => {
 
     const quizzesReducer = useSelector((state) => state.quizzesReducer);
     const [quizzes, setQuizzes] = useState(quizzesReducer.quizzes);
+    const [otherQuizzes, setOtherQuizzes] = useState([]);
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const formattedDate = date.toLocaleDateString(); // Prikaz datuma bez vremena
@@ -27,19 +28,61 @@ const UserQuizzesPage = () => {
     };
 
 
+
     useEffect(() => {
         if (quizzes.length === 0) {
-            fetchQuizzes(dispatch, token).then((data) => {
-                setQuizzes(data.payload);
-            });
-        }
-    }, []);
+            const fetchQuizzesRegistered = async () => {
+                try {
+                    const response = await fetch("/api/exam/student/registered-active-exams/", {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            "Content-Type": "application/json",
+                        },
+                    });
 
-    const registerForExam = async (quizId) => {
+                    if (response.ok) {
+                        const data = await response.json();
+                        setQuizzes(data); // Postavljanje dohvaćenih predmeta u stanje
+                    } else {
+                        throw new Error("Failed to fetch exams");
+                    }
+                } catch (error) {
+                    console.error("Error fetching exams:", error);
+                }
+            };
+
+            const fetchQuizzesUnregistered = async () => {
+                try {
+                    const response = await fetch("/api/exam/student/unregistered-active-exams/", {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            "Content-Type": "application/json",
+                        },
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        setQuizzes(data); // Postavljanje dohvaćenih predmeta u stanje
+                    } else {
+                        throw new Error("Failed to fetch exams");
+                    }
+                } catch (error) {
+                    console.error("Error fetching exams:", error);
+                }
+            };
+
+            fetchQuizzesRegistered();
+            fetchQuizzesUnregistered();
+        }
+    }, [quizzes, token]);
+
+
+
+    const registerForExam = async (examId) => {
         try {
             const token = localStorage.getItem("jwtToken");
     
-            const response = await fetch(`/api/exam/student/register-exam/${quizId}`, {
+            const response = await fetch(`/api/exam/student/register-exam/${examId}`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -57,6 +100,29 @@ const UserQuizzesPage = () => {
         }
     };
 
+    const unregisterForExam = async (examId) => {
+        try {
+            const token = localStorage.getItem("jwtToken");
+
+            const response = await fetch(`/api/exam/student/unregister-exam/${examId}`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to unregister for the exam");
+            }
+            swal("Success!", "You have successfully unregistered for the exam.", "success");
+        } catch (error) {
+            // U slučaju greške pri registraciji, možete prikazati poruku ili obavijestiti korisnika
+            swal("Error!", "Failed to unregister for the exam. Please try again.", "error");
+        }
+    };
+
+
     useEffect(() => {
         if (!localStorage.getItem("jwtToken")) navigate("/");
     }, []);
@@ -67,10 +133,10 @@ const UserQuizzesPage = () => {
                 <Sidebar />
             </div>
             <div className="adminQuizzesPage__content">
-                <h2>Exams</h2>
+                <h2>Registered Exams</h2>
                 {quizzes ? (
                     quizzes.length === 0 ? (
-                        <Message>No exams are present. Try adding some exam.</Message>
+                        <Message>No registered exams are present.</Message>
                     ) : (
                         quizzes.map((quiz, index) => {
                             if ((catId && quiz.category.catId == catId) || (catId == null))
@@ -84,28 +150,65 @@ const UserQuizzesPage = () => {
                                                 <div className="d-flex justify-content-between">
                                                     <div>
                                                         <div className="fw-bold">{quiz.title}</div>
-                                                        <p style={{ color: "grey" }}>{quiz.title}</p> 
+                                                        <p style={{ color: "grey" }}>{quiz.title}</p>
                                                         {<p className="my-3">{quiz.description}</p>}
                                                     </div>
-                                                    {/* Prikazivanje datuma */}
                                                     <div className="text-end">
-                                                        <p>Exam Date: {formatDate(quiz.startDate)}</p>
+                                                        <p>Exam Date: {formatDate(quiz.startDatbue)}</p>
                                                         <p>Registration deadline: {formatDate(quiz.registrationDeadlineDate)}</p>
-                                                        <Button
-                                                            variant="primary"
-                                                            onClick={() => registerForExam(quiz.examId)}
-                                                        >
-                                                            Register exam
-                                                        </Button>
+
                                                     </div>
                                                 </div>
                                                 <div className="adminQuizzesPage__content--ButtonsList">
-
+                                                    {/* Dodaj bilo kakve dodatne gumbe ili funkcionalnosti */}
                                                 </div>
                                             </div>
-                                        </ListGroup.Item>
 
+                                        </ListGroup.Item>
                                     </ListGroup>
+
+                                );
+                        })
+                    )
+                ) : (
+                    <Loader />
+                )}
+                {/* Prikaz druge liste ispita */}
+                <hr className="exams-section-divider" />
+                <h2>Unregistered Exams</h2>
+                {otherQuizzes ? (
+                    otherQuizzes.length === 0 ? (
+                        <Message>No registered exams are present.</Message>
+                    ) : (
+                        otherQuizzes.map((otherQuiz, index) => {
+                            if ((catId && otherQuiz.category.catId == catId) || (catId == null))
+                                return (
+                                    <ListGroup
+                                        className="adminQuizzesPage__content--quizzesList"
+                                        key={index}
+                                    >
+                                        <ListGroup.Item className="align-items-start" action key={index}>
+                                            <div className="ms-2">
+                                                <div className="d-flex justify-content-between">
+                                                    <div>
+                                                        <div className="fw-bold">{otherQuiz.title}</div>
+                                                        <p style={{ color: "grey" }}>{otherQuiz.title}</p>
+                                                        {<p className="my-3">{otherQuiz.description}</p>}
+                                                    </div>
+                                                    <div className="text-end">
+                                                        <p>Exam Date: {formatDate(otherQuiz.startDate)}</p>
+                                                        <p>Registration deadline: {formatDate(otherQuiz.registrationDeadlineDate)}</p>
+
+                                                    </div>
+                                                </div>
+                                                <div className="adminQuizzesPage__content--ButtonsList">
+                                                    {/* Dodaj bilo kakve dodatne gumbe ili funkcionalnosti */}
+                                                </div>
+                                            </div>
+
+                                        </ListGroup.Item>
+                                    </ListGroup>
+
                                 );
                         })
                     )
@@ -116,5 +219,6 @@ const UserQuizzesPage = () => {
         </div>
     );
 };
+
 
 export default UserQuizzesPage;

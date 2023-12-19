@@ -1,29 +1,7 @@
 import axios from "axios";
 
-const fetchQuizzes = async (token, catId) => {
-  try {
-    const config = {
-      headers: { Authorization: `Bearer ${token}` },
-    };
 
-    let quizzes = null;
-    if (catId === null) {
-      const { data } = await axios.get("/api/exam/", config); // Updated URL
-      quizzes = data;
-    } else {
-      const { data } = await axios.get(`/api/exam/${catId}/`, config); // Updated URL
-      quizzes = data;
-    }
-    console.log("quizzesServices:fetchQuizzes() Success: ", quizzes);
-    return quizzes;
-  } catch (error) {
-    console.error(
-        "quizzesServices:fetchQuizzes() Error: ",
-        error.response.statusText
-    );
-    return error.response.statusText;
-  }
-};
+
 
 const addQuiz = async (quiz, token) => {
   try {
@@ -92,5 +70,5 @@ const updateQuiz = async (quiz, token) => {
   }
 };
 
-const quizzesService = { fetchQuizzes, addQuiz, deleteQuiz, updateQuiz };
+const quizzesService = {  addQuiz, deleteQuiz, updateQuiz };
 export default quizzesService;

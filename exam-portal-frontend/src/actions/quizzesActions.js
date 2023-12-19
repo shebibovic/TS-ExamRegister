@@ -2,7 +2,7 @@ import * as quizzesConstants from "../constants/quizzesConstants";
 import quizzesServices from "../services/quizzesServices";
 
 export const fetchQuizzes = async (dispatch, token, catId = null) => {
-  dispatch({ type: quizzesConstants.FETCH_QUIZZES_REQUEST });
+/*  dispatch({ type: quizzesConstants.FETCH_QUIZZES_REQUEST });
   const data = await quizzesServices.fetchQuizzes(token, catId);
   if (data) {
     return dispatch({
@@ -14,7 +14,7 @@ export const fetchQuizzes = async (dispatch, token, catId = null) => {
       type: quizzesConstants.FETCH_QUIZZES_FAILURE,
       payload: data,
     });
-  }
+  }*/
 };
 
 export const addQuiz = async (dispatch, quiz, token) => {
