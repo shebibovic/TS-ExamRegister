@@ -29,10 +29,10 @@ public class SubjectServiceImpl implements SubjectService {
         return subjectRepository.save(subject);
     }
 //
-    @Override
-    public List<Subject> getSubjects() {
-        return subjectRepository.findAll();
-    }
+//    @Override
+//    public List<Subject> getSubjects() {
+//        return subjectRepository.findAll();
+//    }
 //
     @Override
     public Subject getSubject(long subjectId) {
@@ -43,15 +43,15 @@ public class SubjectServiceImpl implements SubjectService {
         return subject.get();
     }
 //
-    @Override
-    public Subject updateSubject(Subject subject) {
-        return subjectRepository.save(subject);
-    }
-
-    @Override
-    public void deleteSubject(Long subjectId) {
-        subjectRepository.delete(getSubject(subjectId));
-    }
+//    @Override
+//    public Subject updateSubject(Subject subject) {
+//        return subjectRepository.save(subject);
+//    }
+//
+//    @Override
+//    public void deleteSubject(Long subjectId) {
+//        subjectRepository.delete(getSubject(subjectId));
+//    }
 
     @Override
     public Subject getSubjectFromProfessor(long professorId) throws AccessDeniedException {
