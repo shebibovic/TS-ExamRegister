@@ -124,40 +124,53 @@ const formatDate = (dateString) => {
                                         className="adminQuizzesPage__content--quizzesList"
                                         key={index}
                                     >
-                                        
                                             <ListGroup.Item className="align-items-start" action key={index}>
-                                            <div className="ms-2">
-                                                <div className="d-flex justify-content-between">
-                                                <Link to={`/quiz/${quiz.examId}`} style={{ textDecoration: 'none' }}>
-                                                    <div>
-                                                        <div className="fw-bold">{quiz.title}</div>
-                                                        {<p className="my-3">{selectedSubject.title}</p>} 
-                                                        {<p className="my-3">{quiz.description}</p>}
+                                                <div className="ms-2">
+                                                    <div className="d-flex justify-content-between">
+                                                        <div>
+                                                            <div className="fw-bold">{quiz.title}</div>
+                                                            {<p className="my-3">{selectedSubject.title}</p>}
+                                                            {<p className="my-3">{quiz.description}</p>}
+                                                        </div>
+                                                        {/* Prikazivanje datuma */}
+                                                        <div className="text-end">
+                                                            <p>Exam Date: {formatDate(quiz.startDate)}</p>
+                                                            <p>Registration deadline: {formatDate(quiz.registrationDeadlineDate)}</p>
+                                                        </div>
                                                     </div>
-                                                    </Link>
-                                                    {/* Prikazivanje datuma */}
-                                                    <div className="text-end">
-                                                        <p>Exam Date: {formatDate(quiz.startDate)}</p>
-                                                        <p>Registration deadline: {formatDate(quiz.registrationDeadlineDate)}</p>
+                                                    <div className="adminQuizzesPage__content--ButtonsList">
+                                                        <div
+                                                            onClick={() => deleteQuizHandler(quiz)}
+                                                            style={{
+                                                                border: "1px solid grey",
+                                                                color: "white",
+                                                                backgroundColor: "#ff0b0bdb",
+                                                                width: "100px",
+                                                                padding: "2px",
+                                                                textAlign: "center",
+                                                                borderRadius: "5px",
+                                                                height: "35px",
+                                                                margin: "0px 4px",
+                                                            }}
+                                                        >{`Delete`}</div>
+
+                                                        <Link to={`/quizzes/${quiz.examId}`} style={{ textDecoration: 'none' }}>
+                                                            <div
+                                                                style={{
+                                                                    border: "1px solid grey",
+                                                                    color: "white",
+                                                                    backgroundColor: "rgb(68 177 49)",
+                                                                    width: "180px",
+                                                                    padding: "2px",
+                                                                    textAlign: "center",
+                                                                    borderRadius: "5px",
+                                                                    height: "35px",
+                                                                    margin: "0px 4px",
+                                                                }}
+                                                            >{`See registered students`}</div>
+                                                        </Link>
                                                     </div>
                                                 </div>
-                                                <div className="adminQuizzesPage__content--ButtonsList">
-                                                    <div
-                                                        onClick={() => deleteQuizHandler(quiz)}
-                                                        style={{
-                                                            border: "1px solid grey",
-                                                            color: "white",
-                                                            backgroundColor: "#ff0b0bdb",
-                                                            width: "100px",
-                                                            padding: "2px",
-                                                            textAlign: "center",
-                                                            borderRadius: "5px",
-                                                            height: "35px",
-                                                            margin: "0px 4px",
-                                                        }}
-                                                    >{`Delete`}</div>
-                                                </div>
-                                            </div>
                                             </ListGroup.Item>
                                     </ListGroup>
                                 );
@@ -166,6 +179,7 @@ const formatDate = (dateString) => {
                 ) : (
                     <Loader />
                 )}
+
                 <Button
                     variant=""
                     className="adminQuizzesPage__content--button"

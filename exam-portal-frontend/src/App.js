@@ -76,7 +76,7 @@ const App = () => {
 
         <Route path="/userSubjects" element={<UserSubjects />} />
         <Route path="/userCategories/:catId" element={<UserSubjectID />} />
-        <Route path="/quiz/:quizId" element={<QuizDetails />} />
+        <Route path="/quizzes/:examId" element={<QuizDetails />} />
       </Routes>
     </Router>
   );

@@ -42,7 +42,7 @@ const ProfessorAddQuiz = () => {
             if (data.type === quizzesConstants.ADD_QUIZ_SUCCESS)
               swal("Exam Added!", `${quiz.title} succesfully added`, "success");
             else {
-              swal("Exam Not Added!", `${quiz.title} not added`, "error");
+              swal("Exam Not Added!", `${quiz.title} not added. Please fill all fields.`, "error");
             }
           });
         } else {

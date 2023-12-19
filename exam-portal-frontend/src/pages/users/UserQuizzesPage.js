@@ -137,10 +137,10 @@ const UserQuizzesPage = () => {
                 <Sidebar />
             </div>
             <div className="adminQuizzesPage__content">
-                <h2>Registered Exams</h2>
+                <h2>Unregistered Exams</h2>
                 {quizzes ? (
                     quizzes.length === 0 ? (
-                        <Message>No registered exams are present.</Message>
+                        <Message>No unregistered exams are present for you.</Message>
                     ) : (
                         quizzes.map((quiz, index) => {
                             if ((catId && quiz.category.catId == catId) || (catId == null))
@@ -161,7 +161,7 @@ const UserQuizzesPage = () => {
                                                         <p>Exam Date: {formatDate(quiz.startDatbue)}</p>
                                                         <p>Registration deadline: {formatDate(quiz.registrationDeadlineDate)}</p>
                                                         <Button onClick={() => registerForExam(quiz.examId)}>
-                                                            Unregister Exam
+                                                            Register Exam
                                                         </Button>
                                                     </div>
                                                 </div>
@@ -181,7 +181,7 @@ const UserQuizzesPage = () => {
                 )}
                 {/* Prikaz druge liste ispita */}
                 <hr className="exams-section-divider" />
-                <h2>Unregistered Exams</h2>
+                <h2>Registered Exams</h2>
                 {otherQuizzes ? (
                     otherQuizzes.length === 0 ? (
                         <Message>No registered exams are present.</Message>
@@ -205,7 +205,7 @@ const UserQuizzesPage = () => {
                                                         <p>Exam Date: {formatDate(otherQuiz.startDate)}</p>
                                                         <p>Registration deadline: {formatDate(otherQuiz.registrationDeadlineDate)}</p>
                                                         <Button onClick={() => unregisterForExam(otherQuiz.examId)}>
-                                                            Register Exam
+                                                            Unregister Exam
                                                         </Button>
                                                     </div>
                                                 </div>
