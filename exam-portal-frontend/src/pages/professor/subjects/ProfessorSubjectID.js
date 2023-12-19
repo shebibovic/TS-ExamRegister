@@ -7,9 +7,6 @@ import { useParams } from "react-router-dom";
 import * as categoriesConstants from "../../../constants/categoriesConstants";
 import FormContainer from "../../../components/FormContainer";
 import Sidebar from "../../../components/SidebarProfessor";
-import { updateCategory } from "../../../actions/categoriesActions";
-import { useNavigate } from "react-router-dom";
-
 const ProfessorSubjectID = () => {
     const params = useParams();
     const subjectId = params.catId;
@@ -19,7 +16,7 @@ const ProfessorSubjectID = () => {
     const [description, setDescription] = useState(""
     );
     const token = localStorage.getItem("jwtToken");
-    const [selectedUsers, setSelectedUsers] = useState([]);
+    const [students, setStudents] = useState([]);
     const [profesorName, setProfesorName] = useState("");
 
 
@@ -41,7 +38,7 @@ const ProfessorSubjectID = () => {
                         " " +
                         selectedCategoryData.professor.lastName
                     );
-                    setSelectedUsers(selectedCategoryData.students);
+                   
                 } else {
                     throw new Error("Failed to fetch selected subject");
                 }
@@ -50,7 +47,33 @@ const ProfessorSubjectID = () => {
             }
         };
 
+
         fetchSelectedCategory();
+    }, [subjectId, token]);
+
+    /////////////////////////////
+    useEffect(() => {
+        const fetchStudentsCategory = async () => {
+            try {
+                const response = await fetch('/api/user/professor/subject-students', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                });
+                if (response.ok) {
+                    const studentsData = await response.json();
+                    setStudents(studentsData);
+                } else {
+                    throw new Error("Failed to fetch students");
+                }
+            } catch (error) {
+                console.error("Error fetching students:", error);
+            }
+        };
+        
+
+        fetchStudentsCategory();
     }, [subjectId, token]);
 
 
@@ -66,10 +89,12 @@ const ProfessorSubjectID = () => {
                     <p><strong>Subject Name:</strong> {title}</p>
                     <p><strong>Description:</strong> {description}</p>
                     <p><strong>Professor:</strong> {profesorName}</p>
-                    <ul><strong>Students:</strong>
-                        <li></li>
+                    <ul>
+                        <strong>Students:</strong>
+                        {students.map((student, index) => (
+                            <li key={index}>{student.firstName} {student.lastName}</li>
+                        ))}
                     </ul>
-
                 </div>
             </div>
         </div>
