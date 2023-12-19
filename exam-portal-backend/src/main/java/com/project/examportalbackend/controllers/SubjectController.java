@@ -59,7 +59,7 @@ public class SubjectController {
 //        return ResponseEntity.ok(subjectService.getSubjects());
 //    }
 //
-    @PreAuthorize("hasAuthority('STUDENT')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin/{subjectId}")
      public ResponseEntity<Subject> getSubjectByAdmin(@PathVariable long subjectId) throws AccessDeniedException {
         User admin = authService.getUserFromToken();
