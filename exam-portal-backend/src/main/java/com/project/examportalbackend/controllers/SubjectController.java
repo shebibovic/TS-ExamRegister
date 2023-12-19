@@ -59,8 +59,19 @@ public class SubjectController {
 //        return ResponseEntity.ok(subjectService.getSubjects());
 //    }
 //
-    @GetMapping("/{subjectId}")
-     public ResponseEntity<?> getSubject(@PathVariable Long subjectId) {
+    @PreAuthorize("hasAuthority('STUDENT')")
+    @GetMapping("/admin/{subjectId}")
+     public ResponseEntity<Subject> getSubjectByAdmin(@PathVariable long subjectId) throws AccessDeniedException {
+        User admin = authService.getUserFromToken();
+        authService.verifyUserRole(admin.getUserId(), Roles.ADMIN.toString());
+        return ResponseEntity.ok(subjectService.getSubject(subjectId));
+    }
+
+    @PreAuthorize("hasAuthority('STUDENT')")
+    @GetMapping("/student/{subjectId}")
+    public ResponseEntity<Subject> getSubjectByStudent(@PathVariable long subjectId) throws AccessDeniedException {
+        User student = authService.getUserFromToken();
+        authService.verifyUserRole(student.getUserId(), Roles.STUDENT.toString());g
         return ResponseEntity.ok(subjectService.getSubject(subjectId));
     }
 //
