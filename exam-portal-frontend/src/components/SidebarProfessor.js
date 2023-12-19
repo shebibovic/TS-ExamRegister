@@ -15,8 +15,8 @@ const SidebarProfessor = ({ children }) => {
             icon: <FaUserAlt />,
         },
         {
-            path: "/professorCategories",
-            name: "Subjects",
+            path: "/professorCategories/category",
+            name: "Subject",
             icon: <TbLayoutGrid />,
         },
         {

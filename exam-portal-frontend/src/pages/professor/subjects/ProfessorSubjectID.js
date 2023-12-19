@@ -35,7 +35,7 @@ const ProfessorSubjectID = () => {
     useEffect(() => {
         const fetchSelectedCategory = async () => {
             try {
-                const response = await fetch(`/api/subject/${subjectId}`, {
+                const response = await fetch('/api/subject/professor/', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "application/json",

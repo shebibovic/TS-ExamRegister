@@ -21,10 +21,7 @@ const AdminAddQuiz = () => {
   const [examDate, setExamDate] = useState("");
   const [registrationDeadline, setRegistrationDeadline] = useState("");
  
-  const onClickPublishedHandler = () => {
-    setIsActive(!isActive);
-  };
- 
+
  
   const token = localStorage.getItem("jwtToken");
  

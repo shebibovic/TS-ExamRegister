@@ -69,7 +69,6 @@ const App = () => {
         <Route path="/professorProfile" element={<ProfessorProfilePage />} />
         <Route path="/addUser" element={<AddUser />} />
 
-        <Route path="/professorCategories" element={<ProfessorCategoriesPage />} />
         <Route path="/professorQuizzes" element={<ProfessorQuizzesPage />} />
         <Route path="/professorAddQuiz" element={<ProfessorAddQuiz />} />
         <Route path="/professorCategories/:catId" element={<ProfessorSubjectID />} />
