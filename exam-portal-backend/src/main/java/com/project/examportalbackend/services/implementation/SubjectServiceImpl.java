@@ -60,8 +60,7 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public Subject getSubjectFromProfessor(long professorId) throws AccessDeniedException {
-        authService.verifyUserRole(professorId,Roles.PROFESSOR.toString());
+    public Subject getSubjectFromProfessor(long professorId) {
         Subject subject = subjectRepository.findByProfessorUserId(professorId);
         if(subject == null){
             throw new IllegalArgumentException("Professor doesn't have a subject");

@@ -189,6 +189,12 @@ public class ExamServiceImpl implements ExamService {
         return examRepository.findBySubject(subject).stream().filter(item -> !item.isActive()).toList();
     }
 
+    @Override
+    public List<Exam> getExamsForSubject(long subjectId) {
+        Subject subject = subjectService.getSubject(subjectId);
+        return subject.getExams();
+    }
+
 
 
     @Override
@@ -254,4 +260,10 @@ public class ExamServiceImpl implements ExamService {
             throw new AccessDeniedException("Professor" + subject.getProfessor().getFullName() + "can only delete exams from his subject");
         }
     }
+
+    public List<User> getExamRegisteredStudents(long examId) {
+        Exam exam = getExam(examId);
+        return exam.getRegisteredStudents();
+    }
+
 }

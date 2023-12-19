@@ -6,6 +6,7 @@ import com.project.examportalbackend.repository.UserRepository;
 import com.project.examportalbackend.services.AuthService;
 import com.project.examportalbackend.services.SubjectService;
 import com.project.examportalbackend.services.UserService;
+import com.project.examportalbackend.utils.constants.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -104,7 +105,17 @@ public class SubjectController {
     @GetMapping("/professor")
     public ResponseEntity<Subject> getProfessorSubject() throws AccessDeniedException {
         User professor = authService.getUserFromToken();
+        authService.verifyUserRole(professor.getUserId(), Roles.PROFESSOR.toString());
         return ResponseEntity.ok(subjectService.getSubjectFromProfessor(professor.getUserId()));
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/admin/{professorId}")
+    public ResponseEntity<Subject> getProfessorSubjectForAdmin(@PathVariable long professorId) throws AccessDeniedException {
+        User admin = authService.getUserFromToken();
+        authService.verifyUserRole(admin.getUserId(), Roles.ADMIN.toString());
+        authService.verifyUserRole(professorId, Roles.PROFESSOR.toString());
+        return ResponseEntity.ok(subjectService.getSubjectFromProfessor(professorId));
     }
 
 

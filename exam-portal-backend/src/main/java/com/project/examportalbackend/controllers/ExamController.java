@@ -8,6 +8,7 @@ import com.project.examportalbackend.models.dto.response.ExamResponseDto;
 import com.project.examportalbackend.services.AuthService;
 import com.project.examportalbackend.services.SubjectService;
 import com.project.examportalbackend.services.ExamService;
+import com.project.examportalbackend.utils.constants.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -69,14 +70,14 @@ public class ExamController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/admin")
+    @GetMapping("/admin/active")
     public ResponseEntity<List<Exam>> getAllActiveExams() throws AccessDeniedException {
         User admin = authService.getUserFromToken();
         return ResponseEntity.ok(examService.getAllActiveExams(admin.getUserId()));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/admin")
+    @GetMapping("/admin/inactive")
     public ResponseEntity<List<Exam>> getAllInactiveExams() throws AccessDeniedException {
         User admin = authService.getUserFromToken();
         return ResponseEntity.ok(examService.getAllInactiveExams(admin.getUserId()));
@@ -136,6 +137,21 @@ public class ExamController {
 
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/admin/{subjectId}")
+    public ResponseEntity<List<Exam>> getExamsForSubject(@PathVariable long subjectId) throws AccessDeniedException {
+        User admin = authService.getUserFromToken();
+        authService.verifyUserRole(admin.getUserId(), Roles.ADMIN.toString());
+        return ResponseEntity.ok(examService.getExamsForSubject(subjectId));
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/admin/students/{examId}")
+    public ResponseEntity<List<User>> getAllStudentsForExam(@PathVariable long examId) throws AccessDeniedException {
+        User admin = authService.getUserFromToken();
+        authService.verifyUserRole(admin.getUserId(), Roles.ADMIN.toString());
+        return ResponseEntity.ok(examService.getExamRegisteredStudents(examId));
+    }
 
 //    @GetMapping("/{examId}")
 //    public ResponseEntity<?> getExam(@PathVariable Long examId) {

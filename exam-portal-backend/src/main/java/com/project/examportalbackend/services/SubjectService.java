@@ -23,7 +23,8 @@ public interface SubjectService {
 
 //    void deleteSubject(Long subjectId);
 
-    Subject getSubjectFromProfessor(long professorId) throws AccessDeniedException;
+    Subject getSubjectFromProfessor(long professorId);
+
 
     void verifySubjectHasStudent(User student, Subject subject);
 }

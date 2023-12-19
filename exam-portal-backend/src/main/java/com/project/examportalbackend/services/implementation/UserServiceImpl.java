@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -59,8 +60,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll().stream().filter(item -> item.getRole().getRoleName().equals(Roles.PROFESSOR.toString())).toList();
     }
     @Override
-    public List<User> getAllStudents(long adminId) throws AccessDeniedException {
-        authService.verifyUserRole(adminId, Roles.ADMIN.toString());
+    public List<User> getAllStudents() {
         return userRepository.findAll().stream().filter(item -> item.getRole().getRoleName().equals(Roles.STUDENT.toString())).toList();
     }
 
@@ -71,13 +71,28 @@ public class UserServiceImpl implements UserService {
     }
 //
 
-
     @Override
-    public List<User> getAllStudentsFromSubjectForProfessor(long professorId) throws AccessDeniedException {
-        authService.verifyUserRole(professorId, Roles.PROFESSOR.toString());
+    public List<User> getAllStudentsFromSubjectForProfessor(long professorId) {
         Subject subject = subjectService.getSubjectFromProfessor(professorId);
         return subject.getStudents();
     }
 
+    @Override
+    public List<User> getAllStudentsFromSubject(long subjectId) {
+        Subject subject = subjectService.getSubject(subjectId);
+        return subject.getStudents();
+    }
+
+    @Override
+    public List<User> getAvailableProfessors() {
+        return userRepository.findAll().stream().filter(item -> Objects.equals(item.getRole().getRoleName(), Roles.PROFESSOR.toString())).toList();
+    }
+
+    public List<User> getAllAvailableStudentsForSubject(long subjectId){
+        Subject subject = subjectService.getSubject(subjectId);
+        List<User> subjectUsers = subject.getStudents();
+        List<User> availableStudents = getAllStudents();
+        return availableStudents.stream().filter(student -> !subjectUsers.contains(student)).toList();
+    }
 
 }

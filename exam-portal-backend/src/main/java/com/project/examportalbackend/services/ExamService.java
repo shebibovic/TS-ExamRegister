@@ -56,5 +56,9 @@ public interface ExamService {
 
     List<Exam> getAllInactiveExams(long adminId) throws AccessDeniedException;
 
+    List<Exam> getExamsForSubject(long subjectId);
+
+    List<User> getExamRegisteredStudents(long examId);
+
 
 }
