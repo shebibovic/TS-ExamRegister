@@ -54,6 +54,12 @@ public class SubjectServiceImpl implements SubjectService {
 //    }
 
     @Override
+    public List<Subject> getAllSubjects(long adminId) throws AccessDeniedException {
+        authService.verifyUserRole(adminId,Roles.ADMIN.toString());
+        return subjectRepository.findAll();
+    }
+
+    @Override
     public Subject getSubjectFromProfessor(long professorId) throws AccessDeniedException {
         authService.verifyUserRole(professorId,Roles.PROFESSOR.toString());
         Subject subject = subjectRepository.findByProfessorUserId(professorId);

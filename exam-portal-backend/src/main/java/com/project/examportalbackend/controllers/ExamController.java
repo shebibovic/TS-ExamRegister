@@ -61,6 +61,26 @@ public class ExamController {
 //        return ResponseEntity.ok(examService.getExams());
 //    }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/admin")
+    public ResponseEntity<List<Exam>> getAllExams() throws AccessDeniedException {
+        User admin = authService.getUserFromToken();
+        return ResponseEntity.ok(examService.getAllExams(admin.getUserId()));
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/admin")
+    public ResponseEntity<List<Exam>> getAllActiveExams() throws AccessDeniedException {
+        User admin = authService.getUserFromToken();
+        return ResponseEntity.ok(examService.getAllActiveExams(admin.getUserId()));
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/admin")
+    public ResponseEntity<List<Exam>> getAllInactiveExams() throws AccessDeniedException {
+        User admin = authService.getUserFromToken();
+        return ResponseEntity.ok(examService.getAllInactiveExams(admin.getUserId()));
+    }
 
     @PreAuthorize("hasAuthority('PROFESSOR')")
     @GetMapping("/professor/active-exams")
@@ -76,12 +96,6 @@ public class ExamController {
         return ResponseEntity.ok(examService.getInactiveExamsByProfessor(professor.getUserId()));
     }
 
-//    @PreAuthorize("hasAuthority('STUDENT')")
-//    @GetMapping("/student/active-exams")
-//    public ResponseEntity<List<Exam>> getStudentActiveExams() throws AccessDeniedException {
-//        User student = authService.getUserFromToken();
-//        return ResponseEntity.ok(examService.getActiveExamsByStudent(student.getUserId()));
-//    }
 
     @PreAuthorize("hasAuthority('STUDENT')")
     @GetMapping("/student/inactive-registered-exams")

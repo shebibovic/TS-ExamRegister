@@ -34,6 +34,12 @@ public class SubjectController {
     @Autowired
     private AuthService authService;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/admin")
+    public ResponseEntity<List<Subject>> getAllSubjects() throws AccessDeniedException {
+        User admin = authService.getUserFromToken();
+        return ResponseEntity.ok(subjectService.getAllSubjects(admin.getUserId()));
+    }
 
 //    @PostMapping("/")
 //    public ResponseEntity<?> addSubject(@RequestBody Subject subject) {

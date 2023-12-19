@@ -111,6 +111,24 @@ public class ExamServiceImpl implements ExamService {
 //    }
 
     @Override
+    public List<Exam> getAllExams(long adminId) throws AccessDeniedException {
+        authService.verifyUserRole(adminId, Roles.ADMIN.toString());
+        return examRepository.findAll();
+    }
+
+    @Override
+    public List<Exam> getAllActiveExams(long adminId) throws AccessDeniedException {
+        authService.verifyUserRole(adminId, Roles.ADMIN.toString());
+        return examRepository.findAll().stream().filter(Exam::isActive).toList();
+    }
+
+    @Override
+    public List<Exam> getAllInactiveExams(long adminId) throws AccessDeniedException {
+        authService.verifyUserRole(adminId, Roles.ADMIN.toString());
+        return examRepository.findAll().stream().filter(item -> !item.isActive()).toList();
+    }
+
+    @Override
     public List<ExamResponseDto> getRegisteredActiveExamsByStudent(long studentId) throws AccessDeniedException {
         authService.verifyUserRole(studentId, Roles.STUDENT.toString());
         List<Exam> registeredExams = examRepository.findByRegisteredStudentsUserId(studentId).stream().filter(Exam::isActive).toList();

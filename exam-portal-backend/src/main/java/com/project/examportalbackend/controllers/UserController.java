@@ -27,6 +27,27 @@ public class UserController {
     @Autowired
     private ExamService examService;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/admin/students")
+    public ResponseEntity<List<User>> getAllStudents() throws AccessDeniedException {
+        User admin = authService.getUserFromToken();
+        return ResponseEntity.ok(userService.getAllStudents(admin.getUserId()));
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/admin/professors")
+    public ResponseEntity<List<User>> getAllProfessors() throws AccessDeniedException {
+        User admin = authService.getUserFromToken();
+        return ResponseEntity.ok(userService.getAllProfesors(admin.getUserId()));
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/admin")
+    public ResponseEntity<List<User>> getAllUsers() throws AccessDeniedException {
+        User admin = authService.getUserFromToken();
+        return ResponseEntity.ok(userService.getAllUsers(admin.getUserId()));
+    }
+
     @PreAuthorize("hasAuthority('PROFESSOR')")
     @GetMapping("/professor/subject-students")
     public ResponseEntity<List<User>> getStudentsForProfessorSubject() throws AccessDeniedException {
