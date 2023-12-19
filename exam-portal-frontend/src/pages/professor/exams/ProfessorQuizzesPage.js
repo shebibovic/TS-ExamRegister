@@ -11,7 +11,6 @@ import { deleteQuiz, fetchQuizzes } from "../../../actions/quizzesActions";
 import * as quizzesConstants from "../../../constants/quizzesConstants";
 import swal from "sweetalert";
 import { Link } from "react-router-dom";
-
 const ProfessorQuizzesPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -32,8 +31,30 @@ const formatDate = (dateString) => {
     const formattedDate = date.toLocaleDateString(); // Prikaz datuma bez vremena
     return formattedDate;
 };
-
-
+    useEffect(() => {
+        const token = localStorage.getItem("jwtToken");
+        const fetchQuizzesForProfessor = async () => {
+            try {
+                if (token) {
+                    const response = await fetch("/api/exam/professor/active-exams", {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            "Content-Type": "application/json",
+                        },
+                    });
+                    if (!response.ok) {
+                        throw new Error("Failed to fetch quizzes for professor");
+                    }
+                    const data = await response.json();
+                    setQuizzes(data); // Assuming the response contains the quizzes for the professor
+                }
+            } catch (error) {
+                console.error("Error fetching quizzes for professor:", error);
+                // Handle errors appropriately
+            }
+        };
+        fetchQuizzesForProfessor();
+    }, []);
     const deleteQuizHandler = (quiz) => {
         swal({
             title: "Are you sure?",
@@ -80,20 +101,16 @@ const formatDate = (dateString) => {
      
         fetchSubjects();
       }, [dispatch, token]);
-
     useEffect(() => {
         if (quizzes.length === 0) {
             fetchQuizzes(dispatch, token).then((data) => {
                 setQuizzes(data.payload);
             });
-
         }
     }, []);
-
     useEffect(() => {
         if (!localStorage.getItem("jwtToken")) navigate("/");
     }, []);
-
     return (
         <div className="adminQuizzesPage__container">
             <div className="adminQuizzesPage__sidebar">
@@ -147,7 +164,6 @@ const formatDate = (dateString) => {
                                             </div>
                                             </ListGroup.Item>
                                         </Link>
-
                                     </ListGroup>
                                 );
                         })
@@ -166,5 +182,5 @@ const formatDate = (dateString) => {
         </div>
     );
 };
-
 export default ProfessorQuizzesPage;
+ 
