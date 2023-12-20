@@ -2,6 +2,8 @@ package com.project.examportalbackend.controllers;
 
 import com.project.examportalbackend.models.Subject;
 import com.project.examportalbackend.models.User;
+import com.project.examportalbackend.models.dto.request.SubjectRequestDto;
+import com.project.examportalbackend.models.dto.response.SubjectResponseDto;
 import com.project.examportalbackend.repository.UserRepository;
 import com.project.examportalbackend.services.AuthService;
 import com.project.examportalbackend.services.SubjectService;
@@ -14,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 
@@ -38,13 +41,21 @@ public class SubjectController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin")
     public ResponseEntity<List<Subject>> getAllSubjects() throws AccessDeniedException {
-        User admin = authService.getUserFromToken();
         return ResponseEntity.ok(subjectService.getAllSubjects());
     }
 
-    @PostMapping("/")
-    public ResponseEntity<?> addSubject(@RequestBody Subject subject) {
-        return ResponseEntity.ok(subjectService.addSubject(subject));
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/admin/add")
+    public ResponseEntity<String> addSubject(@Valid @RequestBody SubjectRequestDto subjectRequestDto) throws AccessDeniedException {
+        Subject subject = subjectService.addSubject(subjectRequestDto);
+        return ResponseEntity.ok("Successfully added a subject " + subject.getTitle());
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/admin/update")
+    public ResponseEntity<String> updateSubject(@Valid @RequestBody SubjectRequestDto subjectRequestDto) throws AccessDeniedException {
+        Subject subject = subjectService.addSubject(subjectRequestDto);
+        return ResponseEntity.ok("Successfully added a subject " + subject.getTitle());
     }
 
     @PreAuthorize("hasAuthority('STUDENT')")
@@ -61,10 +72,10 @@ public class SubjectController {
 //
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin/{subjectId}")
-     public ResponseEntity<Subject> getSubjectByAdmin(@PathVariable long subjectId) throws AccessDeniedException {
+     public ResponseEntity<SubjectResponseDto> getSubjectByAdmin(@PathVariable long subjectId) throws AccessDeniedException {
         User admin = authService.getUserFromToken();
         authService.verifyUserRole(admin.getUserId(), Roles.ADMIN.toString());
-        return ResponseEntity.ok(subjectService.getSubject(subjectId));
+        return ResponseEntity.ok(subjectService.getSubjectDto(subjectId));
     }
 
     @PreAuthorize("hasAuthority('STUDENT')")
@@ -75,13 +86,6 @@ public class SubjectController {
         return ResponseEntity.ok(subjectService.getSubject(subjectId));
     }
 //
-    @PutMapping("/{subjectId}")
-    public ResponseEntity<?> updateSubject(@PathVariable Long subjectId, @RequestBody Subject subject) {
-        if (subjectService.getSubject(subjectId) != null) {
-            return ResponseEntity.ok(subjectService.updateSubject(subject));
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Subject with id : " + String.valueOf(subjectId) + ", doesn't exists");
-    }
 
     @DeleteMapping("/{subjectId}")
     public ResponseEntity<?> deleteSubject(@PathVariable Long subjectId) {

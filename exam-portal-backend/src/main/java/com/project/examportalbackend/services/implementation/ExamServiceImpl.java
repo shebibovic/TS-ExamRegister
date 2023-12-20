@@ -62,6 +62,7 @@ public class ExamServiceImpl implements ExamService {
             throw new IllegalArgumentException("You must pass the id of the exam you wish to update");
         }
         Subject subject = subjectService.getSubjectFromProfessor(professorId);
+        getExam(examRequestDto.getExamId());
 
         Exam exam = new Exam(
                 examRequestDto.getExamId(),
@@ -202,7 +203,7 @@ public class ExamServiceImpl implements ExamService {
         authService.verifyUserRole(studentId, Roles.STUDENT.toString());
 
         Exam exam = getExam(examId);
-        User student = userService.getUser(studentId);
+        User student = authService.getUser(studentId);
 
         verifyExamIsActive(exam);
         subjectService.verifySubjectHasStudent(student, exam.getSubject());
@@ -217,7 +218,7 @@ public class ExamServiceImpl implements ExamService {
         authService.verifyUserRole(studentId, Roles.STUDENT.toString());
 
         Exam exam = getExam(examId);
-        User student = userService.getUser(studentId);
+        User student = authService.getUser(studentId);
 
         verifyExamIsActive(exam);
         subjectService.verifySubjectHasStudent(student, exam.getSubject());

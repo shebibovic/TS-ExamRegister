@@ -9,6 +9,7 @@ import com.project.examportalbackend.models.User;
 import com.project.examportalbackend.repository.RoleRepository;
 import com.project.examportalbackend.repository.UserRepository;
 import com.project.examportalbackend.services.AuthService;
+import com.project.examportalbackend.utils.constants.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -74,6 +76,15 @@ public class AuthServiceImpl implements AuthService {
         } else {
             throw new ResourceNotFoundException("User with id " + userId + " doesn't exist");
         }
+    }
+
+    @Override
+    public User getUser(long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isEmpty()){
+            throw new ResourceNotFoundException("User with id:" + userId + "doesn't exist");
+        }
+        return user.get();
     }
 
     @Override
