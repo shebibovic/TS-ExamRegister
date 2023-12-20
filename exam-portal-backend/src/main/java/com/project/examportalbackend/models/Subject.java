@@ -1,6 +1,8 @@
 package com.project.examportalbackend.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.examportalbackend.utils.validation.annotation.UniqueProfessorConstraint;
+import com.project.examportalbackend.utils.validation.annotation.UniqueSubjectTitleConstraint;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,10 +25,11 @@ public class Subject {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long subjectId;
 
-    @Column(name = "title")
+    @Column(name = "title", unique = true)
     @NotNull(message = "Subject must have a title")
     @NotEmpty(message = "Subject title can't be empty")
     @Size(max = 50, message = "Subject title can't have more than 50 characters")
+    @UniqueSubjectTitleConstraint
     private String title;
 
     @Column(name = "description")
@@ -36,8 +39,9 @@ public class Subject {
     private String description;
 
     @OneToOne
-    @JoinColumn(name = "professor_id")
+    @JoinColumn(name = "professor_id", unique = true)
     @NotNull(message = "Subject must have a professor")
+    @UniqueProfessorConstraint
     private User professor;
 
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)

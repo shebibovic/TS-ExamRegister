@@ -1,6 +1,7 @@
 package com.project.examportalbackend.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.examportalbackend.utils.validation.annotation.UniqueEmailConstraint;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -36,7 +37,7 @@ public class User implements UserDetails {
     @NotEmpty(message = "Username is required!")
     @Column(name = "username", unique = true)
     @Email
-    //@Pattern(regexp = "^[\\w\\.-]+@[a-zA-Z\\d\\.-]+\\.[a-zA-Z]{2,}$", message ="Incorrect Email format")
+    @UniqueEmailConstraint
     private String email;
 
 

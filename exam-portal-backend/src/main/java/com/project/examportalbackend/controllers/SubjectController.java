@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class SubjectController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> addSubject(@RequestBody Subject subject) {
+    public ResponseEntity<?> addSubject(@Valid @RequestBody Subject subject) {
         return ResponseEntity.ok(subjectService.addSubject(subject));
     }
 
