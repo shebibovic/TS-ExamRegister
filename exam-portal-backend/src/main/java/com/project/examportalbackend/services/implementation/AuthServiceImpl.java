@@ -9,7 +9,11 @@ import com.project.examportalbackend.repository.SubjectRepository;
 import com.project.examportalbackend.repository.UserRepository;
 import com.project.examportalbackend.services.AuthService;
 import com.project.examportalbackend.utils.constants.Roles;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -19,10 +23,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.AccessDeniedException;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import static org.springframework.data.util.Pair.of;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -48,8 +58,11 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private JavaMailSender mailSender;
+
     @Override
-    public User registerUserService(UserRequestDto userRequestDto) {
+    public User registerUserService(UserRequestDto userRequestDto) throws MessagingException, UnsupportedEncodingException {
 
         User temp = userRepository.findByEmail(userRequestDto.getEmail());
         if (temp != null) {
@@ -58,13 +71,22 @@ public class AuthServiceImpl implements AuthService {
 
         Role role = getRole(userRequestDto.getRole());
         userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
-        return userRepository.save(new User(
+
+        User user = new User(
                 userRequestDto.getFirstName(),
                 userRequestDto.getLastName(),
                 userRequestDto.getEmail(),
                 userRequestDto.getPassword(),
                 userRequestDto.getPhoneNumber(),
-                role));
+                role);
+
+        Pair<String, Date> otpPair = generateOneTimePassword();
+        user.setOneTimePassword(passwordEncoder.encode(otpPair.getFirst()));
+        user.setOtpGeneratedTime(otpPair.getSecond());
+
+        User savedUser = userRepository.save(user);
+        sendOTPEmail(user, otpPair.getFirst());
+        return savedUser;
     }
 
     @Override
@@ -97,6 +119,9 @@ public class AuthServiceImpl implements AuthService {
                         + user.getFullName()
                         + " because he is assigned to a subject");
             }
+        }
+        if(Objects.equals(user.getRole().getRoleName(), Roles.ADMIN.toString())){
+            throw new IllegalArgumentException("Can't delete the admin");
         }
         userRepository.delete(user);
     }
@@ -153,5 +178,53 @@ public class AuthServiceImpl implements AuthService {
         } catch (BadCredentialsException e) {
             throw new BadCredentialsException("Incorrect email or password", e);
         }
+    }
+
+    @Override
+    public Pair<String, Date> generateOneTimePassword() {
+        String otp = RandomString.make(8);
+        return Pair.of(otp, new Date());
+    }
+
+    @Override
+    public void setNewOneTimePassword(long userId) throws MessagingException, UnsupportedEncodingException {
+        User user = getUser(userId);
+        Pair<String, Date> otpPair = generateOneTimePassword();
+        user.setOneTimePassword(passwordEncoder.encode(otpPair.getFirst()));
+        user.setOtpGeneratedTime(otpPair.getSecond());
+        userRepository.save(user);
+        sendOTPEmail(user, user.getOneTimePassword());
+    }
+
+    @Override
+    public void sendOTPEmail(User user, String otp) throws MessagingException, UnsupportedEncodingException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom("tsexampotal@gmail.com", "Exam Portal");
+        helper.setTo(user.getEmail());
+
+        String subject = "Here's your One Time Password (OTP) - Expires in 60 minutes!";
+
+        String content = "<p>Hello " + user.getFullName() + "</p>"
+                + "<p>For security reason, you're required to use the following "
+                + "One Time Password to login:</p>"
+                + "<p><b>" + otp + "</b></p>"
+                + "<br>"
+                + "<p>Note: this OTP is set to expire in 60 minutes.</p>";
+
+        helper.setSubject(subject);
+
+        helper.setText(content, true);
+
+        mailSender.send(message);
+    }
+
+    @Override
+    public void clearOTP(long userId) {
+        User user = getUser(userId);
+        user.setOneTimePassword(null);
+        user.setOtpGeneratedTime(null);
+        userRepository.save(user);
     }
 }

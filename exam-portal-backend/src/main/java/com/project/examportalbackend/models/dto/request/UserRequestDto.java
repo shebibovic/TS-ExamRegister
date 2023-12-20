@@ -54,4 +54,6 @@ public class UserRequestDto {
         this.phoneNumber = user.getPhoneNumber();
         this.role = user.getRole().getRoleName();
     }
+
+
 }
