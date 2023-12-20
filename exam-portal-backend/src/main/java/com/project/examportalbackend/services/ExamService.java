@@ -50,11 +50,11 @@ public interface ExamService {
 
     List<User> getProfessorExamRegisteredStudents(long professorId, long examId) throws AccessDeniedException;
 
-    List<Exam> getAllExams(long adminId) throws AccessDeniedException;
+    List<ExamResponseDto> getAllExams(long adminId) throws AccessDeniedException;
 
-    List<Exam> getAllActiveExams(long adminId) throws AccessDeniedException;
+    List<ExamResponseDto> getAllActiveExams(long adminId) throws AccessDeniedException;
 
-    List<Exam> getAllInactiveExams(long adminId) throws AccessDeniedException;
+    List<ExamResponseDto> getAllInactiveExams(long adminId) throws AccessDeniedException;
 
     List<Exam> getExamsForSubject(long subjectId);
 

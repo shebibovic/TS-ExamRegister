@@ -112,21 +112,44 @@ public class ExamServiceImpl implements ExamService {
 //    }
 
     @Override
-    public List<Exam> getAllExams(long adminId) throws AccessDeniedException {
+    public List<ExamResponseDto> getAllExams(long adminId) throws AccessDeniedException {
         authService.verifyUserRole(adminId, Roles.ADMIN.toString());
-        return examRepository.findAll();
+        return examRepository.findAll().stream().map(item -> new ExamResponseDto(
+                item.getExamId(),
+                item.getTitle(),
+                item.getDescription(),
+                item.getRegistrationDeadlineDate(),
+                item.getStartDate(),
+                item.getSubject().getTitle()
+        )).toList();
     }
 
     @Override
-    public List<Exam> getAllActiveExams(long adminId) throws AccessDeniedException {
+    public List<ExamResponseDto> getAllActiveExams(long adminId) throws AccessDeniedException {
         authService.verifyUserRole(adminId, Roles.ADMIN.toString());
-        return examRepository.findAll().stream().filter(Exam::isActive).toList();
+        return examRepository.findAll().stream().filter(Exam::isActive).map(exam ->
+                new ExamResponseDto(
+                        exam.getExamId(),
+                        exam.getTitle(),
+                        exam.getDescription(),
+                        exam.getRegistrationDeadlineDate(),
+                        exam.getStartDate(),
+                        exam.getSubject().getTitle()
+                )).toList();
     }
 
     @Override
-    public List<Exam> getAllInactiveExams(long adminId) throws AccessDeniedException {
+    public List<ExamResponseDto> getAllInactiveExams(long adminId) throws AccessDeniedException {
         authService.verifyUserRole(adminId, Roles.ADMIN.toString());
-        return examRepository.findAll().stream().filter(item -> !item.isActive()).toList();
+        return examRepository.findAll().stream().filter(item -> !item.isActive()).map(exam ->
+                new ExamResponseDto(
+                        exam.getExamId(),
+                        exam.getTitle(),
+                        exam.getDescription(),
+                        exam.getRegistrationDeadlineDate(),
+                        exam.getStartDate(),
+                        exam.getSubject().getTitle()
+                )).toList();
     }
 
     @Override

@@ -64,21 +64,21 @@ public class ExamController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin")
-    public ResponseEntity<List<Exam>> getAllExams() throws AccessDeniedException {
+    public ResponseEntity<List<ExamResponseDto>> getAllExams() throws AccessDeniedException {
         User admin = authService.getUserFromToken();
         return ResponseEntity.ok(examService.getAllExams(admin.getUserId()));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin/active")
-    public ResponseEntity<List<Exam>> getAllActiveExams() throws AccessDeniedException {
+    public ResponseEntity<List<ExamResponseDto>> getAllActiveExams() throws AccessDeniedException {
         User admin = authService.getUserFromToken();
         return ResponseEntity.ok(examService.getAllActiveExams(admin.getUserId()));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin/inactive")
-    public ResponseEntity<List<Exam>> getAllInactiveExams() throws AccessDeniedException {
+    public ResponseEntity<List<ExamResponseDto>> getAllInactiveExams() throws AccessDeniedException {
         User admin = authService.getUserFromToken();
         return ResponseEntity.ok(examService.getAllInactiveExams(admin.getUserId()));
     }
