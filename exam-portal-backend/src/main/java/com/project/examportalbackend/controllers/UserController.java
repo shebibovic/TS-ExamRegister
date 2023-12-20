@@ -1,8 +1,8 @@
 package com.project.examportalbackend.controllers;
 
-import com.project.examportalbackend.models.Exam;
-import com.project.examportalbackend.models.Subject;
 import com.project.examportalbackend.models.User;
+import com.project.examportalbackend.models.dto.request.UserRequestDto;
+import com.project.examportalbackend.repository.UserRepository;
 import com.project.examportalbackend.services.AuthService;
 import com.project.examportalbackend.services.ExamService;
 import com.project.examportalbackend.services.UserService;
@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 
@@ -28,6 +29,25 @@ public class UserController {
 
     @Autowired
     private ExamService examService;
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/admin/add")
+    public ResponseEntity<User> addUser(@Valid @RequestBody UserRequestDto userRequestDto) throws AccessDeniedException {
+        return ResponseEntity.ok(authService.registerUserService(userRequestDto));
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/admin/update")
+    public ResponseEntity<User> updateUser(@Valid @RequestBody UserRequestDto userRequestDto) throws AccessDeniedException {
+        return ResponseEntity.ok(authService.updateUser(userRequestDto));
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/admin/delete/{userId}")
+    public ResponseEntity<String> deleteUser(@PathVariable long userId) throws AccessDeniedException {
+        authService.deleteUser(userId);
+        return ResponseEntity.ok("User successfully deleted");
+    }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin/students")

@@ -79,7 +79,7 @@ const AdminQuizzesPage = () => {
     const formattedDate = date.toLocaleDateString(); // Prikaz datuma bez vremena
     return formattedDate;
   };
-
+   
 
 
 
@@ -110,8 +110,8 @@ const AdminQuizzesPage = () => {
                                     {<p className="my-3">{quiz.description}</p>}
                                   </div>
                                   <div className="text-end">
-                                    <p>Exam Date: {formatDate(quiz.startDate)}</p>
-                                    <p>Registration deadline: {formatDate(quiz.registrationDeadlineDate)}</p>
+                                      <p>Exam Date: {formatDate(quiz.startDate)}</p>
+                                      <p>Registration deadline: {formatDate(quiz.registrationDeadlineDate)}</p>
                                   </div>
                                 </div>
 

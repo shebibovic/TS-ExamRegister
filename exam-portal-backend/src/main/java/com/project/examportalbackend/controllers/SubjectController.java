@@ -54,7 +54,7 @@ public class SubjectController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/admin/update")
     public ResponseEntity<String> updateSubject(@Valid @RequestBody SubjectRequestDto subjectRequestDto) throws AccessDeniedException {
-        Subject subject = subjectService.addSubject(subjectRequestDto);
+        Subject subject = subjectService.updateSubject(subjectRequestDto);
         return ResponseEntity.ok("Successfully added a subject " + subject.getTitle());
     }
 
@@ -87,10 +87,11 @@ public class SubjectController {
     }
 //
 
-    @DeleteMapping("/{subjectId}")
-    public ResponseEntity<?> deleteSubject(@PathVariable Long subjectId) {
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @DeleteMapping("admin/delete/{subjectId}")
+    public ResponseEntity<String> deleteSubject(@PathVariable long subjectId) {
         subjectService.deleteSubject(subjectId);
-        return ResponseEntity.ok(true);
+        return ResponseEntity.ok("Subject successfully deleted");
     }
 
 //    @GetMapping("/users")

@@ -11,6 +11,7 @@ import {
 } from "../../../actions/categoriesActions";
 import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const AdminUpdateCategoryPage = () => {
   const [title, setTitle] = useState("");
@@ -18,13 +19,17 @@ const AdminUpdateCategoryPage = () => {
   const [selectedUser, setSelectedUser] = useState(""); // State to hold selected user
   const [users, setUsers] = useState([]); // State to hold the list of users
   const [professor, setProfessor] = useState([]);
+  const [profesorName, setProfesorName] = useState("");
   const token = localStorage.getItem("jwtToken");
   const user = JSON.parse(localStorage.getItem("user"));
   const [selectedStudents, setSelectedStudents] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
+  const params = useParams();
+  const subjectId = params.catId;
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -42,8 +47,41 @@ const AdminUpdateCategoryPage = () => {
       }
     });
   };
+  //fetch subject details
+  useEffect(() => {
+    const fetchSelectedCategory = async () => {
+        try {
+            const response = await fetch(`/api/subject/admin/${subjectId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            });
+            if (response.ok) {
+                const selectedCategoryData = await response.json();
+                console.log("selectedCategoryData", selectedCategoryData);
+                setTitle(selectedCategoryData.title);
+                setDescription(selectedCategoryData.description);
+                setProfesorName(
+                    selectedCategoryData.professor.firstName +
+                    " " +
+                    selectedCategoryData.professor.lastName
+                );
+                setSelectedUsers(selectedCategoryData.students);
+            } else {
+                throw new Error("Failed to fetch selected subject");
+            }
+        } catch (error) {
+            console.error("Error fetching selected subject:", error);
+        }
+    };
+
+    fetchSelectedCategory();
+}, [subjectId, token]);
 
 
+
+console.log(profesorName+"<--------------------------heeej")
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -122,9 +160,9 @@ const AdminUpdateCategoryPage = () => {
                 <Form.Select
                     aria-label="Choose Professor"
                     onChange={(e) => setSelectedUser(e.target.value)}
-                    value={selectedUser}
+                    value={profesorName}
                 >
-                  <option value="">Choose Professor</option>
+                  <option value={profesorName}> </option>
                   {professor.map((user) => (
                       <option key={user.userId} value={user.userId}>
                         {user.firstName} {user.lastName}
