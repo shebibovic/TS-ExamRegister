@@ -26,11 +26,11 @@ const ProfessorQuizzesPage = () => {
         navigate("/professorAddQuiz");
     };
     // Funkcija za formatiranje datuma
-const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const formattedDate = date.toLocaleDateString(); // Prikaz datuma bez vremena
-    return formattedDate;
-};
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const formattedDate = date.toLocaleDateString(); // Prikaz datuma bez vremena
+        return formattedDate;
+    };
     useEffect(() => {
         const token = localStorage.getItem("jwtToken");
         const fetchQuizzesForProfessor = async () => {
@@ -55,7 +55,7 @@ const formatDate = (dateString) => {
         };
         fetchQuizzesForProfessor();
     }, []);
-    
+
     const deleteQuizHandler = (quiz) => {
         swal({
             title: "Are you sure?",
@@ -83,25 +83,25 @@ const formatDate = (dateString) => {
     };
     useEffect(() => {
         const fetchSubjects = async () => {
-          try {
-            const response = await fetch("/api/subject/professor", {
-              headers: {
-                Authorization: `Bearer ${token}`, // Dodajte ovu liniju kako biste poslali token
-                "Content-Type": "application/json", // Ovisno o potrebi, možda trebate dodati i Content-Type
-              },
-            });
-            if (!response.ok) {
-              throw new Error("Failed to fetch professors");
+            try {
+                const response = await fetch("/api/subject/professor", {
+                    headers: {
+                        Authorization: `Bearer ${token}`, // Dodajte ovu liniju kako biste poslali token
+                        "Content-Type": "application/json", // Ovisno o potrebi, možda trebate dodati i Content-Type
+                    },
+                });
+                if (!response.ok) {
+                    throw new Error("Failed to fetch professors");
+                }
+                const userData = await response.json();
+                setSubject(userData);
+            } catch (error) {
+                console.error("Error fetching users:", error);
             }
-            const userData = await response.json();
-            setSubject(userData);
-          } catch (error) {
-            console.error("Error fetching users:", error);
-          }
         };
-     
+
         fetchSubjects();
-      }, [dispatch, token]);
+    }, [dispatch, token]);
 
     useEffect(() => {
         if (!localStorage.getItem("jwtToken")) navigate("/");
@@ -124,54 +124,54 @@ const formatDate = (dateString) => {
                                         className="adminQuizzesPage__content--quizzesList"
                                         key={index}
                                     >
-                                            <ListGroup.Item className="align-items-start" action key={index}>
-                                                <div className="ms-2">
-                                                    <div className="d-flex justify-content-between">
-                                                        <div>
-                                                            <div className="fw-bold">{quiz.title}</div>
-                                                            {<p className="my-3">{selectedSubject.title}</p>}
-                                                            {<p className="my-3">{quiz.description}</p>}
-                                                        </div>
-                                                        {/* Prikazivanje datuma */}
-                                                        <div className="text-end">
-                                                            <p>Exam Date: {formatDate(quiz.startDate)}</p>
-                                                            <p>Registration deadline: {formatDate(quiz.registrationDeadlineDate)}</p>
-                                                        </div>
+                                        <ListGroup.Item className="align-items-start" action key={index}>
+                                            <div className="ms-2">
+                                                <div className="d-flex justify-content-between">
+                                                    <div>
+                                                        <div className="fw-bold">{quiz.title}</div>
+                                                        {<p className="my-3">{selectedSubject.title}</p>}
+                                                        {<p className="my-3">{quiz.description}</p>}
                                                     </div>
-                                                    <div className="adminQuizzesPage__content--ButtonsList">
+                                                    {/* Prikazivanje datuma */}
+                                                    <div className="text-end">
+                                                        <p>Exam Date: {formatDate(quiz.startDate)}</p>
+                                                        <p>Registration deadline: {formatDate(quiz.registrationDeadlineDate)}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="adminQuizzesPage__content--ButtonsList">
+                                                    <div
+                                                        onClick={() => deleteQuizHandler(quiz)}
+                                                        style={{
+                                                            border: "1px solid grey",
+                                                            color: "white",
+                                                            backgroundColor: "#ff0b0bdb",
+                                                            width: "100px",
+                                                            padding: "2px",
+                                                            textAlign: "center",
+                                                            borderRadius: "5px",
+                                                            height: "35px",
+                                                            margin: "0px 4px",
+                                                        }}
+                                                    >{`Delete`}</div>
+
+                                                    <Link to={`/quizzes/${quiz.examId}`} style={{ textDecoration: 'none' }}>
                                                         <div
-                                                            onClick={() => deleteQuizHandler(quiz)}
                                                             style={{
                                                                 border: "1px solid grey",
                                                                 color: "white",
-                                                                backgroundColor: "#ff0b0bdb",
-                                                                width: "100px",
+                                                                backgroundColor: "rgb(68 177 49)",
+                                                                width: "180px",
                                                                 padding: "2px",
                                                                 textAlign: "center",
                                                                 borderRadius: "5px",
                                                                 height: "35px",
                                                                 margin: "0px 4px",
                                                             }}
-                                                        >{`Delete`}</div>
-
-                                                        <Link to={`/quizzes/${quiz.examId}`} style={{ textDecoration: 'none' }}>
-                                                            <div
-                                                                style={{
-                                                                    border: "1px solid grey",
-                                                                    color: "white",
-                                                                    backgroundColor: "rgb(68 177 49)",
-                                                                    width: "180px",
-                                                                    padding: "2px",
-                                                                    textAlign: "center",
-                                                                    borderRadius: "5px",
-                                                                    height: "35px",
-                                                                    margin: "0px 4px",
-                                                                }}
-                                                            >{`See registered students`}</div>
-                                                        </Link>
-                                                    </div>
+                                                        >{`See registered students`}</div>
+                                                    </Link>
                                                 </div>
-                                            </ListGroup.Item>
+                                            </div>
+                                        </ListGroup.Item>
                                     </ListGroup>
                                 );
                         })
@@ -192,4 +192,3 @@ const formatDate = (dateString) => {
     );
 };
 export default ProfessorQuizzesPage;
- 

@@ -23,7 +23,6 @@ const ProfessorProfilePage = () => {
             // Example: dispatch action to get user details using the token
         }
 
-        fetchCategories(dispatch, token);
         fetchQuizzes(dispatch, token);
     }, [dispatch, navigate, token, loginReducer.user]);
 

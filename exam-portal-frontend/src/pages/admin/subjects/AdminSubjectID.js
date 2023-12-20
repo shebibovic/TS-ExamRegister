@@ -18,6 +18,7 @@ const AdminSubjectID = () => {
     console.log("paramsss: ", params);
     const subjectId = params.catId;
     const profId = params.professorId;
+    const [subjectDetails, setSubjectDetails] = useState(null);
 
     const oldCategory = useSelector((state) =>
         state.categoriesReducer.categories.find((cat) => cat.subjectId === subjectId)
@@ -35,7 +36,7 @@ const AdminSubjectID = () => {
     useEffect(() => {
         const fetchSelectedCategory = async () => {
             try {
-                const response = await fetch(`/api/subject/${subjectId}`, {
+                const response = await fetch(`/api/subject/admin/${subjectId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "application/json",
@@ -43,7 +44,7 @@ const AdminSubjectID = () => {
                 });
                 if (response.ok) {
                     const selectedCategoryData = await response.json();
-                    console.log("selectedCategoryData", selectedCategoryData); 
+                    console.log("selectedCategoryData", selectedCategoryData);
                     setTitle(selectedCategoryData.title);
                     setDescription(selectedCategoryData.description);
                     setProfesorName(
@@ -52,7 +53,6 @@ const AdminSubjectID = () => {
                         selectedCategoryData.professor.lastName
                     );
                     setSelectedUsers(selectedCategoryData.students);
-                    console.log("STUDEBNTI: ", selectedCategoryData)
                 } else {
                     throw new Error("Failed to fetch selected subject");
                 }
