@@ -18,6 +18,7 @@ const AdminAddCategoryPage = () => {
   const [selectedUser, setSelectedUser] = useState(""); // State to hold selected user
   const [users, setUsers] = useState([]); // State to hold the list of users
   const [professor, setProfessor] = useState([]);
+  const [noProfessors, setNoProfessors] = useState(false);
   const token = localStorage.getItem("jwtToken");
   const user = JSON.parse(localStorage.getItem("user"));
   const [selectedStudents, setSelectedStudents] = useState([]);
@@ -58,7 +59,11 @@ const AdminAddCategoryPage = () => {
         }
         const userData = await response.json();
         console.log(userData); // Log fetched user data
-        setProfessor(userData);
+        if (userData && userData.length > 0) {
+          setProfessor(userData);
+        } else {
+          setNoProfessors(true);
+        }
       } catch (error) {
         console.error("Error fetching users:", error);
       }
@@ -117,21 +122,29 @@ const AdminAddCategoryPage = () => {
                 />
               </Form.Group>
 
-              <Form.Group controlId="professor">
-                <Form.Label className="label"> <h5>Choose Professor</h5> </Form.Label>
-                <Form.Select
-                    aria-label="Choose Professor"
-                    onChange={(e) => setSelectedUser(e.target.value)}
-                    value={selectedUser}
-                >
-                  <option value="">Choose Professor</option>
-                  {professor.map((user) => (
-                      <option key={user.userId} value={user.userId}>
-                        {user.firstName} {user.lastName}
-                      </option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
+              <div>
+                {noProfessors ? (
+                    <p> <h4>No available professors now. You cannot add this subject</h4> </p>) : (
+                    <Form.Group controlId="professor">
+                      <Form.Label className="label">
+                        <h5>Choose Professor</h5>
+                      </Form.Label>
+                      <Form.Select
+                          aria-label="Choose Professor"
+                          onChange={(e) => setSelectedUser(e.target.value)}
+                          value={selectedUser}
+                      >
+                        <option value="">Choose Professor</option>
+                        {professor.map((user) => (
+                            <option key={user.userId} value={user.userId}>
+                              {user.firstName} {user.lastName}
+                            </option>
+                        ))}
+                      </Form.Select>
+                    </Form.Group>
+                )}
+              </div>
+
               <div style={{ marginBottom: '20px' }}></div>
 
               <Form.Group controlId="students">
