@@ -99,8 +99,7 @@ const UserQuizzesPage = () => {
             }
             swal("Success!", "You have successfully registered for the exam.", "success");
         } catch (error) {
-            // U slučaju greške pri registraciji, možete prikazati poruku ili obavijestiti korisnika
-            swal("Error!", "Failed to register for the exam. Please try again.", "error");
+            swal("Error!", "Failed to register for the exam. You are already registered for this exam.", "error");
         }
     };
 
@@ -121,8 +120,7 @@ const UserQuizzesPage = () => {
             }
             swal("Success!", "You have successfully unregistered for the exam.", "success");
         } catch (error) {
-            // U slučaju greške pri registraciji, možete prikazati poruku ili obavijestiti korisnika
-            swal("Error!", "Failed to unregister for the exam. Please try again.", "error");
+            swal("Error!", "Failed to unregister for the exam. You are already unregistered from this exam. Please try again.", "error");
         }
     };
 

@@ -31,6 +31,7 @@ import ProfessorSubjectID from "./pages/professor/subjects/ProfessorSubjectID";
 import UserSubjects from "./pages/users/UserSubjects";
 import UserSubjectID from "./pages/users/UserSubjectID";
 import QuizDetails from "./pages/professor/exams/QuizDetails";
+import AdminUsers from "./pages/admin/users/AdminUsersPage";
 
 
 const App = () => {
@@ -77,6 +78,8 @@ const App = () => {
         <Route path="/userSubjects" element={<UserSubjects />} />
         <Route path="/userCategories/:catId" element={<UserSubjectID />} />
         <Route path="/quizzes/:examId" element={<QuizDetails />} />
+
+        <Route path="/allUsers" element={<AdminUsers />} />
       </Routes>
     </Router>
   );

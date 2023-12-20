@@ -85,7 +85,7 @@ console.log(profesorName+"<--------------------------heeej")
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("/api/user/admin/available-professors", {
+        const response = await fetch("/api/user/admin/professors", {
           headers: {
             Authorization: `Bearer ${token}`, // Dodajte ovu liniju kako biste poslali token
             "Content-Type": "application/json", // Ovisno o potrebi, možda trebate dodati i Content-Type
