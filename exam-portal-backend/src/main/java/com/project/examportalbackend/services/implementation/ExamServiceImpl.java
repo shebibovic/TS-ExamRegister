@@ -62,6 +62,7 @@ public class ExamServiceImpl implements ExamService {
             throw new IllegalArgumentException("You must pass the id of the exam you wish to update");
         }
         Subject subject = subjectService.getSubjectFromProfessor(professorId);
+        getExam(examRequestDto.getExamId());
 
         Exam exam = new Exam(
                 examRequestDto.getExamId(),

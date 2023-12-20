@@ -1,11 +1,8 @@
 package com.project.examportalbackend.models.dto.request;
 
-import com.project.examportalbackend.utils.validation.annotation.UniqueProfessorConstraint;
 import com.project.examportalbackend.utils.validation.annotation.UniqueProfessorIdConstraint;
-import com.project.examportalbackend.utils.validation.annotation.UniqueSubjectTitleConstraint;
 import lombok.*;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -18,6 +15,8 @@ import java.util.List;
     @NoArgsConstructor
     @AllArgsConstructor
     public class SubjectRequestDto {
+
+        private long subjectId = -1;
         @NotNull(message = "Subject must have a title")
         @NotEmpty(message = "Subject title can't be empty")
         @Size(max = 50, message = "Subject title can't have more than 50 characters")

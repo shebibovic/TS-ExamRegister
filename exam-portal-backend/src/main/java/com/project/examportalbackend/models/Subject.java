@@ -74,4 +74,12 @@ public class Subject {
         this.students = students;
     }
 
+    public Subject(long subjectId, String title, String description, User professor, List<User> students){
+        this.subjectId = subjectId;
+        this.title = title;
+        this.description = description;
+        this.professor = professor;
+        this.students = students;
+    }
+
 }

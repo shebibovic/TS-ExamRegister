@@ -45,6 +45,27 @@ public class SubjectServiceImpl implements SubjectService {
                 students));
 
     }
+
+    @Override
+    public Subject updateSubject(SubjectRequestDto subjectRequestDto) throws AccessDeniedException {
+        if(subjectRequestDto.getSubjectId() == -1){
+            throw new IllegalArgumentException("You must pass the id of the exam you wish to update");
+        }
+        getSubject(subjectRequestDto.getSubjectId());
+
+        for(long studentId: subjectRequestDto.getStudents()){
+            authService.verifyUserRole(studentId, Roles.STUDENT.toString());
+        }
+        authService.verifyUserRole(subjectRequestDto.getProfessorId(), Roles.PROFESSOR.toString());
+        List<User> students = subjectRequestDto.getStudents().stream().map(item -> authService.getUser(item)).toList();
+        return subjectRepository.save(new Subject(
+                subjectRequestDto.getSubjectId(),
+                subjectRequestDto.getTitle(),
+                subjectRequestDto.getDescription(),
+                authService.getUser(subjectRequestDto.getProfessorId()),
+                students));
+
+    }
 //
 //    @Override
 //    public List<Subject> getSubjects() {

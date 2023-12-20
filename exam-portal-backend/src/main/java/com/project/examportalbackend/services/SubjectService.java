@@ -15,6 +15,8 @@ public interface SubjectService {
 
     Subject addSubject(SubjectRequestDto subjectRequestDto) throws AccessDeniedException;
 
+    Subject updateSubject(SubjectRequestDto subjectRequestDto) throws AccessDeniedException;
+
     List<Subject> getAllSubjects();
 
     List<Subject> getSubjectsByStudentId(long studentId) throws AccessDeniedException;

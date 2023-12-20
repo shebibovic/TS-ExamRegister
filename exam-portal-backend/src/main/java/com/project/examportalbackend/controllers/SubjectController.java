@@ -51,6 +51,13 @@ public class SubjectController {
         return ResponseEntity.ok("Successfully added a subject " + subject.getTitle());
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/admin/update")
+    public ResponseEntity<String> updateSubject(@Valid @RequestBody SubjectRequestDto subjectRequestDto) throws AccessDeniedException {
+        Subject subject = subjectService.addSubject(subjectRequestDto);
+        return ResponseEntity.ok("Successfully added a subject " + subject.getTitle());
+    }
+
     @PreAuthorize("hasAuthority('STUDENT')")
     @GetMapping("/student")
     public ResponseEntity<List<Subject>> getSubjects() throws AccessDeniedException {
@@ -79,13 +86,6 @@ public class SubjectController {
         return ResponseEntity.ok(subjectService.getSubject(subjectId));
     }
 //
-    @PutMapping("/{subjectId}")
-    public ResponseEntity<?> updateSubject(@PathVariable Long subjectId, @RequestBody Subject subject) {
-        if (subjectService.getSubject(subjectId) != null) {
-            return ResponseEntity.ok(subjectService.updateSubject(subject));
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Subject with id : " + String.valueOf(subjectId) + ", doesn't exists");
-    }
 
     @DeleteMapping("/{subjectId}")
     public ResponseEntity<?> deleteSubject(@PathVariable Long subjectId) {
