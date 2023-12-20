@@ -3,6 +3,7 @@ import { FaBars, FaUserAlt, FaRegChartBar } from "react-icons/fa";
 import { TbLayoutGrid, TbLayoutGridAdd, TbReport } from "react-icons/tb";
 import { MdQuiz, MdQueue } from "react-icons/md";
 import { FaUserPlus } from "react-icons/fa";
+import { HiOutlineUsers } from "react-icons/hi";
 import { NavLink } from "react-router-dom";
 import "./Sidebar.css";
 
@@ -34,6 +35,11 @@ const Sidebar = ({ children }) => {
       path: "/addUser",
       name: "Add User",
       icon: <FaUserPlus />,
+    },
+    {
+      path: "/allUsers",
+      name: "All Users",
+      icon: <HiOutlineUsers />,
     },
   ];
   return (

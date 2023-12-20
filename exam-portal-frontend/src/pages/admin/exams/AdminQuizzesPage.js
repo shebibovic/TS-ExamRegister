@@ -74,6 +74,13 @@ const AdminQuizzesPage = () => {
     if (!localStorage.getItem("jwtToken")) navigate("/");
   }, []);
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const formattedDate = date.toLocaleDateString(); // Prikaz datuma bez vremena
+    return formattedDate;
+  };
+
+
 
 
   return (
@@ -98,9 +105,13 @@ const AdminQuizzesPage = () => {
                               <div className="ms-2">
                                 <div className="d-flex justify-content-between">
                                   <div>
-                                    <div className="fw-bold">{quiz.title}</div>
-                                    {<p className="my-3">{selectedSubject.title}</p>}
+                                    <div className="fw-bold">{quiz.subjectName}</div>
+                                    {<p className="my-3">{quiz.title}</p>}
                                     {<p className="my-3">{quiz.description}</p>}
+                                  </div>
+                                  <div className="text-end">
+                                    <p>Exam Date: {formatDate(quiz.startDate)}</p>
+                                    <p>Registration deadline: {formatDate(quiz.registrationDeadlineDate)}</p>
                                   </div>
                                 </div>
 
