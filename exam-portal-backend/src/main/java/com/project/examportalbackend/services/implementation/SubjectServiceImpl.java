@@ -3,6 +3,8 @@ package com.project.examportalbackend.services.implementation;
 import com.project.examportalbackend.exception.exceptions.ResourceNotFoundException;
 import com.project.examportalbackend.models.Subject;
 import com.project.examportalbackend.models.User;
+import com.project.examportalbackend.models.dto.request.SubjectRequestDto;
+import com.project.examportalbackend.models.dto.response.SubjectResponseDto;
 import com.project.examportalbackend.repository.SubjectRepository;
 import com.project.examportalbackend.services.AuthService;
 import com.project.examportalbackend.services.SubjectService;
@@ -28,12 +30,40 @@ public class SubjectServiceImpl implements SubjectService {
     public Subject addSubject(Subject subject) {
         return subjectRepository.save(subject);
     }
+
+    @Override
+    public Subject addSubject(SubjectRequestDto subjectRequestDto) throws AccessDeniedException {
+        for(long studentId: subjectRequestDto.getStudents()){
+            authService.verifyUserRole(studentId, Roles.STUDENT.toString());
+        }
+        authService.verifyUserRole(subjectRequestDto.getProfessorId(), Roles.PROFESSOR.toString());
+        List<User> students = subjectRequestDto.getStudents().stream().map(item -> authService.getUser(item)).toList();
+        return subjectRepository.save(new Subject(
+                subjectRequestDto.getTitle(),
+                subjectRequestDto.getDescription(),
+                authService.getUser(subjectRequestDto.getProfessorId()),
+                students));
+
+    }
 //
 //    @Override
 //    public List<Subject> getSubjects() {
 //        return subjectRepository.findAll();
 //    }
 //
+    @Override
+    public SubjectResponseDto getSubjectDto(long subjectId) {
+        Optional<Subject> subject = subjectRepository.findById(subjectId);
+        if(subject.isEmpty()){
+            throw new ResourceNotFoundException("Subject with id:" + subjectId + "doesn't exist");
+        }
+        return new SubjectResponseDto(
+                subject.get().getTitle(),
+                subject.get().getDescription(),
+                subject.get().getProfessor(),
+                subject.get().getStudents());
+    }
+
     @Override
     public Subject getSubject(long subjectId) {
         Optional<Subject> subject = subjectRepository.findById(subjectId);

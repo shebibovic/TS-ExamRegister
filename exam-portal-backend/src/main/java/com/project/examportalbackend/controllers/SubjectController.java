@@ -2,6 +2,8 @@ package com.project.examportalbackend.controllers;
 
 import com.project.examportalbackend.models.Subject;
 import com.project.examportalbackend.models.User;
+import com.project.examportalbackend.models.dto.request.SubjectRequestDto;
+import com.project.examportalbackend.models.dto.response.SubjectResponseDto;
 import com.project.examportalbackend.repository.UserRepository;
 import com.project.examportalbackend.services.AuthService;
 import com.project.examportalbackend.services.SubjectService;
@@ -39,12 +41,12 @@ public class SubjectController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin")
     public ResponseEntity<List<Subject>> getAllSubjects() throws AccessDeniedException {
-        User admin = authService.getUserFromToken();
         return ResponseEntity.ok(subjectService.getAllSubjects());
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/")
-    public ResponseEntity<?> addSubject(@Valid @RequestBody Subject subject) {
+    public ResponseEntity<?> addSubject(@Valid @RequestBody SubjectRequestDto subject) throws AccessDeniedException {
         return ResponseEntity.ok(subjectService.addSubject(subject));
     }
 
@@ -62,10 +64,10 @@ public class SubjectController {
 //
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin/{subjectId}")
-     public ResponseEntity<Subject> getSubjectByAdmin(@PathVariable long subjectId) throws AccessDeniedException {
+     public ResponseEntity<SubjectResponseDto> getSubjectByAdmin(@PathVariable long subjectId) throws AccessDeniedException {
         User admin = authService.getUserFromToken();
         authService.verifyUserRole(admin.getUserId(), Roles.ADMIN.toString());
-        return ResponseEntity.ok(subjectService.getSubject(subjectId));
+        return ResponseEntity.ok(subjectService.getSubjectDto(subjectId));
     }
 
     @PreAuthorize("hasAuthority('STUDENT')")

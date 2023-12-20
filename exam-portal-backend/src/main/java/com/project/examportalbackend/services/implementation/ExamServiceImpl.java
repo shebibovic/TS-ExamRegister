@@ -202,7 +202,7 @@ public class ExamServiceImpl implements ExamService {
         authService.verifyUserRole(studentId, Roles.STUDENT.toString());
 
         Exam exam = getExam(examId);
-        User student = userService.getUser(studentId);
+        User student = authService.getUser(studentId);
 
         verifyExamIsActive(exam);
         subjectService.verifySubjectHasStudent(student, exam.getSubject());
@@ -217,7 +217,7 @@ public class ExamServiceImpl implements ExamService {
         authService.verifyUserRole(studentId, Roles.STUDENT.toString());
 
         Exam exam = getExam(examId);
-        User student = userService.getUser(studentId);
+        User student = authService.getUser(studentId);
 
         verifyExamIsActive(exam);
         subjectService.verifySubjectHasStudent(student, exam.getSubject());

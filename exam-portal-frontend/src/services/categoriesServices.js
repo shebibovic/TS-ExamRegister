@@ -29,7 +29,8 @@ const addCategory = async (cat, token, userRole) => {
     const category = {
       title: cat.title,
       description: cat.description,
-      professor: professor
+      professorId: professor.userId,
+      students: cat.students
     };
     const { data } = await axios.post("/api/subject/", category, config);
     console.log("categoryService:addCategory() Success: ", data);

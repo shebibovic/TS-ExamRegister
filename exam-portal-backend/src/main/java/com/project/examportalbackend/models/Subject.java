@@ -67,4 +67,11 @@ public class Subject {
         this.exams.add(exam);
     }
 
+    public Subject(String title, String description, User professor, List<User> students){
+        this.title = title;
+        this.description = description;
+        this.professor = professor;
+        this.students = students;
+    }
+
 }

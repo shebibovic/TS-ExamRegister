@@ -34,6 +34,7 @@ const AdminAddCategoryPage = () => {
       userId: selectedUser,
       students: selectedStudents,
     };
+    console.log("ker");
     addCategory(dispatch, category, token).then((data) => {
       if (data.type === categoriesConstants.ADD_CATEGORY_SUCCESS) {
         swal("Subject Added!", `${title} successfully added`, "success");

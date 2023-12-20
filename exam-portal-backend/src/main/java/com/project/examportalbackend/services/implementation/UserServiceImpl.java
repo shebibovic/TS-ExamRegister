@@ -27,9 +27,6 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private SubjectRepository subjectRepository;
-
-    @Autowired
     private AuthService authService;
 
     @Autowired
@@ -45,14 +42,14 @@ public class UserServiceImpl implements UserService {
 //        return userRepository.findAll();
 //    }
 
-    @Override
-    public User getUser(long userId) {
-        Optional<User> user = userRepository.findById(userId);
-        if(user.isEmpty()){
-            throw new ResourceNotFoundException("User with id:" + userId + "doesn't exist");
-        }
-        return user.get();
-    }
+//    @Override
+//    public User getUser(long userId) {
+//        Optional<User> user = userRepository.findById(userId);
+//        if(user.isEmpty()){
+//            throw new ResourceNotFoundException("User with id:" + userId + "doesn't exist");
+//        }
+//        return user.get();
+//    }
 
     @Override
     public List<User> getAllProfesors() {
