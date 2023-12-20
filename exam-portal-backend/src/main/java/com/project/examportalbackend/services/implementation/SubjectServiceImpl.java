@@ -101,7 +101,7 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public void deleteSubject(Long subjectId) {
+    public void deleteSubject(long subjectId) {
         subjectRepository.delete(getSubject(subjectId));
     }
 

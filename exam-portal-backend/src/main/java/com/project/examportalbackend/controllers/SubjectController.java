@@ -87,10 +87,11 @@ public class SubjectController {
     }
 //
 
-    @DeleteMapping("/{subjectId}")
-    public ResponseEntity<?> deleteSubject(@PathVariable Long subjectId) {
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @DeleteMapping("admin/delete/{subjectId}")
+    public ResponseEntity<String> deleteSubject(@PathVariable long subjectId) {
         subjectService.deleteSubject(subjectId);
-        return ResponseEntity.ok(true);
+        return ResponseEntity.ok("Subject successfully deleted");
     }
 
 //    @GetMapping("/users")

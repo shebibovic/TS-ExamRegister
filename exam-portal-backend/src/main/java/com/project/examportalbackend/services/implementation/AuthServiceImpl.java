@@ -2,11 +2,10 @@ package com.project.examportalbackend.services.implementation;
 
 import com.project.examportalbackend.configurations.JwtUtil;
 import com.project.examportalbackend.exception.exceptions.ResourceNotFoundException;
-import com.project.examportalbackend.models.LoginRequest;
-import com.project.examportalbackend.models.LoginResponse;
-import com.project.examportalbackend.models.Role;
-import com.project.examportalbackend.models.User;
+import com.project.examportalbackend.models.*;
+import com.project.examportalbackend.models.dto.request.UserRequestDto;
 import com.project.examportalbackend.repository.RoleRepository;
+import com.project.examportalbackend.repository.SubjectRepository;
 import com.project.examportalbackend.repository.UserRepository;
 import com.project.examportalbackend.services.AuthService;
 import com.project.examportalbackend.utils.constants.Roles;
@@ -22,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -43,23 +43,70 @@ public class AuthServiceImpl implements AuthService {
     private JwtUtil jwtUtil;
 
     @Autowired
+    private SubjectRepository subjectRepository;
+
+    @Autowired
     private AuthenticationManager authenticationManager;
 
     @Override
-    public User registerUserService(User user) throws Exception {
+    public User registerUserService(UserRequestDto userRequestDto) {
 
-        User temp = userRepository.findByEmail(user.getUsername());
+        User temp = userRepository.findByEmail(userRequestDto.getEmail());
         if (temp != null) {
-            throw new Exception("User with username: " + user.getUsername() + " already exists;");
+            throw new IllegalArgumentException("User with email: " + userRequestDto.getEmail() + " already exists;");
         }
-        temp = userRepository.findByEmail(user.getEmail());
-        if(temp != null) {
-            throw new Exception("User with email: " + user.getEmail() + " already exists;");
+
+        Role role = getRole(userRequestDto.getRole());
+        userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
+        return userRepository.save(new User(
+                userRequestDto.getFirstName(),
+                userRequestDto.getLastName(),
+                userRequestDto.getEmail(),
+                userRequestDto.getPassword(),
+                userRequestDto.getPhoneNumber(),
+                role));
+    }
+
+    @Override
+    public User updateUser(UserRequestDto userRequestDto) {
+
+        if (userRequestDto.getUserId() == -1) {
+            throw new IllegalArgumentException("You must pass the id of the user you wish to update");
         }
-            Role role = roleRepository.findById(user.getRole().getRoleName()).orElse(null);
-            user.setRole(role);
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            return userRepository.save(user);
+        getUser(userRequestDto.getUserId());
+        Role role = getRole(userRequestDto.getRole());
+
+        userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
+        return userRepository.save(new User(
+                userRequestDto.getUserId(),
+                userRequestDto.getFirstName(),
+                userRequestDto.getLastName(),
+                userRequestDto.getEmail(),
+                userRequestDto.getPassword(),
+                userRequestDto.getPhoneNumber(),
+                role));
+    }
+
+    @Override
+    public void deleteUser(long userId) {
+        User user = getUser(userId);
+        if (Objects.equals(user.getRole().getRoleName(), Roles.PROFESSOR.toString())) {
+            Subject subject = subjectRepository.findByProfessorUserId(user.getUserId());
+            if (subject != null) {
+                throw new IllegalArgumentException("Can't delete professor "
+                        + user.getFullName()
+                        + " because he is assigned to a subject");
+            }
+        }
+        userRepository.delete(user);
+    }
+
+    public Role getRole(String roleName) {
+        Optional<Role> role = roleRepository.findById(roleName);
+        if (role.isEmpty()) {
+            throw new ResourceNotFoundException("Role " + roleName + "doesn't exist");
+        }
+        return role.get();
     }
 
     public LoginResponse loginUserService(LoginRequest loginRequest) throws Exception {
@@ -71,7 +118,7 @@ public class AuthServiceImpl implements AuthService {
 
     public Role getUserRoleByUserId(long userId) throws ResourceNotFoundException {
         Optional<User> user = userRepository.findById(userId);
-        if(user.isPresent()){
+        if (user.isPresent()) {
             return user.get().getRole();
         } else {
             throw new ResourceNotFoundException("User with id " + userId + " doesn't exist");
@@ -81,7 +128,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public User getUser(long userId) {
         Optional<User> user = userRepository.findById(userId);
-        if(user.isEmpty()){
+        if (user.isEmpty()) {
             throw new ResourceNotFoundException("User with id:" + userId + "doesn't exist");
         }
         return user.get();
@@ -90,11 +137,10 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public User getUserFromToken() {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
     }
 
     public void verifyUserRole(long userId, String roleName) throws AccessDeniedException {
-        if(!getUserRoleByUserId(userId).getRoleName().equals(roleName)){
+        if (!getUserRoleByUserId(userId).getRoleName().equals(roleName)) {
             throw new AccessDeniedException("User must be a " + roleName);
         }
     }

@@ -19,7 +19,6 @@ public interface UserService {
 
     List<User> getAllUsers(long adminId) throws AccessDeniedException;
 
-
     List<User> getAllStudentsFromSubjectForProfessor(long professorId);
 
     List<User> getAllStudentsFromSubject(long subjectId);

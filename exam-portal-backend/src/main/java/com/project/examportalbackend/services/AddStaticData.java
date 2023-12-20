@@ -4,6 +4,8 @@ import com.project.examportalbackend.models.Exam;
 import com.project.examportalbackend.models.Role;
 import com.project.examportalbackend.models.Subject;
 import com.project.examportalbackend.models.User;
+import com.project.examportalbackend.models.dto.request.SubjectRequestDto;
+import com.project.examportalbackend.models.dto.request.UserRequestDto;
 import com.project.examportalbackend.repository.RoleRepository;
 import com.project.examportalbackend.services.implementation.AuthServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,21 +109,20 @@ public class AddStaticData {
                 "Profesor3",
                 "Sani3",
                 "knurikic11@etf.unsa.ba",
-
                 "password",
                 "0501035",
                 professorRole);
 
-        authService.registerUserService(admin1);
-        authService.registerUserService(student1);
-        authService.registerUserService(student2);
-        authService.registerUserService(student3);
-        authService.registerUserService(student4);
-        authService.registerUserService(student5);
-        authService.registerUserService(student6);
-        authService.registerUserService(prof1);
-        authService.registerUserService(prof2);
-        authService.registerUserService(prof3);
+        admin1 = authService.registerUserService(new UserRequestDto(admin1));
+        student1 = authService.registerUserService(new UserRequestDto(student1));
+        student2 = authService.registerUserService(new UserRequestDto(student2));
+        student3 = authService.registerUserService(new UserRequestDto(student3));
+        student4 = authService.registerUserService(new UserRequestDto(student4));
+        student5 = authService.registerUserService(new UserRequestDto(student5));
+        student6 = authService.registerUserService(new UserRequestDto(student6));
+        prof1 = authService.registerUserService(new UserRequestDto(prof1));
+        prof2 = authService.registerUserService(new UserRequestDto(prof2));
+        prof3 = authService.registerUserService(new UserRequestDto(prof3));
 
         Subject predmet1 = new Subject("Predmet 1", "Opis predmeta 1");
         Subject predmet2 = new Subject("Predmet 2", "Opis predmeta 2");
@@ -157,23 +158,18 @@ public class AddStaticData {
         cal3.set(Calendar.DAY_OF_MONTH, 30);
         Date startDate = cal3.getTime();
 
+        predmet1 = subjectService.addSubject(new SubjectRequestDto(predmet1));
+        predmet2 = subjectService.addSubject(new SubjectRequestDto(predmet2));
+
         Exam exam1 = new Exam("Kviz1","kviz 1", predmet1, registrationDeadlineDate, startDate);
         Exam exam2 = new Exam("Kviz2","kviz 2", predmet2, registrationDeadlineDatePassed, startDate);
-
         exam1.setRegisteredStudents(Arrays.asList(student1,student2,student3,student4));
         exam2.setRegisteredStudents(Arrays.asList(student3,student4,student5,student6));
-
-
-        subjectService.addSubject(predmet1);
-        subjectService.addSubject(predmet2);
 
         examService.addExam(exam1);
         examService.addExam(exam2);
 
         predmet1.addExam(exam1);
         predmet2.addExam(exam2);
-
-        subjectService.addSubject(predmet1);
-        subjectService.addSubject(predmet2);
     }
 }

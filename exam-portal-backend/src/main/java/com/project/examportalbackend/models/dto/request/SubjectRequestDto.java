@@ -1,5 +1,7 @@
 package com.project.examportalbackend.models.dto.request;
 
+import com.project.examportalbackend.models.Subject;
+import com.project.examportalbackend.models.User;
 import com.project.examportalbackend.utils.validation.annotation.UniqueProfessorIdConstraint;
 import lombok.*;
 
@@ -32,4 +34,11 @@ import java.util.List;
         private long professorId;
 
         private List<Long> students = new ArrayList<>();
+
+        public SubjectRequestDto(Subject subject){
+            this.title = subject.getTitle();
+            this.description = subject.getDescription();
+            this.professorId = subject.getProfessor().getUserId();
+            this.students = subject.getStudents().stream().map(User::getUserId).toList();
+        }
 }

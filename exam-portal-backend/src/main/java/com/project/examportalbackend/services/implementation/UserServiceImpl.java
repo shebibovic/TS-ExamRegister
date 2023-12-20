@@ -65,7 +65,8 @@ public class UserServiceImpl implements UserService {
         authService.verifyUserRole(adminId, Roles.ADMIN.toString());
         return userRepository.findAll();
     }
-//
+
+
 
     @Override
     public List<User> getAllStudentsFromSubjectForProfessor(long professorId) {

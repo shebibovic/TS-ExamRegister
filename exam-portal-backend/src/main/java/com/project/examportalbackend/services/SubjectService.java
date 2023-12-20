@@ -29,7 +29,7 @@ public interface SubjectService {
 
     Subject updateSubject(Subject subject);
 
-    void deleteSubject(Long subjectId);
+    void deleteSubject(long subjectId);
 
     Subject getSubjectFromProfessor(long professorId);
 
