@@ -74,6 +74,12 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<Exam> registeredExams = new ArrayList<>();
 
+    @Column(name = "one_time_password")
+    private String oneTimePassword;
+
+    @Column(name = "otp_generated_time")
+    private Date otpGeneratedTime;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
@@ -129,5 +135,9 @@ public class User implements UserDetails {
         this.password=password;
         this.phoneNumber=phoneNumber;
         this.role=userRole;
+    }
+
+    public boolean isOTPRequired(){
+        return this.getOneTimePassword() != null;
     }
 }

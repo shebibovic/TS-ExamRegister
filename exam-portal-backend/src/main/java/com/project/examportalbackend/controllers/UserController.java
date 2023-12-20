@@ -12,7 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 
@@ -32,7 +34,7 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin/add")
-    public ResponseEntity<User> addUser(@Valid @RequestBody UserRequestDto userRequestDto) throws AccessDeniedException {
+    public ResponseEntity<User> addUser(@Valid @RequestBody UserRequestDto userRequestDto) throws AccessDeniedException, MessagingException, UnsupportedEncodingException {
         return ResponseEntity.ok(authService.registerUserService(userRequestDto));
     }
 
@@ -43,7 +45,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/admin/delete/{userId}")
+    @DeleteMapping("/admin/delete/{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable long userId) throws AccessDeniedException {
         authService.deleteUser(userId);
         return ResponseEntity.ok("User successfully deleted");
