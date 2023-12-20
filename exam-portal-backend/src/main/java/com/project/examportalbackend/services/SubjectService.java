@@ -11,7 +11,7 @@ public interface SubjectService {
 
     Subject addSubject(Subject subject); //TODO method only used for static data, should be removed
 
-    List<Subject> getAllSubjects(long adminId) throws AccessDeniedException;
+    List<Subject> getAllSubjects();
 
     List<Subject> getSubjectsByStudentId(long studentId) throws AccessDeniedException;
 
@@ -19,9 +19,9 @@ public interface SubjectService {
 
     Subject getSubject(long subjectId);
 
-//    Subject updateSubject(Subject subject);
+    Subject updateSubject(Subject subject);
 
-//    void deleteSubject(Long subjectId);
+    void deleteSubject(Long subjectId);
 
     Subject getSubjectFromProfessor(long professorId);
 

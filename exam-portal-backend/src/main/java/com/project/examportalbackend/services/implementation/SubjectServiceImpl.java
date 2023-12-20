@@ -43,19 +43,18 @@ public class SubjectServiceImpl implements SubjectService {
         return subject.get();
     }
 //
-//    @Override
-//    public Subject updateSubject(Subject subject) {
-//        return subjectRepository.save(subject);
-//    }
-//
-//    @Override
-//    public void deleteSubject(Long subjectId) {
-//        subjectRepository.delete(getSubject(subjectId));
-//    }
+    @Override
+    public Subject updateSubject(Subject subject) {
+        return subjectRepository.save(subject);
+    }
 
     @Override
-    public List<Subject> getAllSubjects(long adminId) throws AccessDeniedException {
-        authService.verifyUserRole(adminId,Roles.ADMIN.toString());
+    public void deleteSubject(Long subjectId) {
+        subjectRepository.delete(getSubject(subjectId));
+    }
+
+    @Override
+    public List<Subject> getAllSubjects() {
         return subjectRepository.findAll();
     }
 

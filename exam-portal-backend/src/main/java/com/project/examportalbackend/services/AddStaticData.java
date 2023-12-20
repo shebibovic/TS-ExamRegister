@@ -103,6 +103,15 @@ public class AddStaticData {
                 "0501035",
                 professorRole);
 
+        var prof3 = new User(
+                "Profesor3",
+                "Sani3",
+                "knurikic11@etf.unsa.ba",
+
+                "password",
+                "0501035",
+                professorRole);
+
         authService.registerUserService(admin1);
         authService.registerUserService(student1);
         authService.registerUserService(student2);
@@ -112,6 +121,7 @@ public class AddStaticData {
         authService.registerUserService(student6);
         authService.registerUserService(prof1);
         authService.registerUserService(prof2);
+        authService.registerUserService(prof3);
 
         Subject predmet1 = new Subject("Predmet 1", "Opis predmeta 1");
         Subject predmet2 = new Subject("Predmet 2", "Opis predmeta 2");

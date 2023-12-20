@@ -39,13 +39,13 @@ public class SubjectController {
     @GetMapping("/admin")
     public ResponseEntity<List<Subject>> getAllSubjects() throws AccessDeniedException {
         User admin = authService.getUserFromToken();
-        return ResponseEntity.ok(subjectService.getAllSubjects(admin.getUserId()));
+        return ResponseEntity.ok(subjectService.getAllSubjects());
     }
 
-//    @PostMapping("/")
-//    public ResponseEntity<?> addSubject(@RequestBody Subject subject) {
-//        return ResponseEntity.ok(subjectService.addSubject(subject));
-//    }
+    @PostMapping("/")
+    public ResponseEntity<?> addSubject(@RequestBody Subject subject) {
+        return ResponseEntity.ok(subjectService.addSubject(subject));
+    }
 
     @PreAuthorize("hasAuthority('STUDENT')")
     @GetMapping("/student")
@@ -75,19 +75,19 @@ public class SubjectController {
         return ResponseEntity.ok(subjectService.getSubject(subjectId));
     }
 //
-//    @PutMapping("/{subjectId}")
-//    public ResponseEntity<?> updateSubject(@PathVariable Long subjectId, @RequestBody Subject subject) {
-//        if (subjectService.getSubject(subjectId) != null) {
-//            return ResponseEntity.ok(subjectService.updateSubject(subject));
-//        }
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Subject with id : " + String.valueOf(subjectId) + ", doesn't exists");
-//    }
-//
-//    @DeleteMapping("/{subjectId}")
-//    public ResponseEntity<?> deleteSubject(@PathVariable Long subjectId) {
-//        subjectService.deleteSubject(subjectId);
-//        return ResponseEntity.ok(true);
-//    }
+    @PutMapping("/{subjectId}")
+    public ResponseEntity<?> updateSubject(@PathVariable Long subjectId, @RequestBody Subject subject) {
+        if (subjectService.getSubject(subjectId) != null) {
+            return ResponseEntity.ok(subjectService.updateSubject(subject));
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Subject with id : " + String.valueOf(subjectId) + ", doesn't exists");
+    }
+
+    @DeleteMapping("/{subjectId}")
+    public ResponseEntity<?> deleteSubject(@PathVariable Long subjectId) {
+        subjectService.deleteSubject(subjectId);
+        return ResponseEntity.ok(true);
+    }
 
 //    @GetMapping("/users")
 //    public List<User> getAllUsers() {
@@ -121,7 +121,7 @@ public class SubjectController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/admin/{professorId}")
+    @GetMapping("/admin/professor-subject/{professorId}")
     public ResponseEntity<Subject> getProfessorSubjectForAdmin(@PathVariable long professorId) throws AccessDeniedException {
         User admin = authService.getUserFromToken();
         authService.verifyUserRole(admin.getUserId(), Roles.ADMIN.toString());

@@ -55,8 +55,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllProfesors(long adminId) throws AccessDeniedException {
-        authService.verifyUserRole(adminId, Roles.ADMIN.toString());
+    public List<User> getAllProfesors() {
         return userRepository.findAll().stream().filter(item -> item.getRole().getRoleName().equals(Roles.PROFESSOR.toString())).toList();
     }
     @Override
@@ -85,7 +84,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAvailableProfessors() {
-        return userRepository.findAll().stream().filter(item -> Objects.equals(item.getRole().getRoleName(), Roles.PROFESSOR.toString())).toList();
+        List<User> professors = getAllProfesors();
+        List<Subject> subjects = subjectService.getAllSubjects();
+        List<User> professorsWithASubject = subjects.stream().map(Subject::getProfessor).toList();
+        return professors.stream().filter(item -> !professorsWithASubject.contains(item)).toList();
     }
 
     public List<User> getAllAvailableStudentsForSubject(long subjectId){
