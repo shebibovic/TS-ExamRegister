@@ -26,11 +26,11 @@ const ProfessorQuizzesPage = () => {
         navigate("/professorAddQuiz");
     };
     // Funkcija za formatiranje datuma
-const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const formattedDate = date.toLocaleDateString(); // Prikaz datuma bez vremena
-    return formattedDate;
-};
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const formattedDate = date.toLocaleDateString(); // Prikaz datuma bez vremena
+        return formattedDate;
+    };
     useEffect(() => {
         const token = localStorage.getItem("jwtToken");
         const fetchQuizzesForProfessor = async () => {
@@ -55,6 +55,7 @@ const formatDate = (dateString) => {
         };
         fetchQuizzesForProfessor();
     }, []);
+
     const deleteQuizHandler = (quiz) => {
         swal({
             title: "Are you sure?",
@@ -82,32 +83,26 @@ const formatDate = (dateString) => {
     };
     useEffect(() => {
         const fetchSubjects = async () => {
-          try {
-            const response = await fetch("/api/subject/professor", {
-              headers: {
-                Authorization: `Bearer ${token}`, // Dodajte ovu liniju kako biste poslali token
-                "Content-Type": "application/json", // Ovisno o potrebi, možda trebate dodati i Content-Type
-              },
-            });
-            if (!response.ok) {
-              throw new Error("Failed to fetch professors");
+            try {
+                const response = await fetch("/api/subject/professor", {
+                    headers: {
+                        Authorization: `Bearer ${token}`, // Dodajte ovu liniju kako biste poslali token
+                        "Content-Type": "application/json", // Ovisno o potrebi, možda trebate dodati i Content-Type
+                    },
+                });
+                if (!response.ok) {
+                    throw new Error("Failed to fetch professors");
+                }
+                const userData = await response.json();
+                setSubject(userData);
+            } catch (error) {
+                console.error("Error fetching users:", error);
             }
-            const userData = await response.json();
-            setSubject(userData);
-          } catch (error) {
-            console.error("Error fetching users:", error);
-          }
         };
-     
+
         fetchSubjects();
-      }, [dispatch, token]);
-    useEffect(() => {
-        if (quizzes.length === 0) {
-            fetchQuizzes(dispatch, token).then((data) => {
-                setQuizzes(data.payload);
-            });
-        }
-    }, []);
+    }, [dispatch, token]);
+
     useEffect(() => {
         if (!localStorage.getItem("jwtToken")) navigate("/");
     }, []);
@@ -124,19 +119,17 @@ const formatDate = (dateString) => {
                     ) : (
                         quizzes.map((quiz, index) => {
                             if ((catId && quiz.category.catId == catId) || (catId == null))
-                                console.log(quiz);
                                 return (
                                     <ListGroup
                                         className="adminQuizzesPage__content--quizzesList"
                                         key={index}
                                     >
-                                        <Link to={`/quiz/${quiz.examId}`} style={{ textDecoration: 'none' }}>
-                                            <ListGroup.Item className="align-items-start" action key={index}>
+                                        <ListGroup.Item className="align-items-start" action key={index}>
                                             <div className="ms-2">
                                                 <div className="d-flex justify-content-between">
                                                     <div>
                                                         <div className="fw-bold">{quiz.title}</div>
-                                                        {<p className="my-3">{selectedSubject.title}</p>} 
+                                                        {<p className="my-3">{selectedSubject.title}</p>}
                                                         {<p className="my-3">{quiz.description}</p>}
                                                     </div>
                                                     {/* Prikazivanje datuma */}
@@ -160,10 +153,25 @@ const formatDate = (dateString) => {
                                                             margin: "0px 4px",
                                                         }}
                                                     >{`Delete`}</div>
+
+                                                    <Link to={`/quizzes/${quiz.examId}`} style={{ textDecoration: 'none' }}>
+                                                        <div
+                                                            style={{
+                                                                border: "1px solid grey",
+                                                                color: "white",
+                                                                backgroundColor: "rgb(68 177 49)",
+                                                                width: "180px",
+                                                                padding: "2px",
+                                                                textAlign: "center",
+                                                                borderRadius: "5px",
+                                                                height: "35px",
+                                                                margin: "0px 4px",
+                                                            }}
+                                                        >{`See registered students`}</div>
+                                                    </Link>
                                                 </div>
                                             </div>
-                                            </ListGroup.Item>
-                                        </Link>
+                                        </ListGroup.Item>
                                     </ListGroup>
                                 );
                         })
@@ -171,6 +179,7 @@ const formatDate = (dateString) => {
                 ) : (
                     <Loader />
                 )}
+
                 <Button
                     variant=""
                     className="adminQuizzesPage__content--button"
@@ -183,4 +192,3 @@ const formatDate = (dateString) => {
     );
 };
 export default ProfessorQuizzesPage;
- 

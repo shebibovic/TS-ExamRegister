@@ -4,46 +4,60 @@ import { useParams } from "react-router-dom";
 import Sidebar from "../../../components/SidebarProfessor";
 import "./ProfessorQuizzesPage.css";
 
+
 const QuizDetails = () => {
     const dispatch = useDispatch();
-    const { quizId } = useParams();
-    const quizzesReducer = useSelector((state) => state.quizzesReducer);
-    const [quizDetails, setQuizDetails] = useState(null);
+    const params = useParams();
+    const quizId = params.examId;
+    console.log(quizId);
+    const [quizDetails, setQuizDetails] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Formatiranje quizId iz URL-a u broj
-        const quizIdFromURL = parseInt(quizId, 10);
+        const token = localStorage.getItem("jwtToken");
+        const fetchRegisteredStudents = async () => {
+            try {
+                const response = await fetch(`/api/user/professor/exam-registered-students/${quizId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                setQuizDetails(data);
+                setLoading(false);
+            } catch (error) {
+                console.error("Greška prilikom dohvaćanja prijavljenih studenata:", error.message);
+                setLoading(false);
+            }
+        };
 
-        // Pronalaženje odgovarajućeg kviza na osnovu formatiranog quizId
-        const selectedQuiz = quizzesReducer.quizzes.find((quiz) => quiz.examId === quizIdFromURL);
-
-        // Postavljanje stanja samo ako je pronađen odgovarajući kviz
-        if (selectedQuiz !== undefined) {
-            setQuizDetails(selectedQuiz);
-        }
-    }, [quizId, quizzesReducer.quizzes]);
-
-    if (!quizDetails) {
-        return <div>Loading...</div>;
-    }
+        fetchRegisteredStudents();
+    }, [quizId]);
 
     return (
         <div className="adminQuizzesPage__container">
             <div className="adminQuizzesPage__sidebar">
                 <Sidebar />
             </div>
-        <div>
-            <h2>Title: {quizDetails.title}</h2>
-            <p>Description: {quizDetails.description}</p>
-            <p>Exam Date: {quizDetails.startDate}</p>
-            <ul>
-                Registered students:
-                <li>ja</li>
-                <li>ti</li>
-            </ul>
-        </div>
+            <div>
+                <h2>Registered students:</h2>
+                {quizDetails.length === 0 ? (
+                    <p>No registered students yet</p>
+                ) : (
+                    <ul>
+                        {quizDetails.map((student) => (
+                            <li key={student.id}>
+                                {student.firstName} {student.lastName}
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
         </div>
     );
 };
-
 export default QuizDetails;

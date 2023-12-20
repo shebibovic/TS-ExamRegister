@@ -7,35 +7,23 @@ import { useParams } from "react-router-dom";
 import * as categoriesConstants from "../../../constants/categoriesConstants";
 import FormContainer from "../../../components/FormContainer";
 import Sidebar from "../../../components/SidebarProfessor";
-import { updateCategory } from "../../../actions/categoriesActions";
-import { useNavigate } from "react-router-dom";
-
 const ProfessorSubjectID = () => {
-
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
     const params = useParams();
-    console.log("paramsss: ", params);
     const subjectId = params.catId;
-    const profId = params.professorId;
 
-    const oldCategory = useSelector((state) =>
-        state.categoriesReducer.categories.find((cat) => cat.subjectId === subjectId)
-    );
+  
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState(""
     );
     const token = localStorage.getItem("jwtToken");
-    const [users, setUsers] = useState([]);
-    const [selectedUser, setSelectedUser] = useState("");
-    const [selectedUsers, setSelectedUsers] = useState([]);
+    const [students, setStudents] = useState([]);
     const [profesorName, setProfesorName] = useState("");
 
 
     useEffect(() => {
         const fetchSelectedCategory = async () => {
             try {
-                const response = await fetch('/api/subject/professor/', {
+                const response = await fetch('/api/subject/professor', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "application/json",
@@ -43,7 +31,6 @@ const ProfessorSubjectID = () => {
                 });
                 if (response.ok) {
                     const selectedCategoryData = await response.json();
-                    console.log("selectedCategoryData", selectedCategoryData);
                     setTitle(selectedCategoryData.title);
                     setDescription(selectedCategoryData.description);
                     setProfesorName(
@@ -51,8 +38,7 @@ const ProfessorSubjectID = () => {
                         " " +
                         selectedCategoryData.professor.lastName
                     );
-                    setSelectedUsers(selectedCategoryData.students);
-                    console.log("STUDEBNTI: ", selectedCategoryData)
+                   
                 } else {
                     throw new Error("Failed to fetch selected subject");
                 }
@@ -61,14 +47,36 @@ const ProfessorSubjectID = () => {
             }
         };
 
+
         fetchSelectedCategory();
     }, [subjectId, token]);
 
+    /////////////////////////////
     useEffect(() => {
-        console.log("Title:", title);
-        console.log("Description:", description);
-        console.log("Profesor Name:", profesorName);
-    }, [title, description, profesorName]);
+        const fetchStudentsCategory = async () => {
+            try {
+                const response = await fetch('/api/user/professor/subject-students', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                });
+                if (response.ok) {
+                    const studentsData = await response.json();
+                    setStudents(studentsData);
+                } else {
+                    throw new Error("Failed to fetch students");
+                }
+            } catch (error) {
+                console.error("Error fetching students:", error);
+            }
+        };
+        
+
+        fetchStudentsCategory();
+    }, [subjectId, token]);
+
+
 
     return (
         <div className="adminUpdateCategoryPage__container">
@@ -81,10 +89,12 @@ const ProfessorSubjectID = () => {
                     <p><strong>Subject Name:</strong> {title}</p>
                     <p><strong>Description:</strong> {description}</p>
                     <p><strong>Professor:</strong> {profesorName}</p>
-                    <ul><strong>Students:</strong>
-                        <li></li>
+                    <ul>
+                        <strong>Students:</strong>
+                        {students.map((student, index) => (
+                            <li key={index}>{student.firstName} {student.lastName}</li>
+                        ))}
                     </ul>
-
                 </div>
             </div>
         </div>

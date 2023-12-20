@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./AdminQuizzesPage.css";
-import { useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, ListGroup } from "react-bootstrap";
 import Message from "../../../components/Message";
@@ -19,47 +19,62 @@ const AdminQuizzesPage = () => {
 
   const quizzesReducer = useSelector((state) => state.quizzesReducer);
   const [quizzes, setQuizzes] = useState(quizzesReducer.quizzes);
-  const addNewQuizHandler = () => {
-    navigate("/adminAddQuiz");
-  };
+  const [selectedSubject, setSubject] = useState("");
 
-  const deleteQuizHandler = (quiz) => {
-    swal({
-      title: "Are you sure?",
-      text: "Once deleted, you will not be able to recover this quiz!",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
-        deleteQuiz(dispatch, quiz.quizId, token).then((data) => {
-          if (data.type === quizzesConstants.DELETE_QUIZ_SUCCESS) {
-            swal(
-                "Quiz Deleted!",
-                `${quiz.title} succesfully deleted`,
-                "success"
-            );
-          } else {
-            swal("Quiz Not Deleted!", `${quiz.title} not deleted`, "error");
-          }
-        });
-      } else {
-        swal(`${quiz.title} is safe`);
-      }
-    });
-  };
+
 
   useEffect(() => {
-    if (quizzes.length === 0) {
-      fetchQuizzes(dispatch, token).then((data) => {
-        setQuizzes(data.payload);
-      });
-    }
-  }, []);
+    const fetchAllQuizzes = async () => {
+      try {
+        const response = await fetch("/api/exam/admin", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+        setQuizzes(data);
+        console.log(data);
+      } catch (error) {
+        console.error("Greška prilikom dohvaćanja kvizova:", error.message);
+      }
+    };
+
+    fetchAllQuizzes();
+  }, [token]);
+
+  useEffect(() => {
+    const fetchSubjects = async () => {
+      try {
+        const response = await fetch("/api/subject/admin", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Dodajte ovu liniju kako biste poslali token
+            "Content-Type": "application/json", // Ovisno o potrebi, možda trebate dodati i Content-Type
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch subjects");
+        }
+        const userData = await response.json();
+        setSubject(userData);
+      } catch (error) {
+        console.error("Error fetching subjects:", error);
+      }
+    };
+
+    fetchSubjects();
+  }, [dispatch, token]);
 
   useEffect(() => {
     if (!localStorage.getItem("jwtToken")) navigate("/");
   }, []);
+
+
 
   return (
       <div className="adminQuizzesPage__container">
@@ -67,10 +82,10 @@ const AdminQuizzesPage = () => {
           <Sidebar />
         </div>
         <div className="adminQuizzesPage__content">
-          <h2>Quizzes</h2>
+          <h2>Exams</h2>
           {quizzes ? (
               quizzes.length === 0 ? (
-                  <Message>No quizzes are present. Try adding some quizzes.</Message>
+                  <Message>No exams are present. Try adding some exam.</Message>
               ) : (
                   quizzes.map((quiz, index) => {
                     if ((catId && quiz.category.catId == catId) || (catId == null))
@@ -79,14 +94,17 @@ const AdminQuizzesPage = () => {
                               className="adminQuizzesPage__content--quizzesList"
                               key={index}
                           >
-                            <ListGroup.Item className="align-items-start" action>
-                              <div className="ms-2 me-auto">
-                                <div className="fw-bold">{quiz.title}</div>
-                                <p style={{ color: "grey" }}>{quiz.title}</p>
-                                {<p className="my-3">{quiz.description}</p>}
+                            <ListGroup.Item className="align-items-start" action key={index}>
+                              <div className="ms-2">
+                                <div className="d-flex justify-content-between">
+                                  <div>
+                                    <div className="fw-bold">{quiz.title}</div>
+                                    {<p className="my-3">{selectedSubject.title}</p>}
+                                    {<p className="my-3">{quiz.description}</p>}
+                                  </div>
+                                </div>
 
                               </div>
-                              {/* <Badge bg="primary" pill></Badge> */}
                             </ListGroup.Item>
                           </ListGroup>
                       );
