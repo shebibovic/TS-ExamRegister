@@ -53,7 +53,7 @@ const deleteCategory = async (catId, token) => {
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
-    const { data } = await axios.delete(`/api/subject/${catId}/`, config);
+    const { data } = await axios.delete(`/api/subject/admin/delete/${catId}/`, config);
     console.log("categoryService:deleteCategory()  Success: ", data);
     return {
       isDeleted: true,

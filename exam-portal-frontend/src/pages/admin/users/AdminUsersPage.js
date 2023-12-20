@@ -1,44 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { register } from '../../../actions/authActions';
 import { useDispatch, useSelector } from 'react-redux';
-import Loader from '../../../components/Loader';
-import { Form, Button, InputGroup, Row, Col } from 'react-bootstrap';
 import FormContainer from '../../../components/FormContainer';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import * as authConstants from '../../../constants/authConstants';
-import { Link } from 'react-router-dom';
 import Sidebar from "../../../components/Sidebar";
 import swal from "sweetalert";
-import {deleteCategory} from "../../../actions/categoriesActions";
-import * as categoriesConstants from "../../../constants/categoriesConstants";
+import { Button, Form } from "react-bootstrap";
 
 
 const AdminUsers = () => {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
     const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
     const token = localStorage.getItem("jwtToken");
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [code, setCode] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
-    const [passwordType, setPasswordType] = useState('password');
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [confirmPasswordType, setConfirmPasswordType] = useState('password');
-    const [selectedRole, setSelectedRole] = useState('');
 
-    const [usernameError, setUsernameError] = useState('');
-    const [passwordError, setPasswordError] = useState('');
-    const [confirmPasswordError, setConfirmPasswordError] = useState('');
     const [usernameExistsError, setUsernameExistsError] = useState('');
     const [users, setUsers] = useState([]);
     const [professors, setProfessors] = useState([]);
 
     const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const registerReducer = useSelector((state) => state.registerReducer);
-
+    const [searchTerm, setSearchTerm] = useState("");
+    const [searchTermProf, setSearchTermProf] = useState("");
 
     useEffect(() => {
         setUsernameExistsError('');
@@ -96,16 +74,18 @@ const AdminUsers = () => {
             dangerMode: true,
         }).then((willDelete) => {
             if (willDelete) {
-                fetch(`/api/user/admin/${userId}`, {
+                fetch(`/api/user/admin/delete/${userId}`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
                     },
                 })
+
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Network response was not ok');
+
                         }
                         return response.json();
                     })
@@ -131,8 +111,21 @@ const AdminUsers = () => {
             </div>
             <FormContainer>
                 <h3>Students:</h3>
+                <Form.Group controlId="searchStudents">
+
+                    <Form.Control
+                        type="text"
+                        placeholder="Search students by name"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                </Form.Group>
                 <div className="studentCheckboxes">
-                    {users.map((user, index) => (
+                    {users
+                        .filter((user) =>
+                            user.firstName.toLowerCase().includes(searchTerm.toLowerCase())
+                        )
+                        .map((user, index) => (
                         <div key={index} className="userRow">
                             <p>{user.firstName} {user.lastName}
                                 <div
@@ -148,9 +141,20 @@ const AdminUsers = () => {
                         </div>
                     ))}
                 </div>
+
                 <h3>Professors:</h3>
+                <Form.Control
+                    type="text"
+                    placeholder="Search students by name"
+                    value={searchTermProf}
+                    onChange={(e) => setSearchTermProf(e.target.value)}
+                />
                 <div className="studentCheckboxes">
-                    {professors.map((user, index) => (
+                    {professors
+                        .filter((user) =>
+                            user.firstName.toLowerCase().includes(searchTermProf.toLowerCase())
+                        )
+                        .map((user, index) => (
                         <div key={index} className="userRow">
                             <p>{user.firstName} {user.lastName}
                                 <div
