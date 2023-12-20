@@ -153,7 +153,7 @@ const UserQuizzesPage = () => {
                                             <div className="ms-2">
                                                 <div className="d-flex justify-content-between">
                                                     <div>
-                                                        <div className="fw-bold">{quiz.title}</div>
+                                                        <div className="fw-bold">{quiz.subjectName}</div>
                                                         <p style={{ color: "grey" }}>{quiz.title}</p>
                                                         {<p className="my-3">{quiz.description}</p>}
                                                     </div>
@@ -197,7 +197,7 @@ const UserQuizzesPage = () => {
                                             <div className="ms-2">
                                                 <div className="d-flex justify-content-between">
                                                     <div>
-                                                        <div className="fw-bold">{otherQuiz.title}</div>
+                                                        <div className="fw-bold">{otherQuiz.subjectName}</div>
                                                         <p style={{ color: "grey" }}>{otherQuiz.title}</p>
                                                         {<p className="my-3">{otherQuiz.description}</p>}
                                                     </div>
