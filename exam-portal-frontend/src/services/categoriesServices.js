@@ -32,7 +32,7 @@ const addCategory = async (cat, token, userRole) => {
       professorId: professor.userId,
       students: cat.students
     };
-    const { data } = await axios.post("/api/subject/", category, config);
+    const { data } = await axios.post("/api/subject/admin/add", category, config);
     console.log("categoryService:addCategory() Success: ", data);
     return { data: data, isAdded: true, error: null };
   } catch (error) {
