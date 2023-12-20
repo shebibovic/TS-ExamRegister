@@ -26,7 +26,7 @@ const AdminQuizzesPage = () => {
   useEffect(() => {
     const fetchAllQuizzes = async () => {
       try {
-        const response = await fetch("/api/exam/admin/active", {
+        const response = await fetch("/api/exam/admin", {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",

@@ -35,6 +35,10 @@ const LoginPage = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     login(dispatch, email, password).then((data) => {
+        if(data.type === authConstants.USER_LOGIN_FAILURE)
+        {
+          setErrorMessage("User does not exist. Wrong email or password.");
+        }
      /* if (data.type === authConstants.USER_LOGIN_SUCCESS) {
         if (data.role.roleName === 'ADMIN') {
           navigate("/adminProfile"); // Redirect to admin profile for admins

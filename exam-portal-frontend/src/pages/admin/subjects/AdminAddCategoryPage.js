@@ -24,6 +24,7 @@ const AdminAddCategoryPage = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -46,7 +47,7 @@ const AdminAddCategoryPage = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("/api/user/admin/professors", {
+        const response = await fetch("/api/user/admin/available-professors", {
           headers: {
             Authorization: `Bearer ${token}`, // Dodajte ovu liniju kako biste poslali token
             "Content-Type": "application/json", // Ovisno o potrebi, možda trebate dodati i Content-Type
@@ -83,93 +84,113 @@ const AdminAddCategoryPage = () => {
     fetchUsers();
   }, [dispatch, token]);
 
-
   return (
-    <div className="adminAddCategoryPage__container">
-      <div className="adminAddCategoryPage__sidebar">
-        <Sidebar />
-      </div>
-      <div className="adminAddCategoryPage__content">
-        <FormContainer>
-          <h2>Add Subject</h2>
-          <Form onSubmit={submitHandler}>
-            <Form.Group className="my-3" controlId="title">
-              <Form.Label>Title</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter Subject Title"
-                value={title}
-                onChange={(e) => {
-                  setTitle(e.target.value);
-                }}
-              ></Form.Control>
-            </Form.Group>
+      <div className="adminAddCategoryPage__container">
+        <div className="adminAddCategoryPage__sidebar">
+          <Sidebar />
+        </div>
+        <div className="adminAddCategoryPage__content">
+          <FormContainer>
+            <h2>Add Subject</h2>
 
-            <Form.Group className="my-3" controlId="description">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                style={{ textAlign: "top" }}
-                as="textarea"
-                rows="5"
-                type="text"
-                placeholder="Enter Subject Description"
-                value={description}
-                onChange={(e) => {
-                  setDescription(e.target.value);
-                }}
-              ></Form.Control>
-            </Form.Group>
+            <Form onSubmit={submitHandler}>
+              <Form.Group className="my-3" controlId="title">
+                <Form.Label className="label"> <h5>Title</h5> </Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="Enter Subject Title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                />
+              </Form.Group>
 
-            <Form.Select
-                aria-label="Choose Professor"
-                onChange={(e) => setSelectedUser(e.target.value)}
-                value={selectedUser}
-            >
-              <option value="">Choose Professor</option>
-              {professor.map((user) => (
-                  <option key={user.userId} value={user.userId}>
-                    {user.firstName} {user.lastName}
-                  </option>
-              ))}
-            </Form.Select>
+              <Form.Group className="my-3" controlId="description">
+                <Form.Label className="label"> <h5>Description</h5> </Form.Label>
+                <Form.Control
+                    style={{ textAlign: "top" }}
+                    as="textarea"
+                    rows="5"
+                    type="text"
+                    placeholder="Enter Subject Description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                />
+              </Form.Group>
 
+              <Form.Group controlId="professor">
+                <Form.Label className="label"> <h5>Choose Professor</h5> </Form.Label>
+                <Form.Select
+                    aria-label="Choose Professor"
+                    onChange={(e) => setSelectedUser(e.target.value)}
+                    value={selectedUser}
+                >
+                  <option value="">Choose Professor</option>
+                  {professor.map((user) => (
+                      <option key={user.userId} value={user.userId}>
+                        {user.firstName} {user.lastName}
+                      </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+              <div style={{ marginBottom: '20px' }}></div>
 
-            <Form.Group controlId="students">
-              <Form.Label>Choose Students (Multiple)</Form.Label>
-              {users.map((users) => (
-                  <Form.Check
-                      key={users.userId}
-                      type="checkbox"
-                      id={`user-${users.userId}`}
+              <Form.Group controlId="students">
 
-                      label={users.email}
-                      onChange={(e) => {
-                        const isChecked = e.target.checked;
-                        if (isChecked) {
-                          setSelectedStudents((prevSelected) => [...prevSelected, users.userId]);
-                        } else {
-                          setSelectedStudents((prevSelected) =>
-                              prevSelected.filter((selectedUserId) => selectedUserId !== users.userId)
-                          );
-                        }
-                      }}
-                      checked={selectedStudents.includes(users.userId)}
+                <Form.Label className="label"> <h5>Choose Students</h5> </Form.Label>
+
+                <Form.Group controlId="searchStudents">
+
+                  <Form.Control
+                      type="text"
+                      placeholder="Search students by email"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
                   />
-              ))}
-            </Form.Group>
+                </Form.Group>
 
+                <div className="studentCheckboxes">
+                  {users
+                      .filter((user) =>
+                          user.email.toLowerCase().includes(searchTerm.toLowerCase())
+                      )
+                      .map((user) => (
+                          <Form.Check
+                              key={user.userId}
+                              type="checkbox"
+                              id={`user-${user.userId}`}
+                              label={user.email}
+                              onChange={(e) => {
+                                const isChecked = e.target.checked;
+                                if (isChecked) {
+                                  setSelectedStudents((prevSelected) => [
+                                    ...prevSelected,
+                                    user.userId,
+                                  ]);
+                                } else {
+                                  setSelectedStudents((prevSelected) =>
+                                      prevSelected.filter(
+                                          (selectedUserId) => selectedUserId !== user.userId
+                                      )
+                                  );
+                                }
+                              }}
+                              checked={selectedStudents.includes(user.userId)}
+                          />
+                      ))}
+                </div>
+              </Form.Group>
 
-            <Button
-              className="my-3 adminAddCategoryPage__content--button"
-              type="submit"
-              variant=""
-            >
-              Add
-            </Button>
-          </Form>
-        </FormContainer>
+              <Button
+                  className="my-3 adminAddCategoryPage__content--button"
+                  type="submit"
+                  variant=""
+              >
+                Add
+              </Button>
+            </Form>
+          </FormContainer>
+        </div>
       </div>
-    </div>
   );
 };
 
