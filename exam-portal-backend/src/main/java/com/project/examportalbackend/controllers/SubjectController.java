@@ -54,7 +54,7 @@ public class SubjectController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/admin/update")
     public ResponseEntity<String> updateSubject(@Valid @RequestBody SubjectRequestDto subjectRequestDto) throws AccessDeniedException {
-        Subject subject = subjectService.addSubject(subjectRequestDto);
+        Subject subject = subjectService.updateSubject(subjectRequestDto);
         return ResponseEntity.ok("Successfully added a subject " + subject.getTitle());
     }
 
