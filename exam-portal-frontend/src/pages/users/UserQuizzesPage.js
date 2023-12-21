@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "./UserQuizzesPage.css";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Button, ListGroup } from "react-bootstrap";
 import Message from "../../components/Message";
 import Sidebar from "../../components/SidebarUser";
 import Loader from "../../components/Loader";
-import { deleteQuiz, fetchQuizzes } from "../../actions/quizzesActions";
-import * as quizzesConstants from "../../constants/quizzesConstants";
 import swal from "sweetalert";
-import { Link } from "react-router-dom";
 
 const UserQuizzesPage = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
     const urlParams = new URLSearchParams(window.location.search);
     const catId = urlParams.get("catId");
     const token = localStorage.getItem("jwtToken");
@@ -141,7 +137,7 @@ const UserQuizzesPage = () => {
                         <Message>No unregistered exams are present for you.</Message>
                     ) : (
                         quizzes.map((quiz, index) => {
-                            if ((catId && quiz.category.catId == catId) || (catId == null))
+                            if ((catId && quiz.category.catId === catId) || (catId === null))
                                 return (
                                     <ListGroup
                                         className="adminQuizzesPage__content--quizzesList"
@@ -185,7 +181,7 @@ const UserQuizzesPage = () => {
                         <Message>No registered exams are present.</Message>
                     ) : (
                         otherQuizzes.map((otherQuiz, index) => {
-                            if ((catId && otherQuiz.category.catId == catId) || (catId == null))
+                            if ((catId && otherQuiz.category.catId === catId) || (catId === null))
                                 return (
                                     <ListGroup
                                         className="adminQuizzesPage__content--quizzesList"

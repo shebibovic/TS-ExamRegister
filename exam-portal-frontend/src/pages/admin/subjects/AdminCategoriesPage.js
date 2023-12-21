@@ -22,7 +22,6 @@ const AdminCategoriesPage = () => {
   const [categories, setCategories] = useState(categoriesReducer.categories);
 
   const categoryClickHandler = (subjectId) => {
-    console.log(subjectId)
     navigate(`/adminCategories/${subjectId}`);
   };
 

@@ -21,13 +21,11 @@ const AdminAddCategoryPage = () => {
   const [professor, setProfessor] = useState([]);
   const [noProfessors, setNoProfessors] = useState(false);
   const token = localStorage.getItem("jwtToken");
-  const user = JSON.parse(localStorage.getItem("user"));
   const [selectedStudents, setSelectedStudents] = useState([]);
   const categoriesReducer = useSelector((state) => state.categoriesReducer);
   const [categories, setCategories] = useState(categoriesReducer.categories);
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
 
   const submitHandler = (e) => {
@@ -67,7 +65,6 @@ const AdminAddCategoryPage = () => {
           throw new Error("Failed to fetch users");
         }
         const userData = await response.json();
-        console.log(userData); // Log fetched user data
         if (userData && userData.length > 0) {
           setProfessor(userData);
         } else {
@@ -88,7 +85,6 @@ const AdminAddCategoryPage = () => {
           throw new Error("Failed to fetch students");
         }
         const usersData = await response.json();
-        console.log(usersData); // Log fetched user data
         setUsers(usersData);
       } catch (error) {
         console.error("Error fetching students:", error);

@@ -1,34 +1,16 @@
 import React, { useState, useEffect } from "react";
 import "./AdminUpdateCategoryPage.css";
-import { Button, Form } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import swal from "sweetalert";
 import { useParams } from "react-router-dom";
-import * as categoriesConstants from "../../../constants/categoriesConstants";
-import FormContainer from "../../../components/FormContainer";
 import Sidebar from "../../../components/Sidebar";
-import { updateCategory } from "../../../actions/categoriesActions";
-import { useNavigate } from "react-router-dom";
 
 const AdminSubjectID = () => {
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
     const params = useParams();
     console.log("paramsss: ", params);
     const subjectId = params.catId;
-    const profId = params.professorId;
-    const [subjectDetails, setSubjectDetails] = useState(null);
-
-    const oldCategory = useSelector((state) =>
-        state.categoriesReducer.categories.find((cat) => cat.subjectId === subjectId)
-    );
     const [title, setTitle] = useState("");
-    const [description, setDescription] = useState(""
-    );
+    const [description, setDescription] = useState("");
     const token = localStorage.getItem("jwtToken");
-    const [users, setUsers] = useState([]);
-    const [selectedUser, setSelectedUser] = useState("");
     const [selectedUsers, setSelectedUsers] = useState([]);
     const [profesorName, setProfesorName] = useState("");
 
@@ -64,11 +46,6 @@ const AdminSubjectID = () => {
         fetchSelectedCategory();
     }, [subjectId, token]);
 
-    useEffect(() => {
-        console.log("Title:", title);
-        console.log("Description:", description);
-        console.log("Profesor Name:", profesorName);
-    }, [title, description, profesorName]);
 
     return (
         <div className="adminUpdateCategoryPage__container">

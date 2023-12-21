@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./ProfessorQuizzesPage.css";
 import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, ListGroup } from "react-bootstrap";
 import Message from "../../../components/Message";
 import Sidebar from "../../../components/SidebarProfessor";
 import Loader from "../../../components/Loader";
-import { deleteQuiz, fetchQuizzes } from "../../../actions/quizzesActions";
+import { deleteQuiz } from "../../../actions/quizzesActions";
 import * as quizzesConstants from "../../../constants/quizzesConstants";
 import swal from "sweetalert";
 import { Link } from "react-router-dom";
@@ -17,8 +16,6 @@ const ProfessorQuizzesPage = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const catId = urlParams.get("catId");
     const token = localStorage.getItem("jwtToken");
-    const params = useParams();
-    const examId = params.examId;
     const [selectedSubject, setSubject] = useState("");
     const quizzesReducer = useSelector((state) => state.quizzesReducer);
     const [quizzes, setQuizzes] = useState(quizzesReducer.quizzes);
@@ -118,7 +115,7 @@ const ProfessorQuizzesPage = () => {
                         <Message>No exams are present. Try adding some exam.</Message>
                     ) : (
                         quizzes.map((quiz, index) => {
-                            if ((catId && quiz.category.catId == catId) || (catId == null))
+                            if ((catId && quiz.category.catId === catId) || (catId === null))
                                 return (
                                     <ListGroup
                                         className="adminQuizzesPage__content--quizzesList"
