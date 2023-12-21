@@ -81,7 +81,7 @@ const AdminSubjectID = () => {
                     <p><strong>Subject Name:</strong> {title}</p>
                     <p><strong>Description:</strong> {description}</p>
                     <p><strong>Professor:</strong> {profesorName}</p>
-                    <ul>Students:
+                    <ul> <strong>Students: </strong>
                         {selectedUsers.map( student => (
                             <li>{student.firstName} {student.lastName} - {student.email}</li>
                         ))}

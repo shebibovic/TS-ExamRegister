@@ -76,9 +76,8 @@ const updateCategory = async (category, token) => {
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
-    console.log("category", category);
-    const { data } = await axios.put(
-        `/api/subject/${category.subjectId}`,
+    const { data } = await axios.post(
+        `/api/subject/admin/update`,
         category,
         config
     );
