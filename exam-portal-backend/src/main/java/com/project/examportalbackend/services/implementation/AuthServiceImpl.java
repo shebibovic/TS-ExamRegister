@@ -153,6 +153,8 @@ public class AuthServiceImpl implements AuthService {
         clearOTP(userId);
     }
 
+//    public void requestPasswordChange()
+
     public LoginResponse loginOtpUserService(LoginOtpRequestDto loginOtpRequestDto) {
         authenticate(loginOtpRequestDto.getEmail(), loginOtpRequestDto.getOtp());
         UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(loginOtpRequestDto.getEmail());
