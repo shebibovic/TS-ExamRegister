@@ -55,7 +55,7 @@ const AdminCategoriesPage = () => {
           } else {
             swal(
               "Subject Not Deleted!",
-              `${category.title} not deleted`,
+              `${category.title} not deleted. You have already deleted it. Please refresh the page.`,
               "error"
             );
           }
@@ -100,7 +100,7 @@ const AdminCategoriesPage = () => {
                 >
                   <ListGroup.Item
                     style={{ borderWidth: "0px" }}
-                    className="d-flex"
+                    className="d-flex" action key={index}
                     onClick={() => categoryClickHandler(cat.subjectId)}
                   >
                     <div className="ms-2 me-auto">

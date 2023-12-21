@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from 'react-redux';
 import "./AdminAddCategoryPage.css";
 import { Button, Form } from "react-bootstrap";
 import { useDispatch } from "react-redux";
@@ -22,6 +23,8 @@ const AdminAddCategoryPage = () => {
   const token = localStorage.getItem("jwtToken");
   const user = JSON.parse(localStorage.getItem("user"));
   const [selectedStudents, setSelectedStudents] = useState([]);
+  const categoriesReducer = useSelector((state) => state.categoriesReducer);
+  const [categories, setCategories] = useState(categoriesReducer.categories);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -38,7 +41,12 @@ const AdminAddCategoryPage = () => {
     console.log("ker");
     addCategory(dispatch, category, token).then((data) => {
       if (data.type === categoriesConstants.ADD_CATEGORY_SUCCESS) {
-        swal("Subject Added!", `${title} successfully added`, "success");
+        swal("Subject Added!", `${title} successfully added`, "success")
+            .then(() => {
+              fetchCategories(dispatch, token).then((data) => {
+                setCategories(data.payload);
+              });
+            });
       } else {
         swal("Subject Not Added!", `${title} not added`, "error");
       }

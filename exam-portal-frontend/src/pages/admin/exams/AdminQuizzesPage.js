@@ -101,7 +101,7 @@ const AdminQuizzesPage = () => {
                               className="adminQuizzesPage__content--quizzesList"
                               key={index}
                           >
-                            <ListGroup.Item className="align-items-start" action key={index}>
+                            <ListGroup.Item className="align-items-start">
                               <div className="ms-2">
                                 <div className="d-flex justify-content-between">
                                   <div>

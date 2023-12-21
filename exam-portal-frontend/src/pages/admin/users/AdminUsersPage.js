@@ -109,68 +109,89 @@ const AdminUsers = () => {
             <div className="adminCategoriesPage__sidebar">
                 <Sidebar />
             </div>
-            <FormContainer>
-                <h3>Students:</h3>
-                <Form.Group controlId="searchStudents">
-
-                    <Form.Control
-                        type="text"
-                        placeholder="Search students by name"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                </Form.Group>
-                <div className="studentCheckboxes">
-                    {users
-                        .filter((user) =>
-                            user.firstName.toLowerCase().includes(searchTerm.toLowerCase())
-                        )
-                        .map((user, index) => (
-                        <div key={index} className="userRow">
-                            <p>{user.firstName} {user.lastName}
-                                <div
-                                    onClick={(event) => deleteUserHandler(event, user)}
-                                    style={{
-                                        color: "red",
-                                        fontWeight: "500",
-                                        cursor:"pointer"
-                                    }}
-                                >{`Delete`}</div>
-                            </p>
-
+            <div className="adminCategoriesPage__content">
+                <FormContainer>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', columnGap: '20px' }}>
+                        <div style={{ marginRight: '30px' }}>
+                            <h3>Students:</h3>
+                            <Form.Group controlId="searchStudents">
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Search students by name"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                            </Form.Group>
+                        <div className="studentCheckboxes" style={{ marginTop: '20px' }}></div>
+                        <div className="studentCheckboxes">
+                            {users
+                                .filter((user) =>
+                                    user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                    user.lastName.toLowerCase().includes(searchTerm.toLowerCase())
+                                )
+                                .map((user, index) => (
+                                    <div key={index} className="userRow">
+                                        <p>
+                                            {user.firstName} {user.lastName}
+                                            <span
+                                                className="deleteText"
+                                                onClick={() => deleteUserHandler(user.userId, token)}
+                                                style={{
+                                                    color: "red",
+                                                    marginLeft: "10px",
+                                                    fontWeight: "500",
+                                                    cursor: "pointer",
+                                                }}
+                                            >
+            Delete
+          </span>
+                                        </p>
+                                    </div>
+                                ))}
                         </div>
-                    ))}
-                </div>
+                    </div>
 
-                <h3>Professors:</h3>
-                <Form.Control
-                    type="text"
-                    placeholder="Search students by name"
-                    value={searchTermProf}
-                    onChange={(e) => setSearchTermProf(e.target.value)}
-                />
-                <div className="studentCheckboxes">
-                    {professors
-                        .filter((user) =>
-                            user.firstName.toLowerCase().includes(searchTermProf.toLowerCase())
-                        )
-                        .map((user, index) => (
-                        <div key={index} className="userRow">
-                            <p>{user.firstName} {user.lastName}
-                                <div
-                                    onClick={(event) => deleteUserHandler(event, user)}
-                                    style={{
-                                        color: "red",
-                                        fontWeight: "500",
-                                        cursor:"pointer"
-                                    }}
-                                >{`Delete`}</div>
-                            </p>
+                        <div style={{ marginLeft: '30px' }}>
 
+                        <h3>Professors:</h3>
+                        <Form.Control
+                            type="text"
+                            placeholder="Search professors by name"
+                            value={searchTermProf}
+                            onChange={(e) => setSearchTermProf(e.target.value)}
+                        />
+
+                        <div className="studentCheckboxes" style={{ marginTop: '20px' }}></div>
+                        <div className="professorCheckboxes">
+                            {professors
+                                .filter((prof) =>
+                                    prof.firstName.toLowerCase().includes(searchTermProf.toLowerCase()) ||
+                                    prof.lastName.toLowerCase().includes(searchTermProf.toLowerCase())
+                                )
+                                .map((prof, index) => (
+                                    <div key={index} className="profRow">
+                                        <p>
+                                            {prof.firstName} {prof.lastName}
+                                            <span
+                                                className="deleteText"
+                                                onClick={() => deleteUserHandler(prof.userId, token)}
+                                                style={{
+                                                    color: "red",
+                                                    marginLeft: "10px",
+                                                    fontWeight: "500",
+                                                    cursor: "pointer",
+                                                }}
+                                            >
+            Delete
+          </span>
+                                        </p>
+                                    </div>
+                                ))}
                         </div>
-                    ))}
-                </div>
-            </FormContainer>
+                    </div>
+                    </div>
+                </FormContainer>
+            </div>
         </div>
     );
 };
