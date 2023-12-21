@@ -1,5 +1,8 @@
 package com.project.examportalbackend.configurations;
 
+import com.project.examportalbackend.models.User;
+import com.project.examportalbackend.repository.UserRepository;
+import com.project.examportalbackend.services.UserService;
 import com.project.examportalbackend.services.implementation.UserDetailsServiceImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -23,6 +27,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -53,9 +60,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
+            User user = userRepository.findByEmail(username);
+            if(user.getResetPassword() == 1 && !Objects.equals(request.getServletPath(), "/api/reset-password")) {
+                filterChain.doFilter(request, response);
+                return;
+            }
             UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(username);
-            if (jwtUtil.validateToken(jwtToken, userDetails)) {
+            if (Boolean.TRUE.equals(jwtUtil.validateToken(jwtToken, userDetails))) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);

@@ -38,7 +38,7 @@ public interface AuthService {
 
     LoginResponse loginUserService(LoginRequest loginRequest);
 
-    LoginResponse loginOtpUserService(LoginOtpRequestDto loginOtpRequestDto);
+    LoginResponse loginOtpUserService(LoginOtpRequestDto loginOtpRequestDto) throws AccessDeniedException;
 
     void resetPassword(long userId, String password);
 

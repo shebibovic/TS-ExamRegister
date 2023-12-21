@@ -39,7 +39,7 @@ public class AddStaticData {
         var admin1 = new User(
                 "Admin",
                 "Admin",
-                "knurikic1@etf.unsa.ba",
+                "kerimnurikic16@gmail.com",
                 "password",
                 "0501035",
                 adminRole);
@@ -90,7 +90,7 @@ public class AddStaticData {
         var prof1 = new User(
                 "Profesor1",
                 "Sani",
-                "knurikic3@etf.unsa.ba",
+                "knurikic1@etf.unsa.ba",
 
                 "password",
                 "0501035",

@@ -25,7 +25,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.mail.IllegalWriteException;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
@@ -35,7 +34,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static org.springframework.data.util.Pair.of;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -83,13 +81,13 @@ public class AuthServiceImpl implements AuthService {
                 userRequestDto.getPhoneNumber(),
                 role);
 
-//        Pair<String, Date> otpPair = generateOneTimePassword();
-//        user.setOneTimePassword(passwordEncoder.encode(otpPair.getFirst()));
-//        user.setOtpGeneratedTime(otpPair.getSecond());
-//        user.setResetPassword(1);
+        Pair<String, Date> otpPair = generateOneTimePassword();
+        user.setOneTimePassword(passwordEncoder.encode(otpPair.getFirst()));
+        user.setOtpGeneratedTime(otpPair.getSecond());
+        user.setResetPassword(1);
 
         User savedUser = userRepository.save(user);
-        //sendOTPEmail(user, otpPair.getFirst());
+        sendOTPEmail(user, otpPair.getFirst());
         return savedUser;
     }
 
@@ -147,7 +145,7 @@ public class AuthServiceImpl implements AuthService {
 
     public void resetPassword(long userId, String password) {
         User user = getUser(userId);
-        user.setPassword(password);
+        user.setPassword(passwordEncoder.encode(password));
         user.setResetPassword(0);
         userRepository.save(user);
         clearOTP(userId);
@@ -155,11 +153,17 @@ public class AuthServiceImpl implements AuthService {
 
 //    public void requestPasswordChange()
 
-    public LoginResponse loginOtpUserService(LoginOtpRequestDto loginOtpRequestDto) {
+    public LoginResponse loginOtpUserService(LoginOtpRequestDto loginOtpRequestDto) throws AccessDeniedException {
+        User user = userRepository.findByEmail(loginOtpRequestDto.getEmail());
+        if(user == null){
+            throw new BadCredentialsException("User with email " + loginOtpRequestDto.getEmail() + "doesn't exit");
+        }
+        if(new Date().getTime() - user.getOtpGeneratedTime().getTime() > 3600000){
+            throw new AccessDeniedException("OTP expired, please request a new one from the admin");
+        }
         authenticate(loginOtpRequestDto.getEmail(), loginOtpRequestDto.getOtp());
         UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(loginOtpRequestDto.getEmail());
         String token = jwtUtil.generateToken(userDetails);
-        User user = userRepository.findByEmail(loginOtpRequestDto.getEmail());
         return new LoginResponse(user, token);
     }
 
@@ -212,7 +216,7 @@ public class AuthServiceImpl implements AuthService {
     public void setNewOneTimePassword(long userId) throws MessagingException, UnsupportedEncodingException {
         User user = getUser(userId);
         if (user.getRole().getRoleName().equals(Roles.ADMIN.toString())) {
-            throw new IllegalArgumentException("Can't generate otp for admin");
+            throw new IllegalArgumentException("Can't generate new otp for admin");
         }
         Pair<String, Date> otpPair = generateOneTimePassword();
         user.setOneTimePassword(passwordEncoder.encode(otpPair.getFirst()));
