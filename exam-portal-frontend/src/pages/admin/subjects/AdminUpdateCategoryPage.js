@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./AdminUpdateCategoryPage.css";
 import { Button, Form } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import * as categoriesConstants from "../../../constants/categoriesConstants";
 import FormContainer from "../../../components/FormContainer";
 import Sidebar from "../../../components/Sidebar";
 import {
-  updateCategory} from "../../../actions/categoriesActions";
+  updateCategory, fetchCategories} from "../../../actions/categoriesActions";
 import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
@@ -27,6 +27,8 @@ const AdminUpdateCategoryPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const params = useParams();
   const subjectId = params.catId;
+  const categoriesReducer = useSelector((state) => state.categoriesReducer);
+  const [categories, setCategories] = useState(categoriesReducer.categories);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -40,6 +42,10 @@ const AdminUpdateCategoryPage = () => {
     updateCategory(dispatch, category, token).then((data) => {
       if (data.type === categoriesConstants.UPDATE_CATEGORY_SUCCESS) {
         swal("Subject Updated!", `${title} successfully updated`, "success");
+        // Ponovno učitavanje kategorija nakon uspješnog ažuriranja
+        fetchCategories(dispatch, token).then((data) => {
+          setCategories(data.payload);
+        });
       } else {
         swal("Subject Not Updated!", `${title} not updated`, "error");
       }
