@@ -80,11 +80,22 @@ public class User implements UserDetails {
     @Column(name = "otp_generated_time")
     private Date otpGeneratedTime;
 
+    @Column(name = "set_password")
+    private int resetPassword;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
         return authorities;
+    }
+
+    @Override
+    public String getPassword(){
+        if(isOTPRequired()){
+            return oneTimePassword;
+        }
+        return password;
     }
 
     public String getFullName(){

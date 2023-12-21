@@ -4,6 +4,7 @@ import com.project.examportalbackend.models.LoginRequest;
 import com.project.examportalbackend.models.LoginResponse;
 import com.project.examportalbackend.models.Role;
 import com.project.examportalbackend.models.User;
+import com.project.examportalbackend.models.dto.request.LoginOtpRequestDto;
 import com.project.examportalbackend.models.dto.request.UserRequestDto;
 import org.springframework.data.util.Pair;
 
@@ -35,5 +36,10 @@ public interface AuthService {
 
     void verifyUserRole(long userId, String roleName) throws AccessDeniedException;
 
-    LoginResponse loginUserService(LoginRequest loginRequest) throws Exception;
+    LoginResponse loginUserService(LoginRequest loginRequest);
+
+    LoginResponse loginOtpUserService(LoginOtpRequestDto loginOtpRequestDto);
+
+    void resetPassword(long userId, String password);
+
 }

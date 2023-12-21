@@ -60,6 +60,13 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/admin/generate-otp/{userId}")
+    public ResponseEntity<String> generateOtp(long userId) throws MessagingException, UnsupportedEncodingException {
+        authService.setNewOneTimePassword(userId);
+        return ResponseEntity.ok("New OTP has been generated and sent to the user");
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin/professors")
     public ResponseEntity<List<User>> getAllProfessors() throws AccessDeniedException {
         User admin = authService.getUserFromToken();
