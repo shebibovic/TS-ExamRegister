@@ -83,6 +83,17 @@ public class User implements UserDetails {
     @Column(name = "set_password")
     private int resetPassword;
 
+    @PreRemove
+    private void removeSubjectAndExamAssociations() {
+        for (Subject subject: this.subjects) {
+            subject.getStudents().remove(this);
+        }
+
+        for (Exam exam: this.registeredExams) {
+            exam.getRegisteredStudents().remove(this);
+        }
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
