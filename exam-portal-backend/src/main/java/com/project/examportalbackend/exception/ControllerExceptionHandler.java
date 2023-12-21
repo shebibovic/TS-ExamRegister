@@ -34,6 +34,18 @@ public class ControllerExceptionHandler {
         );
     }
 
+    @ExceptionHandler(java.nio.file.AccessDeniedException.class)
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    public ErrorMessage accessDeniedException(java.nio.file.AccessDeniedException ex) {
+
+        return new ErrorMessage(
+                HttpStatus.UNAUTHORIZED.value(),
+                new Date(),
+                ex.getMessage(),
+                ErrorTypeMessages.UNAUTHORIZED.toString()
+        );
+    }
+
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public ErrorMessage userNotFoundException(ResourceNotFoundException ex) {
