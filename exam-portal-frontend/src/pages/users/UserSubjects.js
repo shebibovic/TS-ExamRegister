@@ -2,16 +2,10 @@ import React, { useEffect, useState } from "react";
 import "../admin/subjects/AdminCategoriesPage.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, ListGroup } from "react-bootstrap";
-import * as categoriesConstants from "../../constants/categoriesConstants";
+import { ListGroup } from "react-bootstrap";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
 import Sidebar from "../../components/SidebarUser";
-import {
-    deleteCategory,
-    fetchCategories,
-} from "../../actions/categoriesActions";
-import swal from "sweetalert";
 
 const UserSubjects = () => {
     const navigate = useNavigate();
@@ -22,7 +16,6 @@ const UserSubjects = () => {
     const [categories, setCategories] = useState(categoriesReducer.categories);
 
     const categoryClickHandler = (subjectId) => {
-        console.log(subjectId)
         navigate(`/userCategories/${subjectId}`);
     };
 

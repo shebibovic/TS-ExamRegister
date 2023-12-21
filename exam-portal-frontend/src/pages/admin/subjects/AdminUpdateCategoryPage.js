@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./AdminUpdateCategoryPage.css";
 import { Button, Form } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import * as categoriesConstants from "../../../constants/categoriesConstants";
 import FormContainer from "../../../components/FormContainer";
 import Sidebar from "../../../components/Sidebar";
 import {
-  updateCategory,
-  fetchCategories,
-} from "../../../actions/categoriesActions";
+  updateCategory, fetchCategories} from "../../../actions/categoriesActions";
 import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
@@ -21,27 +19,33 @@ const AdminUpdateCategoryPage = () => {
   const [professor, setProfessor] = useState([]);
   const [profesorName, setProfesorName] = useState("");
   const token = localStorage.getItem("jwtToken");
-  const user = JSON.parse(localStorage.getItem("user"));
   const [selectedStudents, setSelectedStudents] = useState([]);
-  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [oldProfessor, setOldProfessor] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const params = useParams();
   const subjectId = params.catId;
+  const categoriesReducer = useSelector((state) => state.categoriesReducer);
+  const [categories, setCategories] = useState(categoriesReducer.categories);
 
   const submitHandler = (e) => {
     e.preventDefault();
     const category = {
+      subjectId: parseInt(subjectId),
       title: title,
       description: description,
-      userId: selectedUser,
+      professorId: parseInt(selectedUser),
       students: selectedStudents,
     };
     updateCategory(dispatch, category, token).then((data) => {
       if (data.type === categoriesConstants.UPDATE_CATEGORY_SUCCESS) {
         swal("Subject Updated!", `${title} successfully updated`, "success");
+        // Ponovno učitavanje kategorija nakon uspješnog ažuriranja
+        fetchCategories(dispatch, token).then((data) => {
+          setCategories(data.payload);
+        });
       } else {
         swal("Subject Not Updated!", `${title} not updated`, "error");
       }
@@ -50,42 +54,43 @@ const AdminUpdateCategoryPage = () => {
   //fetch subject details
   useEffect(() => {
     const fetchSelectedCategory = async () => {
-        try {
-            const response = await fetch(`/api/subject/admin/${subjectId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                },
-            });
-            if (response.ok) {
-                const selectedCategoryData = await response.json();
-                console.log("selectedCategoryData", selectedCategoryData);
-                setTitle(selectedCategoryData.title);
-                setDescription(selectedCategoryData.description);
-                setProfesorName(
-                    selectedCategoryData.professor.firstName +
-                    " " +
-                    selectedCategoryData.professor.lastName
-                );
-                setSelectedUsers(selectedCategoryData.students);
-            } else {
-                throw new Error("Failed to fetch selected subject");
-            }
-        } catch (error) {
-            console.error("Error fetching selected subject:", error);
+      try {
+        const response = await fetch(`/api/subject/admin/${subjectId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.ok) {
+          const selectedCategoryData = await response.json();
+          console.log("selectedCategoryData", selectedCategoryData);
+          setTitle(selectedCategoryData.title);
+          setDescription(selectedCategoryData.description);
+          setOldProfessor(selectedCategoryData.professor);
+          console.log("ivdsjfbhsdjk", selectedCategoryData.professor.userId);
+          //setSelectedUsers(selectedCategoryData.students);
+          setSelectedStudents(selectedCategoryData.students.map(user => user.userId));
+
+        } else {
+          throw new Error("Failed to fetch selected subject");
         }
+      } catch (error) {
+        console.error("Error fetching selected subject:", error);
+      }
     };
 
+
     fetchSelectedCategory();
-}, [subjectId, token]);
+
+  }, [subjectId, token]);
 
 
 
-console.log(profesorName+"<--------------------------heeej")
+  console.log(profesorName+"<--------------------------heeej")
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("/api/user/admin/professors", {
+        const response = await fetch("/api/user/admin/available-professors", {
           headers: {
             Authorization: `Bearer ${token}`, // Dodajte ovu liniju kako biste poslali token
             "Content-Type": "application/json", // Ovisno o potrebi, možda trebate dodati i Content-Type
@@ -118,9 +123,15 @@ console.log(profesorName+"<--------------------------heeej")
         console.error("Error fetching students:", error);
       }
     };
-
     fetchUsers();
+    // setProfessor([...professor, oldProfessor])
   }, [dispatch, token]);
+
+  useEffect(() => {
+    setProfessor(professor => [...professor, oldProfessor]);
+
+  }, [oldProfessor]);
+
 
   return (
       <div className="adminAddCategoryPage__container">
@@ -156,19 +167,27 @@ console.log(profesorName+"<--------------------------heeej")
               </Form.Group>
 
               <Form.Group controlId="professor">
-                <Form.Label className="label"> <h5>Choose Professor</h5> </Form.Label>
+                <Form.Label className="label" > <h5>Choose Professor</h5> </Form.Label>
                 <Form.Select
                     aria-label="Choose Professor"
-                    onChange={(e) => setSelectedUser(e.target.value)}
-                    value={profesorName}
+                    onChange={(e) => {
+                      const selectedValue = parseInt(e.target.value);
+                      setSelectedUser(selectedValue);
+                    }}
+                    value={selectedUser || (oldProfessor && oldProfessor.userId) || ""}
                 >
-                  <option value={profesorName}> </option>
+                  {oldProfessor && (
+                      <option value={oldProfessor.userId}>
+                        {oldProfessor.firstName} {oldProfessor.lastName}
+                      </option>
+                  )}
                   {professor.map((user) => (
                       <option key={user.userId} value={user.userId}>
                         {user.firstName} {user.lastName}
                       </option>
                   ))}
                 </Form.Select>
+
               </Form.Group>
               <div style={{ marginBottom: '20px' }}></div>
 

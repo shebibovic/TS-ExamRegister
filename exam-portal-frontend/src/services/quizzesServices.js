@@ -8,8 +8,7 @@ const addQuiz = async (quiz, token) => {
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
-    const { data } = await axios.post("/api/exam/professor/add/", quiz, config); // Update the URL if needed
-    console.log("quizzesServices:addQuiz()  Success: ", data);
+    const { data } = await axios.post("/api/exam/professor/add/", quiz, config); 
     return { data: data, isAdded: true, error: null };
   } catch (error) {
     console.error(
@@ -27,7 +26,6 @@ const deleteQuiz = async (examId, token) => {
       headers: { Authorization: `Bearer ${token}` },
     };
     const { data } = await axios.delete(`/api/exam/professor/delete/${examId}/`, config);
-   // console.log("quizzesServices:deleteQuiz()  Success: ", data);
     return {
       isDeleted: true,
       error: null,
@@ -45,13 +43,11 @@ const deleteQuiz = async (examId, token) => {
 };
 
 const updateQuiz = async (quiz, token) => {
-  console.log(quiz);
   try {
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
     const { data } = await axios.put(`/api/quiz/${quiz.quizId}/`, quiz, config);
-    console.log("quizzesServices:updateQuiz()  Success: ", data);
     return {
       data: data,
       isUpdated: true,

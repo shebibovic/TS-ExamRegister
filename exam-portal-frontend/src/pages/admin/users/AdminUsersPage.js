@@ -35,7 +35,6 @@ const AdminUsers = () => {
                     throw new Error("Failed to fetch students");
                 }
                 const usersData = await response.json();
-                console.log(usersData); // Log fetched user data
                 setUsers(usersData);
             } catch (error) {
                 console.error("Error fetching students:", error);
@@ -54,7 +53,6 @@ const AdminUsers = () => {
                     throw new Error("Failed to fetch professors");
                 }
                 const profData = await response.json();
-                console.log(profData); // Log fetched user data
                 setProfessors(profData);
             } catch (error) {
                 console.error("Error fetching professors:", error);
@@ -65,43 +63,48 @@ const AdminUsers = () => {
         fetchUsers();
     }, [dispatch, token]);
 
-    const deleteUserHandler = (userId, token) => {
-        swal({
-            title: "Are you sure?",
-            text: "Once deleted, you will not be able to recover this user!",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        }).then((willDelete) => {
-            if (willDelete) {
-                fetch(`/api/user/admin/delete/${userId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                })
-
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        swal("User Deleted!", "User successfully deleted", "success");
-
-                    })
-                    .catch(error => {
-                        console.error('There was a problem with the deletion:', error);
-                        swal("User Not Deleted!", "There was an error while deleting the user", "error");
+const deleteUserHandler = (userId, token) => {
+    swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this user!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willDelete) => {
+        if (willDelete) {
+            fetch(`/api/user/admin/delete/${userId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    swal("User Deleted!", "User successfully deleted", "success");
+                } 
+                else if (!response.ok) {
+                    return response.json().then(data => {
+                        throw new Error(data.message); // Bacanje greške sa porukom sa servera
                     });
-            } else {
-                swal("User is safe");
-            }
-        });
-    };
+                }
+               
+            })
+            .then(data => {
+                // Ovdje se može koristiti odgovor koji dolazi sa servera (data)
+                // Ako nema potrebe za prikazivanjem podataka, možete izostaviti ovaj then blok
+
+                swal("User Deleted!", "User successfully deleted", "success");
+            })
+            .catch(error => {
+                console.error('There was a problem with the deletion:', error);
+                swal("User Not Deleted!", error.message || "There was an error while deleting the user", "error");
+            });
+        } else {
+            swal("User is safe");
+        }
+    });
+};
 
 
     return (

@@ -33,7 +33,6 @@ const addCategory = async (cat, token, userRole) => {
       students: cat.students
     };
     const { data } = await axios.post("/api/subject/admin/add", category, config);
-    console.log("categoryService:addCategory() Success: ", data);
     return { data: data, isAdded: true, error: null };
   } catch (error) {
     console.error(
@@ -54,7 +53,6 @@ const deleteCategory = async (catId, token) => {
       headers: { Authorization: `Bearer ${token}` },
     };
     const { data } = await axios.delete(`/api/subject/admin/delete/${catId}/`, config);
-    console.log("categoryService:deleteCategory()  Success: ", data);
     return {
       isDeleted: true,
       error: null,
@@ -76,13 +74,11 @@ const updateCategory = async (category, token) => {
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
-    console.log("category", category);
-    const { data } = await axios.put(
-        `/api/subject/${category.subjectId}`,
+    const { data } = await axios.post(
+        `/api/subject/admin/update`,
         category,
         config
     );
-    console.log("categoryService:updateCategory()  Success: ", data);
     return {
       data: data,
       isUpdated: true,

@@ -42,6 +42,7 @@ const App = () => {
         <Route path="/" element={<LoginPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+
         <Route path="/adminProfile" element={<AdminProfilePage />} />
         <Route path="/adminCategories" element={<AdminCategoriesPage />} />
         <Route path="/adminAddCategory" element={<AdminAddCategoryPage />} />
@@ -50,36 +51,24 @@ const App = () => {
           element={<AdminUpdateCategoryPage />}
         />
         <Route path="/adminQuizzes" element={<AdminQuizzesPage />} />
-        <Route path="/adminAddQuiz" element={<AdminAddQuiz />} />
-        <Route path="/adminUpdateQuiz/:quizId" element={<AdminUpdateQuiz />} />
-        <Route path="/adminQuestions" element={<AdminQuestionsPage />} />
-        <Route path="/adminAddQuestion" element={<AdminAddQuestionsPage />} />
-        <Route path="/adminallResult" element={<AdminQuizResultPage />} />
-        <Route
-          path="/adminUpdateQuestion/:quesId"
-          element={<AdminUpdateQuestionPage />}
-        />
+        <Route path="/adminCategories/:catId" element={<AdminSubjectID />} />
+        <Route path="/addUser" element={<AddUser />} />
+        <Route path="/allUsers" element={<AdminUsers />} />
+
+
         <Route path="/profile" element={<UserProfilePage />} />
         <Route path="/quizzes" element={<UserQuizzesPage />} />
-        <Route path="/quiz/*" element={<UserQuizzesPage />} />
-        <Route path="/quizManual/" element={<UserQuizManualPage />} />
-        <Route path="/questions/" element={<UserQuestionsPage />} />
+        <Route path="/userSubjects" element={<UserSubjects />} />
+        <Route path="/userCategories/:catId" element={<UserSubjectID />} />
 
-        <Route path="/adminCategories/:catId" element={<AdminSubjectID />} />
-        <Route path="/adminQuizzes/:catId" element={<AdminExamID />} />
+
         <Route path="/professorProfile" element={<ProfessorProfilePage />} />
-        <Route path="/addUser" element={<AddUser />} />
-
         <Route path="/professorQuizzes" element={<ProfessorQuizzesPage />} />
         <Route path="/professorAddQuiz" element={<ProfessorAddQuiz />} />
         <Route path="/professorCategories/:catId" element={<ProfessorSubjectID />} />
 
 
-        <Route path="/userSubjects" element={<UserSubjects />} />
-        <Route path="/userCategories/:catId" element={<UserSubjectID />} />
-        <Route path="/quizzes/:examId" element={<QuizDetails />} />
 
-        <Route path="/allUsers" element={<AdminUsers />} />
       </Routes>
     </Router>
   );
