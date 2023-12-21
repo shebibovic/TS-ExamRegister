@@ -166,7 +166,6 @@ const AdminUpdateCategoryPage = () => {
                     aria-label="Choose Professor"
                     onChange={(e) => {
                       const selectedValue = parseInt(e.target.value);
-                      console.log(selectedValue);
                       setSelectedUser(selectedValue);
                     }}
                     value={selectedUser || (oldProfessor && oldProfessor.userId) || ""}

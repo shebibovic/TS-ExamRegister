@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./ProfessorCategoriesPage.css";
-import { Button, Form } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import swal from "sweetalert";
 import { useParams } from "react-router-dom";
-import * as categoriesConstants from "../../../constants/categoriesConstants";
-import FormContainer from "../../../components/FormContainer";
 import Sidebar from "../../../components/SidebarProfessor";
 const ProfessorSubjectID = () => {
     const params = useParams();

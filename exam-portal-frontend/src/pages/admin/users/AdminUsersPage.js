@@ -35,7 +35,6 @@ const AdminUsers = () => {
                     throw new Error("Failed to fetch students");
                 }
                 const usersData = await response.json();
-                console.log(usersData); // Log fetched user data
                 setUsers(usersData);
             } catch (error) {
                 console.error("Error fetching students:", error);
@@ -54,7 +53,6 @@ const AdminUsers = () => {
                     throw new Error("Failed to fetch professors");
                 }
                 const profData = await response.json();
-                console.log(profData); // Log fetched user data
                 setProfessors(profData);
             } catch (error) {
                 console.error("Error fetching professors:", error);

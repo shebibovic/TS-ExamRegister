@@ -9,7 +9,6 @@ const fetchQuestionsByQuiz = async (quizId, token) => {
       `/api/question/?quizId=${quizId}`,
       config
     );
-    console.log("questionsServices:fetchQuestionsByQuiz() Success: ", data);
     return data;
   } catch (error) {
     console.error(
@@ -27,7 +26,6 @@ const addQuestion = async (question, token) => {
     };
 
     const { data } = await axios.post("/api/question/", question, config);
-    console.log("questionsServices:addQuestion()  Success: ", data);
     return { data: data, isAdded: true, error: null };
   } catch (error) {
     console.error(
@@ -44,7 +42,6 @@ const deleteQuestion = async (quesId, token) => {
       headers: { Authorization: `Bearer ${token}` },
     };
     const { data } = await axios.delete(`/api/question/${quesId}`, config);
-    console.log("questionsServices:deleteQuestion() Success: ", data);
     return {
       isDeleted: true,
       error: null,
@@ -71,7 +68,6 @@ const updateQuestion = async (question, token) => {
       question,
       config
     );
-    console.log("questionsServices:updateQuestion() Success: ", data);
     return {
       data: data,
       isUpdated: true,
