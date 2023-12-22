@@ -106,7 +106,7 @@ const deleteUserHandler = (userId, token) => {
     });
 };
 const resendOTPHandler = (userId, token) =>{
-     fetch(`/api/reset-password/${userId}`, {
+     fetch(`/api/user/admin/generate-otp/${userId}`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,

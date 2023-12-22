@@ -53,12 +53,14 @@ const RegisterPage = () => {
             },
             body: JSON.stringify(user),
           });
-    
           if (response.ok) {
             const data = await response.json();
+            localStorage.setItem('jwtToken', data.jwtToken); 
+          //  console.log(data.token+"<-----------------------------")// Spremanje tokena u local storage
             navigate('/resetPassword');
-           
-          }  else if (!response.ok) {
+          }
+          
+           else if (!response.ok) {
             return response.json().then(data => {
                 throw new Error(data.message); // Bacanje greške sa porukom sa servera
             });

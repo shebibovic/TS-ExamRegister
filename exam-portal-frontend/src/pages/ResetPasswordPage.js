@@ -33,6 +33,7 @@ const ResetPasswordPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const registerReducer = useSelector((state) => state.registerReducer);
+    const token = localStorage.getItem("jwtToken");
 
     const showPasswordHandler = () => {
         const temp = !showPassword;
@@ -45,6 +46,13 @@ const ResetPasswordPage = () => {
         setShowConfirmPassword(temp);
         setConfirmPasswordType(temp ? 'text' : 'password');
     };
+    useEffect(() => {
+   
+        console.log(token+"<-------------------------------!!!!!!!!!!!!!!!!")
+        if (!token) {
+          navigate('/'); // Ako nema tokena, redirektuj na login stranicu
+        }
+      }, []);
 
 
     const submitHandler = async (e) => {
@@ -68,16 +76,30 @@ const ResetPasswordPage = () => {
 
         if (isValid) {
             const user = {
-                username: username, // Dodaj ovo ako trebaš korisničko ime za identifikaciju
-                password: password,
+//username: username, // Dodaj ovo ako trebaš korisničko ime za identifikaciju
+                password: password
             };
             try {
-                await resetPassword(dispatch, user);
-                navigate('/login');
-            } catch (error) {
-                // Obrada grešaka ako postoji problem s resetiranjem lozinke
-                console.error('Error resetting password:', error);
-            }
+                const response = await fetch('/api/reset-password', {
+                    method: 'POST',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify(user)
+                });
+                if (response.status===200) {
+                    const responseData = await response.text(); // Dobavljanje odgovora kao teksta, ne kao JSON-a
+                    console.log(responseData); // Prikaz odgovora servera kao teksta
+                    navigate('/login');
+                  } else {
+                    const errorData = await response.text(); // Dobavljanje greške kao teksta
+                    console.log(errorData); // Prikaz greške servera kao teksta
+                  }
+                } catch (error) {
+                  // Obrada grešaka ako postoji problem s resetiranjem lozinke
+                  console.error('Error resetting password:', error);
+                }
         }
     };
 
