@@ -105,6 +105,32 @@ const deleteUserHandler = (userId, token) => {
         }
     });
 };
+const resendOTPHandler = (userId, token) =>{
+     fetch(`/api/reset-password/${userId}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    swal("OTP sent!", "OTP successfully sent", "success");
+                } 
+                else if (!response.ok) {
+                    return response.json().then(data => {
+                        throw new Error(data.message); // Bacanje greške sa porukom sa servera
+                    });
+                }
+               
+            })
+            .then(data => {
+                // Ovdje se može koristiti odgovor koji dolazi sa servera (data)
+                // Ako nema potrebe za prikazivanjem podataka, možete izostaviti ovaj then blok
+
+                swal("OTP sent!", "OTP successfully sent", "success");
+            })
+}
 
 
     return (
@@ -148,6 +174,18 @@ const deleteUserHandler = (userId, token) => {
                                             >
             Delete
           </span>
+          <span
+                                                className="deleteText"
+                                                onClick={() => resendOTPHandler(user.userId, token)}
+                                                style={{
+                                                    color: "green",
+                                                    marginLeft: "10px",
+                                                    fontWeight: "500",
+                                                    cursor: "pointer",
+                                                }}
+                                            >
+            Resend OTP
+          </span>
                                         </p>
                                     </div>
                                 ))}
@@ -186,6 +224,18 @@ const deleteUserHandler = (userId, token) => {
                                                 }}
                                             >
             Delete
+          </span>
+          <span
+                                                className="deleteText"
+                                                onClick={() => resendOTPHandler(prof.userId, token)}
+                                                style={{
+                                                    color: "green",
+                                                    marginLeft: "10px",
+                                                    fontWeight: "500",
+                                                    cursor: "pointer",
+                                                }}
+                                            >
+            Resend OTP
           </span>
                                         </p>
                                     </div>

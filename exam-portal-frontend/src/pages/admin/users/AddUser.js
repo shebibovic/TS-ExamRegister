@@ -9,29 +9,24 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import * as authConstants from '../../../constants/authConstants';
 import { Link } from 'react-router-dom';
 import Sidebar from "../../../components/Sidebar";
+import swal from "sweetalert";
 
 const AddUser = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [code, setCode] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
-    const [passwordType, setPasswordType] = useState('password');
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [confirmPasswordType, setConfirmPasswordType] = useState('password');
     const [selectedRole, setSelectedRole] = useState('');
 
     const [usernameError, setUsernameError] = useState('');
-    const [passwordError, setPasswordError] = useState('');
-    const [confirmPasswordError, setConfirmPasswordError] = useState('');
     const [usernameExistsError, setUsernameExistsError] = useState('');
 
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const registerReducer = useSelector((state) => state.registerReducer);
+    
+    const token = localStorage.getItem("jwtToken");
 
 
     useEffect(() => {
@@ -55,16 +50,21 @@ const AddUser = () => {
             const user = {
                 firstName: firstName,
                 lastName: lastName,
-                username: username,
+                email: username,
                 role: selectedRole,
             };
-            register(dispatch, user).then((data) => {
-                console.log(data); // Log the response here to check its structure
+            register(dispatch, user, token).then((data) => {
+    // Log the response here to check its structure
                 if (data.type === authConstants.USER_REGISTER_SUCCESS) {
+                    swal("User added!", `successfully added`, "success")
                     navigate('/allUsers');
                 }
+                /*else{
+                    swal("User not added!", `not added`, "error")
+                }*/
             });
         }
+       
     };
 
     return (
