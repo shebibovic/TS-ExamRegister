@@ -32,6 +32,7 @@ import UserSubjects from "./pages/users/UserSubjects";
 import UserSubjectID from "./pages/users/UserSubjectID";
 import QuizDetails from "./pages/professor/exams/QuizDetails";
 import AdminUsers from "./pages/admin/users/AdminUsersPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 
 const App = () => {
@@ -42,6 +43,7 @@ const App = () => {
         <Route path="/" element={<LoginPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/resetPassword" element={<ResetPasswordPage />} />
 
         <Route path="/adminProfile" element={<AdminProfilePage />} />
         <Route path="/adminCategories" element={<AdminCategoriesPage />} />
