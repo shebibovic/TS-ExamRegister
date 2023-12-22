@@ -2,11 +2,13 @@ import React from 'react';
 import { Route, Navigate } from "react-router-dom";
 
 const GuardedRoute = ({ role, children, anyRole = false }) => {
-    
-    
+
     let user = JSON.parse(localStorage.getItem('user'));
     if(anyRole && user){
         return children;
+    }
+    if(user?.resetPassword == 1){
+        return <Navigate to="/resetPassword" replace />;
     }
     if(role != user?.role?.roleName){
         if(user?.role?.roleName === "ADMIN"){

@@ -42,4 +42,10 @@ public interface AuthService {
 
     void resetPassword(long userId, String password);
 
+    void changePasswordRequest(long userId) throws MessagingException, UnsupportedEncodingException;
+
+    void changePassword(long userId, String password, String passwordCode) throws AccessDeniedException;
+
+    void sendChangePasswordEmail(User user, String code) throws MessagingException, UnsupportedEncodingException;
+
 }

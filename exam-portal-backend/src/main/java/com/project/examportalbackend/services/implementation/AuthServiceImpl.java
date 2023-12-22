@@ -251,6 +251,56 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    public void sendChangePasswordEmail(User user, String passwordChangeCode) throws MessagingException, UnsupportedEncodingException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom("tsexampotal@gmail.com", "Exam Portal");
+        helper.setTo(user.getEmail());
+
+        String subject = "Here's your Link for password change - Expires in 5 minutes!";
+
+        String content = "<p>Hello " + user.getFullName() + "</p>"
+                + "<p>For security reason, you're required to use the following link to change your password!</p>"
+                + "<a target='_blank' href=\"http://localhost:3000/resetPassword/" + passwordChangeCode + "\""
+                + "<button> Change your password </button>"
+                + "</form>"
+                + "</a>"
+                + "<br>"
+                + "<p>Note: this link is set to expire in 5 minutes.</p>";
+
+        helper.setSubject(subject);
+
+        helper.setText(content, true);
+
+        mailSender.send(message);
+    }
+
+    public void changePasswordRequest(long userId) throws MessagingException, UnsupportedEncodingException {
+        Pair<String, Date> changePasswordCode = generateOneTimePassword();
+        User user = getUser(userId);
+        user.setChangePasswordCode(passwordEncoder.encode(changePasswordCode.getFirst()));
+        user.setChangePasswordGeneratedTime(changePasswordCode.getSecond());
+        userRepository.save(user);
+        sendChangePasswordEmail(user, changePasswordCode.getFirst());
+    }
+
+    public void changePassword(long userId, String password, String passwordCode) throws AccessDeniedException {
+        User user = getUser(userId);
+        if(!passwordEncoder.matches(passwordCode, user.getChangePasswordCode())){
+            throw new AccessDeniedException("Invalid code for password change");
+        }
+        if(new Date().getTime() - user.getChangePasswordGeneratedTime().getTime() > 300000){
+            throw new AccessDeniedException("The link has expired");
+        }
+
+        user.setPassword(passwordEncoder.encode(password));
+        user.setChangePasswordCode(null);
+        user.setChangePasswordGeneratedTime(null);
+        userRepository.save(user);
+    }
+
+    @Override
     public void clearOTP(long userId) {
         User user = getUser(userId);
         user.setOneTimePassword(null);

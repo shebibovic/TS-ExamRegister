@@ -82,6 +82,13 @@ public class User implements UserDetails {
     @Column(name = "otp_generated_time")
     private Date otpGeneratedTime;
 
+    @Column(name = "change_password_code")
+    @JsonIgnore
+    private String changePasswordCode;
+
+    @Column(name = "reset_password_generated_time")
+    private Date changePasswordGeneratedTime;
+
     @Column(name = "set_password")
     private int resetPassword;
 

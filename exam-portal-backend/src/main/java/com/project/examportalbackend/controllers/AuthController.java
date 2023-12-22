@@ -12,7 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.AccessDeniedException;
 
 @CrossOrigin
@@ -45,6 +47,23 @@ public class AuthController {
     public ResponseEntity<String> resetPassword(@Valid @RequestBody PasswordRequestDto passwordRequestDto){
         User user = authService.getUserFromToken();
         authService.resetPassword(user.getUserId(), passwordRequestDto.getPassword());
+        return ResponseEntity.ok("Successfully updated password");
+    }
+
+    @PreAuthorize("hasAuthority('PROFESSOR') or hasAuthority('STUDENT') or hasAuthority('ADMIN')")
+    @PostMapping("/change-password")
+    public ResponseEntity<String> changePasswordRequest() throws MessagingException, UnsupportedEncodingException {
+        User user = authService.getUserFromToken();
+        authService.changePasswordRequest(user.getUserId());
+        return ResponseEntity.ok("Email with a link to reset password has been sent to you!");
+    }
+
+    @PreAuthorize("hasAuthority('PROFESSOR') or hasAuthority('STUDENT') or hasAuthority('ADMIN')")
+    @PostMapping("/change-password/{passwordCode}")
+    public ResponseEntity<String> changePassword(@Valid @RequestBody PasswordRequestDto passwordRequestDto,
+                                                 @PathVariable String passwordCode) throws AccessDeniedException {
+        User user = authService.getUserFromToken();
+        authService.changePassword(user.getUserId(), passwordRequestDto.getPassword(), passwordCode);
         return ResponseEntity.ok("Successfully updated password");
     }
 }
