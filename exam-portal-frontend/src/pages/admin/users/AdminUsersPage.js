@@ -161,7 +161,7 @@ const resendOTPHandler = (userId, token) =>{
                                 .map((user, index) => (
                                     <div key={index} className="userRow">
                                         <p>
-                                            {user.firstName} {user.lastName}
+                                            <div>{user.firstName} {user.lastName}</div>
                                             <span
                                                 className="deleteText"
                                                 onClick={() => deleteUserHandler(user.userId, token)}
@@ -212,7 +212,7 @@ const resendOTPHandler = (userId, token) =>{
                                 .map((prof, index) => (
                                     <div key={index} className="profRow">
                                         <p>
-                                            {prof.firstName} {prof.lastName}
+                                            <div>{prof.firstName} {prof.lastName}</div>
                                             <span
                                                 className="deleteText"
                                                 onClick={() => deleteUserHandler(prof.userId, token)}
