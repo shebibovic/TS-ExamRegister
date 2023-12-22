@@ -33,44 +33,133 @@ import UserSubjectID from "./pages/users/UserSubjectID";
 import QuizDetails from "./pages/professor/exams/QuizDetails";
 import AdminUsers from "./pages/admin/users/AdminUsersPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
+import GuardedRoute from "./components/GuardedRoute";
+import { useState } from "react";
+import { useEffect } from "react";
+import UnguardedRoute from "./components/UnGuardedRoute";
 
 
 const App = () => {
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const checkUserToken = () => {
+    const userToken = localStorage.getItem('jwtToken');
+    if (!userToken || userToken === 'undefined') {
+      setIsLoggedIn(false);
+    }
+    setIsLoggedIn(true);
+  }
+
+  useEffect(() => {
+    checkUserToken();
+  }, [isLoggedIn])
+
   return (
     <Router>
       <Header />
       <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/resetPassword" element={<ResetPasswordPage />} />
 
-        <Route path="/adminProfile" element={<AdminProfilePage />} />
-        <Route path="/adminCategories" element={<AdminCategoriesPage />} />
-        <Route path="/adminAddCategory" element={<AdminAddCategoryPage />} />
+        <Route path="/" element={
+          <UnguardedRoute>
+            <LoginPage />
+          </UnguardedRoute>} />
+        <Route path="/login" element={
+          <UnguardedRoute>
+            <LoginPage />
+          </UnguardedRoute>} />
+        <Route path="/register" element={
+          <UnguardedRoute>
+            <RegisterPage />
+          </UnguardedRoute>} />
+        <Route path="/resetPassword" element={
+          <GuardedRoute anyRole={true}>
+            <ResetPasswordPage />
+          </GuardedRoute>
+        } />
+
+        <Route path="/adminProfile" element={
+          <GuardedRoute role={"ADMIN"}>
+            <AdminProfilePage />
+          </GuardedRoute>
+        } />
+        <Route path="/adminCategories" element={
+          <GuardedRoute role={"ADMIN"}>
+            <AdminCategoriesPage />
+          </GuardedRoute>
+        } />
+        <Route path="/adminAddCategory" element={
+          <GuardedRoute role={"ADMIN"}>
+            <AdminAddCategoryPage />
+          </GuardedRoute>
+        } />
         <Route
           path="/adminUpdateCategory/:catId"
-          element={<AdminUpdateCategoryPage />}
+          element={
+            <GuardedRoute role={"ADMIN"}>
+              <AdminUpdateCategoryPage />
+            </GuardedRoute>
+          }
         />
-        <Route path="/adminQuizzes" element={<AdminQuizzesPage />} />
-        <Route path="/adminCategories/:catId" element={<AdminSubjectID />} />
-        <Route path="/addUser" element={<AddUser />} />
-        <Route path="/allUsers" element={<AdminUsers />} />
-
-
-        <Route path="/profile" element={<UserProfilePage />} />
-        <Route path="/quizzes" element={<UserQuizzesPage />} />
-        <Route path="/userSubjects" element={<UserSubjects />} />
-        <Route path="/userCategories/:catId" element={<UserSubjectID />} />
-
-
-        <Route path="/professorProfile" element={<ProfessorProfilePage />} />
-        <Route path="/professorQuizzes" element={<ProfessorQuizzesPage />} />
-        <Route path="/professorAddQuiz" element={<ProfessorAddQuiz />} />
-        <Route path="/professorCategories/:catId" element={<ProfessorSubjectID />} />
-
-
-
+        <Route path="/adminQuizzes" element={
+          <GuardedRoute role={"ADMIN"}>
+            <AdminQuizzesPage />
+          </GuardedRoute>
+        } />
+        <Route path="/adminCategories/:catId" element={
+          <GuardedRoute role={"ADMIN"}>
+            <AdminSubjectID />
+          </GuardedRoute>
+        } />
+        <Route path="/addUser" element={
+          <GuardedRoute role={"ADMIN"}>
+            <AddUser />
+          </GuardedRoute>
+        } />
+        <Route path="/allUsers" element={
+          <GuardedRoute role={"ADMIN"}>
+            <AdminUsers />
+          </GuardedRoute>
+        } />
+        <Route path="/profile" element={
+          <GuardedRoute role={"STUDENT"}>
+            <UserProfilePage />
+          </GuardedRoute>
+        } />
+        <Route path="/quizzes" element={
+          <GuardedRoute role={"STUDENT"}>
+            <UserQuizzesPage />
+          </GuardedRoute>
+        } />
+        <Route path="/userSubjects" element={
+          <GuardedRoute role={"STUDENT"}>
+            <UserSubjects />
+          </GuardedRoute>
+        } />
+        <Route path="/userCategories/:catId" element={
+          <GuardedRoute role={"STUDENT"}>
+            <UserSubjectID />
+          </GuardedRoute>
+        } />
+        <Route path="/professorProfile" element={
+          <GuardedRoute role={"PROFESSOR"}>
+            <ProfessorProfilePage />
+          </GuardedRoute>
+        } />
+        <Route path="/professorQuizzes" element={
+          <GuardedRoute role={"PROFESSOR"}>
+            <ProfessorQuizzesPage />
+          </GuardedRoute>
+        } />
+        <Route path="/professorAddQuiz" element={
+          <GuardedRoute role={"ADMIN"}>
+            <ProfessorAddQuiz />
+          </GuardedRoute>
+        } />
+        <Route path="/professorCategories/:catId" element={
+          <GuardedRoute role={"PROFESSOR"}>
+            <ProfessorSubjectID />
+          </GuardedRoute>
+        } />
       </Routes>
     </Router>
   );
