@@ -20,6 +20,26 @@ const register = async (user, token) => {
   }
 };
 
+const resetPassword = async (user, token) => {
+  try {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` },
+    };
+    const { data } = await axios.post("/api/reset-password", user, config);
+    if(data && data.userId){
+
+      return {isReset:true, error:null};
+    }
+    else {
+      console.error("authService:register() Error: ", data);
+      return { isReset: false, error: data };
+    }
+  } catch (error) {
+    console.error("authService:register() Error: ", error.response.statusText);
+    return { isReset: false, error: error.response.statusText };
+  }
+};
+
 //////////////
 
 const login = async (username, password) => {
@@ -43,5 +63,5 @@ const login = async (username, password) => {
   }
 };
 
-const authServices = { register, login };
+const authServices = { register, login, resetPassword };
 export default authServices;

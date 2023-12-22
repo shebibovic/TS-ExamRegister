@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { register } from '../actions/authActions';
+import { resetPassword } from '../actions/authActions';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../components/Loader';
 import { Form, Button, InputGroup, Row, Col } from 'react-bootstrap';
@@ -46,26 +46,11 @@ const ResetPasswordPage = () => {
         setConfirmPasswordType(temp ? 'text' : 'password');
     };
 
-    useEffect(() => {
-        setUsernameExistsError('');
-    }, [username]);
 
     const submitHandler = async (e) => {
         e.preventDefault();
 
         let isValid = true;
-
-        if (!username.trim()) {
-            setUsernameError('Email is required');
-            isValid = false;
-        }
-        if (!emailRegex.test(username)) {
-            setUsernameError('Email must be in e-mail format');
-            isValid = false;
-        }
-        else {
-            setUsernameError('');
-        }
 
         if (!passwordRegex.test(password)) {
             setPasswordError('Password must contain at least 8 characters including 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character');
@@ -73,7 +58,6 @@ const ResetPasswordPage = () => {
         } else {
             setPasswordError('');
         }
-
 
         if (password !== confirmPassword) {
             setConfirmPasswordError('Passwords do not match');
@@ -84,16 +68,16 @@ const ResetPasswordPage = () => {
 
         if (isValid) {
             const user = {
-                firstName: firstName,
-                lastName: lastName,
-                username: username,
+                username: username, // Dodaj ovo ako trebaš korisničko ime za identifikaciju
                 password: password,
             };
-            register(dispatch, user).then((data) => {
-                //if (data.type === authConstants.USER_REGISTER_SUCCESS) {
-                    navigate('/profile');
-                //}
-            });
+            try {
+                await resetPassword(dispatch, user);
+                navigate('/login');
+            } catch (error) {
+                // Obrada grešaka ako postoji problem s resetiranjem lozinke
+                console.error('Error resetting password:', error);
+            }
         }
     };
 

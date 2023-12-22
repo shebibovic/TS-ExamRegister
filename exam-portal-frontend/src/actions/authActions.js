@@ -17,6 +17,31 @@ export const register = async (dispatch, user, token) => {
   }
 };
 
+export const resetPassword = async (dispatch, userData) => {
+  try {
+    const response = await fetch('api/reset-password', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      dispatch({ type: 'RESET_PASSWORD_SUCCESS', payload: data });
+      return data;
+    } else {
+      dispatch({ type: 'RESET_PASSWORD_FAILURE' });
+      throw new Error('Failed to reset password');
+    }
+  } catch (error) {
+    // Obrada grešaka u fetch pozivu
+    console.error('Error resetting password:', error);
+    throw error;
+  }
+};
+
 export const login = async (dispatch, email, password) => {
   dispatch({ type: authConstants.USER_LOGIN_REQUEST });
   try {
