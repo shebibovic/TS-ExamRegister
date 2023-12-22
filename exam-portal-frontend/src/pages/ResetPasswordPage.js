@@ -1,38 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { resetPassword } from '../actions/authActions';
 import { useDispatch, useSelector } from 'react-redux';
-import Loader from '../components/Loader';
-import { Form, Button, InputGroup, Row, Col } from 'react-bootstrap';
+import { Form, Button, InputGroup } from 'react-bootstrap';
 import FormContainer from '../components/FormContainer';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import * as authConstants from '../constants/authConstants';
-import { Link } from 'react-router-dom';
 
 const ResetPasswordPage = () => {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [code, setCode] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [passwordType, setPasswordType] = useState('password');
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [confirmPasswordType, setConfirmPasswordType] = useState('password');
 
-    const [usernameError, setUsernameError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
-    const [usernameExistsError, setUsernameExistsError] = useState('');
-    const emailRegex = /^.*@.*\..*$/;
     const passwordRegex = /^(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{8,}$/;
 
-
-
-    const dispatch = useDispatch();
     const navigate = useNavigate();
-    const registerReducer = useSelector((state) => state.registerReducer);
     const token = localStorage.getItem("jwtToken");
 
     const showPasswordHandler = () => {
@@ -47,8 +32,6 @@ const ResetPasswordPage = () => {
         setConfirmPasswordType(temp ? 'text' : 'password');
     };
     useEffect(() => {
-   
-        console.log(token+"<-------------------------------!!!!!!!!!!!!!!!!")
         if (!token) {
           navigate('/'); // Ako nema tokena, redirektuj na login stranicu
         }
@@ -90,11 +73,9 @@ const ResetPasswordPage = () => {
                 });
                 if (response.status===200) {
                     const responseData = await response.text(); // Dobavljanje odgovora kao teksta, ne kao JSON-a
-                    console.log(responseData); // Prikaz odgovora servera kao teksta
                     navigate('/login');
                   } else {
                     const errorData = await response.text(); // Dobavljanje greške kao teksta
-                    console.log(errorData); // Prikaz greške servera kao teksta
                   }
                 } catch (error) {
                   // Obrada grešaka ako postoji problem s resetiranjem lozinke

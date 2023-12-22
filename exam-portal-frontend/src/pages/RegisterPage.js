@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../components/Loader';
-import { Form, Button, InputGroup, Row, Col } from 'react-bootstrap';
+import { Form, Button, Row, Col } from 'react-bootstrap';
 import FormContainer from '../components/FormContainer';
-import * as authConstants from '../constants/authConstants';
 import { Link } from 'react-router-dom';
 import swal from "sweetalert";
 
@@ -56,7 +55,6 @@ const RegisterPage = () => {
           if (response.ok) {
             const data = await response.json();
             localStorage.setItem('jwtToken', data.jwtToken); 
-          //  console.log(data.token+"<-----------------------------")// Spremanje tokena u local storage
             navigate('/resetPassword');
           }
           
