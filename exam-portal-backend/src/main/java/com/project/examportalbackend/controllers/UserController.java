@@ -61,7 +61,7 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/admin/generate-otp/{userId}")
-    public ResponseEntity<String> generateOtp(long userId) throws MessagingException, UnsupportedEncodingException {
+    public ResponseEntity<String> generateOtp(@PathVariable long userId) throws MessagingException, UnsupportedEncodingException {
         authService.setNewOneTimePassword(userId);
         return ResponseEntity.ok("New OTP has been generated and sent to the user");
     }

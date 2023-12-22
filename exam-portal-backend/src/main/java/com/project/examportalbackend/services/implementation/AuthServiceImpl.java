@@ -223,7 +223,7 @@ public class AuthServiceImpl implements AuthService {
         user.setOtpGeneratedTime(otpPair.getSecond());
         user.setResetPassword(1);
         userRepository.save(user);
-        sendOTPEmail(user, user.getOneTimePassword());
+        sendOTPEmail(user, otpPair.getFirst());
     }
 
     @Override

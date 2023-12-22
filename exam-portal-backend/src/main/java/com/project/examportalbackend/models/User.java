@@ -52,6 +52,7 @@ public class User implements UserDetails {
             message = "Password must contain at least one uppercase letter and one digit!"
     )
     @Column(name = "password")
+    @JsonIgnore
     private String password;
 
 
@@ -75,6 +76,7 @@ public class User implements UserDetails {
     private List<Exam> registeredExams = new ArrayList<>();
 
     @Column(name = "one_time_password")
+    @JsonIgnore
     private String oneTimePassword;
 
     @Column(name = "otp_generated_time")
