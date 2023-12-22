@@ -1,9 +1,9 @@
 import * as authConstants from "../constants/authConstants";
 import authServices from "../services/authServices";
 
-export const register = async (dispatch, user) => {
-  dispatch({ type: authConstants.USER_REGISTER_REQUEST });
-  const { isRegistered, error } = await authServices.register(user);
+export const register = async (dispatch, user, token) => {
+ dispatch({ type: authConstants.USER_REGISTER_REQUEST });
+  const { isRegistered, error } = await authServices.register(user, token);
   if (isRegistered) {
     return dispatch({
       type: authConstants.USER_REGISTER_SUCCESS,

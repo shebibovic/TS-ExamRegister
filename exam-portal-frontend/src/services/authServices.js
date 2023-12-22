@@ -1,11 +1,16 @@
 import axios from "axios";
 
-const register = async (user) => {
+const register = async (user, token) => {
   try {
-    const { data } = await axios.post("/api/register", user);
-    if (data && data.userId) {
-      return { isRegistered: true, error: null };
-    } else {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` },
+    };
+    const { data } = await axios.post("/api/user/admin/add/", user, config);
+    if(data && data.userId){
+      
+      return {isRegistered:true, error:null};
+    }
+    else {
       console.error("authService:register() Error: ", data);
       return { isRegistered: false, error: data };
     }
@@ -14,6 +19,8 @@ const register = async (user) => {
     return { isRegistered: false, error: error.response.statusText };
   }
 };
+
+//////////////
 
 const login = async (username, password) => {
   try {
