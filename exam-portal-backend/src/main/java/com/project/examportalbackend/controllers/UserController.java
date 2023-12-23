@@ -48,7 +48,7 @@ public class UserController {
     @PostMapping("/admin/approve-update/{userId}")
     public ResponseEntity<String> updateUser(@PathVariable long userId) throws AccessDeniedException {
         authService.approveUpdate(userId);
-        return ResponseEntity.ok("Successfully update the user!");
+        return ResponseEntity.ok("Successfully updated the user!");
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
