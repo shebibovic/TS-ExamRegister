@@ -85,7 +85,6 @@ public class UserController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin/professors")
     public ResponseEntity<List<User>> getAllProfessors() throws AccessDeniedException {
-        User admin = authService.getUserFromToken();
         return ResponseEntity.ok(userService.getAllProfesors());
     }
 
