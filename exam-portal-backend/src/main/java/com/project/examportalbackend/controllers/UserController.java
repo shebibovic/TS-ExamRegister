@@ -2,6 +2,7 @@ package com.project.examportalbackend.controllers;
 
 import com.project.examportalbackend.models.User;
 import com.project.examportalbackend.models.dto.request.UserRequestDto;
+import com.project.examportalbackend.models.dto.request.UserUpdateRequestDto;
 import com.project.examportalbackend.repository.UserRepository;
 import com.project.examportalbackend.services.AuthService;
 import com.project.examportalbackend.services.ExamService;
@@ -33,15 +34,30 @@ public class UserController {
     private ExamService examService;
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/admin/add")
+    @PostMapping("/admin/add")
     public ResponseEntity<User> addUser(@Valid @RequestBody UserRequestDto userRequestDto) throws AccessDeniedException, MessagingException, UnsupportedEncodingException {
         return ResponseEntity.ok(authService.registerUserService(userRequestDto));
     }
 
+//    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PostMapping("/admin/update")
+//    public ResponseEntity<User> updateUser(@Valid @RequestBody UserRequestDto userRequestDto) throws AccessDeniedException {
+//        return ResponseEntity.ok(authService.updateUser(userRequestDto));
+//    }
+
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/admin/update")
-    public ResponseEntity<User> updateUser(@Valid @RequestBody UserRequestDto userRequestDto) throws AccessDeniedException {
-        return ResponseEntity.ok(authService.updateUser(userRequestDto));
+    @PostMapping("/admin/approve-update/{userId}")
+    public ResponseEntity<String> updateUser(@PathVariable long userId) throws AccessDeniedException {
+        authService.approveUpdate(userId);
+        return ResponseEntity.ok("Successfully update the user!");
+    }
+
+    @PreAuthorize("hasAuthority('PROFESSOR') or hasAuthority('STUDENT')")
+    @PostMapping("/request-update")
+    public ResponseEntity<String> requestUpdate(@Valid @RequestBody UserUpdateRequestDto userUpdateRequestDto) throws AccessDeniedException {
+        User user = authService.getUserFromToken();
+        authService.requestUpdate(user.getUserId(), userUpdateRequestDto);
+        return ResponseEntity.ok("Sent request for data update, wait for admin to accept or deny the request");
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

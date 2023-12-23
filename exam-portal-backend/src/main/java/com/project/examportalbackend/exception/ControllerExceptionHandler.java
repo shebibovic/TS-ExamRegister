@@ -2,6 +2,8 @@ package com.project.examportalbackend.exception;
 
 import com.project.examportalbackend.exception.exceptions.ResourceNotFoundException;
 import com.project.examportalbackend.utils.constants.ErrorTypeMessages;
+import com.sun.mail.smtp.SMTPSendFailedException;
+import com.sun.mail.smtp.SMTPSenderFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -31,6 +33,18 @@ public class ControllerExceptionHandler {
                 new Date(),
                 ex.getMessage(),
                 ErrorTypeMessages.UNAUTHORIZED.toString()
+        );
+    }
+
+    @ExceptionHandler(SMTPSendFailedException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorMessage smtpSendFailedException(SMTPSendFailedException ex) {
+
+        return new ErrorMessage(
+                HttpStatus.BAD_REQUEST.value(),
+                new Date(),
+                ex.getMessage(),
+                ErrorTypeMessages.BAD_REQUEST.toString()
         );
     }
 

@@ -6,6 +6,7 @@ import com.project.examportalbackend.models.Role;
 import com.project.examportalbackend.models.User;
 import com.project.examportalbackend.models.dto.request.LoginOtpRequestDto;
 import com.project.examportalbackend.models.dto.request.UserRequestDto;
+import com.project.examportalbackend.models.dto.request.UserUpdateRequestDto;
 import org.springframework.data.util.Pair;
 
 import javax.mail.MessagingException;
@@ -17,7 +18,12 @@ import java.util.List;
 public interface AuthService {
     User registerUserService(UserRequestDto user) throws MessagingException, UnsupportedEncodingException;
 
-    User updateUser(UserRequestDto user);
+//    User updateUser(UserRequestDto user);
+
+    void approveUpdate(long userId);
+
+
+    void requestUpdate(long userId, UserUpdateRequestDto user);
 
     void deleteUser(long userId);
 

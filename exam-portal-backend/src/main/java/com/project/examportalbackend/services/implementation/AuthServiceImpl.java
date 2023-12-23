@@ -5,12 +5,13 @@ import com.project.examportalbackend.exception.exceptions.ResourceNotFoundExcept
 import com.project.examportalbackend.models.*;
 import com.project.examportalbackend.models.dto.request.LoginOtpRequestDto;
 import com.project.examportalbackend.models.dto.request.UserRequestDto;
+import com.project.examportalbackend.models.dto.request.UserUpdateRequestDto;
 import com.project.examportalbackend.repository.RoleRepository;
 import com.project.examportalbackend.repository.SubjectRepository;
 import com.project.examportalbackend.repository.UserRepository;
+import com.project.examportalbackend.repository.UserUpdateRepository;
 import com.project.examportalbackend.services.AuthService;
 import com.project.examportalbackend.utils.constants.Roles;
-import lombok.extern.java.Log;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
@@ -43,6 +44,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    UserUpdateRepository userUpdateRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -91,24 +95,47 @@ public class AuthServiceImpl implements AuthService {
         return savedUser;
     }
 
+//    @Override
+//    public User updateUser(UserRequestDto userRequestDto) {
+//
+//        if (userRequestDto.getUserId() == -1) {
+//            throw new IllegalArgumentException("You must pass the id of the user you wish to update");
+//        }
+//        getUser(userRequestDto.getUserId());
+//        Role role = getRole(userRequestDto.getRole());
+//
+//        userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
+//        return userRepository.save(new User(
+//                userRequestDto.getUserId(),
+//                userRequestDto.getFirstName(),
+//                userRequestDto.getLastName(),
+//                userRequestDto.getEmail(),
+//                userRequestDto.getPassword(),
+//                userRequestDto.getPhoneNumber(),
+//                role));
+//    }
+
     @Override
-    public User updateUser(UserRequestDto userRequestDto) {
+    public void approveUpdate(long userId) {
 
-        if (userRequestDto.getUserId() == -1) {
-            throw new IllegalArgumentException("You must pass the id of the user you wish to update");
+        UserUpdateRequestDto userUpdateRequestDto = userUpdateRepository.findByUserId(userId);
+        if(userUpdateRequestDto == null){
+            throw new IllegalArgumentException("User hasn't made an update request");
         }
-        getUser(userRequestDto.getUserId());
-        Role role = getRole(userRequestDto.getRole());
 
-        userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
-        return userRepository.save(new User(
-                userRequestDto.getUserId(),
-                userRequestDto.getFirstName(),
-                userRequestDto.getLastName(),
-                userRequestDto.getEmail(),
-                userRequestDto.getPassword(),
-                userRequestDto.getPhoneNumber(),
-                role));
+        User user = getUser(userId);
+        if(userUpdateRequestDto.getFirstName() != null) {
+            user.setFirstName(userUpdateRequestDto.getFirstName());
+        }
+
+        if(userUpdateRequestDto.getLastName() != null) {
+            user.setLastName(userUpdateRequestDto.getLastName());
+        }
+
+        if(userUpdateRequestDto.getEmail() != null) {
+            user.setEmail(userUpdateRequestDto.getEmail());
+        }
+        userRepository.save(user);
     }
 
     @Override
@@ -231,7 +258,7 @@ public class AuthServiceImpl implements AuthService {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 
-        helper.setFrom("tsexampotal@gmail.com", "Exam Portal");
+        helper.setFrom("examportalts@outlook.com", "Exam Portal");
         helper.setTo(user.getEmail());
 
         String subject = "Here's your One Time Password (OTP) - Expires in 60 minutes!";
@@ -255,7 +282,7 @@ public class AuthServiceImpl implements AuthService {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 
-        helper.setFrom("tsexampotal@gmail.com", "Exam Portal");
+        helper.setFrom("examportalts@outlook.com", "Exam Portal");
         helper.setTo(user.getEmail());
 
         String subject = "Here's your Link for password change - Expires in 5 minutes!";
@@ -307,4 +334,12 @@ public class AuthServiceImpl implements AuthService {
         user.setOtpGeneratedTime(null);
         userRepository.save(user);
     }
+
+    @Override
+    public void requestUpdate(long userId, UserUpdateRequestDto userUpdateRequestDto){
+        User user = getUser(userId);
+        userUpdateRequestDto.setUserId(user.getUserId());
+        userUpdateRepository.save(userUpdateRequestDto);
+    }
+
 }
