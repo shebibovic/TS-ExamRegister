@@ -22,6 +22,8 @@ public interface AuthService {
 
     void approveUpdate(long userId);
 
+    List<UserUpdateRequestDto> getAllUpdateRequests();
+
 
     void requestUpdate(long userId, UserUpdateRequestDto user);
 

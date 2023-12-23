@@ -52,6 +52,12 @@ public class UserController {
         return ResponseEntity.ok("Successfully update the user!");
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/admin/update-requests")
+    public ResponseEntity<List<UserUpdateRequestDto>> updateUser() throws AccessDeniedException {
+        return ResponseEntity.ok(authService.getAllUpdateRequests());
+    }
+
     @PreAuthorize("hasAuthority('PROFESSOR') or hasAuthority('STUDENT')")
     @PostMapping("/request-update")
     public ResponseEntity<String> requestUpdate(@Valid @RequestBody UserUpdateRequestDto userUpdateRequestDto) throws AccessDeniedException {

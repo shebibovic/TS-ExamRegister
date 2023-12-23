@@ -116,6 +116,11 @@ public class AuthServiceImpl implements AuthService {
 //    }
 
     @Override
+    public List<UserUpdateRequestDto> getAllUpdateRequests(){
+        return userUpdateRepository.findAll();
+    }
+
+    @Override
     public void approveUpdate(long userId) {
 
         UserUpdateRequestDto userUpdateRequestDto = userUpdateRepository.findByUserId(userId);
