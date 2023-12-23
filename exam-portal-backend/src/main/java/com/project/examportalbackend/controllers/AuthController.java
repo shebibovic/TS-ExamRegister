@@ -7,12 +7,19 @@ import com.project.examportalbackend.models.dto.request.LoginOtpRequestDto;
 import com.project.examportalbackend.models.dto.request.PasswordRequestDto;
 import com.project.examportalbackend.repository.UserRepository;
 import com.project.examportalbackend.services.AuthService;
+import com.project.examportalbackend.services.TokenBlackList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.AccessDeniedException;
@@ -22,14 +29,14 @@ import java.nio.file.AccessDeniedException;
 @RequestMapping("/api")
 public class AuthController {
 
-    private final AuthService authService;
-    private final UserRepository userRepository;
+    @Autowired
+    private AuthService authService;
 
     @Autowired
-    public AuthController(AuthService authService, UserRepository userRepository) {
-        this.authService = authService;
-        this.userRepository = userRepository;
-    }
+    private UserRepository userRepository;
+
+    @Autowired
+    TokenBlackList tokenBlackList;
 
 
     @PostMapping("/login")
@@ -65,5 +72,24 @@ public class AuthController {
         User user = authService.getUserFromToken();
         authService.changePassword(user.getUserId(), passwordRequestDto.getPassword(), passwordCode);
         return ResponseEntity.ok("Successfully updated password");
+    }
+
+    @PreAuthorize("hasAuthority('PROFESSOR') or hasAuthority('STUDENT') or hasAuthority('ADMIN')")
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request){
+        String token = extractTokenFromRequest(request);
+        if(token != null) {
+            tokenBlackList.addToBlacklist(token);
+        }
+
+        return ResponseEntity.ok("Logged out successfully");
+    }
+
+    private String extractTokenFromRequest(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader("Authorization");
+        if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
+            return authorizationHeader.substring(7);
+        }
+        return null;
     }
 }

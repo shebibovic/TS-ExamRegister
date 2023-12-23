@@ -80,6 +80,7 @@ public class User implements UserDetails {
     private String oneTimePassword;
 
     @Column(name = "otp_generated_time")
+    @JsonIgnore
     private Date otpGeneratedTime;
 
     @Column(name = "change_password_code")
@@ -87,6 +88,7 @@ public class User implements UserDetails {
     private String changePasswordCode;
 
     @Column(name = "reset_password_generated_time")
+    @JsonIgnore
     private Date changePasswordGeneratedTime;
 
     @Column(name = "set_password")

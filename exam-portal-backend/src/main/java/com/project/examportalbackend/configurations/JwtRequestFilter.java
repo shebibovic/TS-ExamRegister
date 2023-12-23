@@ -2,6 +2,7 @@ package com.project.examportalbackend.configurations;
 
 import com.project.examportalbackend.models.User;
 import com.project.examportalbackend.repository.UserRepository;
+import com.project.examportalbackend.services.TokenBlackList;
 import com.project.examportalbackend.services.UserService;
 import com.project.examportalbackend.services.implementation.UserDetailsServiceImpl;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -18,6 +19,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.util.Objects;
 
 @Component
@@ -30,6 +32,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private TokenBlackList tokenBlackList;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -44,8 +49,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             return;
         }
 
+
+
         if (requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
+
+            if(tokenBlackList.isBlacklisted(jwtToken)){
+                System.out.println("The token is not valid");
+                filterChain.doFilter(request, response);
+                return;
+            }
+
             try {
                 username = jwtUtil.extractUsername(jwtToken);
             } catch (IllegalArgumentException e) {
