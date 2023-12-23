@@ -3,18 +3,41 @@ import { Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Image from "react-bootstrap/Image";
-import { fetchCategories } from "../../actions/categoriesActions";
-import { fetchQuizzes } from "../../actions/quizzesActions";
 import SidebarUser from "../../components/SidebarUser";
 import "./UserProfilePage.css";
+import { Button } from "react-bootstrap";
+import swal from "sweetalert";
+
+
 
 const UserProfilePage = () => {
-  const dispatch = useDispatch();
+    // Retrieve user data from localStorage
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = localStorage.getItem("jwtToken");
   const navigate = useNavigate();
+  const handleEditData = () => {
+    navigate('/user-edit');
+  };
+  const handleChangePassword = async () => {
+     try{ const response = await fetch('/api/change-password', {
+      method: 'POST',
+      headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        }
+  });
+  if(response.status==200){
+      swal("Request sent!", `Request successfully sent`, "success");
+  }
+  else {
+      swal("Request was not sent!", `Request was not sent`, "error");
+  }
 
-  // Retrieve user data from localStorage
-  const user = JSON.parse(localStorage.getItem("user"));
-  const token = localStorage.getItem("jwtToken");
+ }catch(error){
+  console.error('Error sending request:', error);
+ }
+  }
+
 
 
 
@@ -61,7 +84,26 @@ const UserProfilePage = () => {
               </Table>
             </div>
         )}
+                    <Button
+                        variant=""
+                        className="my-3"
+                        type="submit"
+                        style={{ backgroundColor: 'rgb(68 177 49)', color: 'white' }}
+                        onClick={handleEditData}
+                    >
+                        Edit data
+                    </Button>
+                    <Button
+                        variant=""
+                        className="my-3"
+                        type="submit"
+                        style={{ backgroundColor: 'rgb(68 177 49)', color: 'white' }}
+                        onClick={handleChangePassword}
+                    >
+                        Change password
+                    </Button>
       </div>
+      
   );
 };
 

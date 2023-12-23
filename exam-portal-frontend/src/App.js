@@ -24,6 +24,7 @@ import GuardedRoute from "./components/GuardedRoute";
 import { useState } from "react";
 import { useEffect } from "react";
 import UnguardedRoute from "./components/UnGuardedRoute";
+import UserEditPage from "./pages/users/UserEditPage";
 
 
 const App = () => {
@@ -45,6 +46,10 @@ const App = () => {
     <Router>
       <Header />
       <Routes>
+      <Route path="/user-edit" element={
+          <UnguardedRoute>
+            <UserEditPage />
+          </UnguardedRoute>} />
 
         <Route path="/" element={
           <UnguardedRoute>

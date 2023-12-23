@@ -86,7 +86,6 @@ const AdminUpdateCategoryPage = () => {
 
 
 
-  console.log(profesorName+"<--------------------------heeej")
   useEffect(() => {
     const fetchUsers = async () => {
       try {
