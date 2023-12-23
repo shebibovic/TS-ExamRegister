@@ -129,15 +129,15 @@ public class AuthServiceImpl implements AuthService {
         }
 
         User user = getUser(userId);
-        if(userUpdateRequestDto.getFirstName() != null) {
+        if(userUpdateRequestDto.getFirstName() != null && !userUpdateRequestDto.getFirstName().isEmpty()) {
             user.setFirstName(userUpdateRequestDto.getFirstName());
         }
 
-        if(userUpdateRequestDto.getLastName() != null) {
+        if(userUpdateRequestDto.getLastName() != null && !userUpdateRequestDto.getLastName().isEmpty()) {
             user.setLastName(userUpdateRequestDto.getLastName());
         }
 
-        if(userUpdateRequestDto.getEmail() != null) {
+        if(userUpdateRequestDto.getEmail() != null && !userUpdateRequestDto.getEmail().isEmpty()) {
             user.setEmail(userUpdateRequestDto.getEmail());
         }
         userRepository.save(user);

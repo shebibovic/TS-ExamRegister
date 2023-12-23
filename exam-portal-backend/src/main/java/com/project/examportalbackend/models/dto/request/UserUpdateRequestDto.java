@@ -25,11 +25,9 @@ public class UserUpdateRequestDto {
     private long userId;
 
     @Size(max = 50, message = "First name can't have more than 50 characters")
-    @Size(min = 1, message = "First name must have at least 1 character")
     @Column(name = "first_name")
     private String firstName;
 
-    @Size(min = 1, message = "Last name must have at least 1 character")
     @Size(max = 50, message = "Last name can't have more than 50 characters")
     @Column(name = "last_name")
     private String lastName;

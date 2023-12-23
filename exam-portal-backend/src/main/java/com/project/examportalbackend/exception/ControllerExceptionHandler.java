@@ -19,7 +19,6 @@ import javax.validation.ConstraintViolationException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ControllerExceptionHandler {
