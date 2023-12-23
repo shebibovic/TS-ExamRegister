@@ -3,7 +3,6 @@ package com.project.examportalbackend.exception;
 import com.project.examportalbackend.exception.exceptions.ResourceNotFoundException;
 import com.project.examportalbackend.utils.constants.ErrorTypeMessages;
 import com.sun.mail.smtp.SMTPSendFailedException;
-import com.sun.mail.smtp.SMTPSenderFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;

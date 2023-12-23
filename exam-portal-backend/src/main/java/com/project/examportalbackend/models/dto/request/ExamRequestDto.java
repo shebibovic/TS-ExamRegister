@@ -1,17 +1,11 @@
 package com.project.examportalbackend.models.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.project.examportalbackend.models.Subject;
-import com.project.examportalbackend.models.User;
 import lombok.*;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter

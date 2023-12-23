@@ -3,7 +3,6 @@ package com.project.examportalbackend.configurations;
 import com.project.examportalbackend.models.User;
 import com.project.examportalbackend.repository.UserRepository;
 import com.project.examportalbackend.services.TokenBlackList;
-import com.project.examportalbackend.services.UserService;
 import com.project.examportalbackend.services.implementation.UserDetailsServiceImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;

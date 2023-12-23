@@ -5,7 +5,6 @@ import com.project.examportalbackend.models.User;
 import com.project.examportalbackend.models.dto.request.SubjectRequestDto;
 import com.project.examportalbackend.models.dto.response.SubjectResponseDto;
 
-import javax.persistence.Access;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 

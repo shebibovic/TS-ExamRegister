@@ -1,14 +1,9 @@
 package com.project.examportalbackend.services.implementation;
 
-import com.project.examportalbackend.exception.exceptions.ResourceNotFoundException;
-import com.project.examportalbackend.models.Exam;
-import com.project.examportalbackend.models.Role;
 import com.project.examportalbackend.models.Subject;
 import com.project.examportalbackend.models.User;
-import com.project.examportalbackend.repository.SubjectRepository;
 import com.project.examportalbackend.repository.UserRepository;
 import com.project.examportalbackend.services.AuthService;
-import com.project.examportalbackend.services.ExamService;
 import com.project.examportalbackend.services.SubjectService;
 import com.project.examportalbackend.services.UserService;
 import com.project.examportalbackend.utils.constants.Roles;
@@ -16,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {

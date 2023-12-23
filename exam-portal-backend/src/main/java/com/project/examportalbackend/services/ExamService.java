@@ -1,6 +1,5 @@
 package com.project.examportalbackend.services;
 
-import com.project.examportalbackend.models.Subject;
 import com.project.examportalbackend.models.Exam;
 import com.project.examportalbackend.models.User;
 import com.project.examportalbackend.models.dto.request.ExamRequestDto;

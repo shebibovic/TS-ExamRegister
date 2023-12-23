@@ -3,7 +3,6 @@ package com.project.examportalbackend.controllers;
 import com.project.examportalbackend.models.User;
 import com.project.examportalbackend.models.dto.request.UserRequestDto;
 import com.project.examportalbackend.models.dto.request.UserUpdateRequestDto;
-import com.project.examportalbackend.repository.UserRepository;
 import com.project.examportalbackend.services.AuthService;
 import com.project.examportalbackend.services.ExamService;
 import com.project.examportalbackend.services.UserService;
@@ -50,6 +49,13 @@ public class UserController {
     public ResponseEntity<String> updateUser(@PathVariable long userId) throws AccessDeniedException {
         authService.approveUpdate(userId);
         return ResponseEntity.ok("Successfully update the user!");
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/admin/deny-update/{userId}")
+    public ResponseEntity<String> denyUpdateUser(@PathVariable long userId) throws AccessDeniedException {
+        authService.denyUpdate(userId);
+        return ResponseEntity.ok("Successfully denied the update!");
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

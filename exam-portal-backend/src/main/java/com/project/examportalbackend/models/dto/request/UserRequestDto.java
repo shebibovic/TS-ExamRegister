@@ -1,6 +1,5 @@
 package com.project.examportalbackend.models.dto.request;
 
-import com.project.examportalbackend.models.Role;
 import com.project.examportalbackend.models.User;
 import com.project.examportalbackend.utils.validation.annotation.UniqueEmailConstraint;
 import lombok.*;

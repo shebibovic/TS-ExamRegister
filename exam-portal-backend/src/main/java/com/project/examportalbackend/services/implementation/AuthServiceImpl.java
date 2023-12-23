@@ -141,6 +141,16 @@ public class AuthServiceImpl implements AuthService {
             user.setEmail(userUpdateRequestDto.getEmail());
         }
         userRepository.save(user);
+        userUpdateRepository.delete(userUpdateRequestDto);
+    }
+
+    @Override
+    public void denyUpdate(long userId){
+        UserUpdateRequestDto userUpdateRequestDto = userUpdateRepository.findByUserId(userId);
+        if(userUpdateRequestDto == null){
+            throw new IllegalArgumentException("User hasn't made an update request");
+        }
+        userUpdateRepository.delete(userUpdateRequestDto);
     }
 
     @Override
@@ -158,6 +168,10 @@ public class AuthServiceImpl implements AuthService {
             throw new IllegalArgumentException("Can't delete the admin");
         }
         userRepository.delete(user);
+        UserUpdateRequestDto userUpdateRequestDto = userUpdateRepository.findByUserId(userId);
+        if(userUpdateRequestDto != null){
+            userUpdateRepository.delete(userUpdateRequestDto);
+        }
     }
 
     public Role getRole(String roleName) {
