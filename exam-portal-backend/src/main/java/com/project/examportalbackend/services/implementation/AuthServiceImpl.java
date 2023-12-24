@@ -191,6 +191,9 @@ public class AuthServiceImpl implements AuthService {
 
     public void resetPassword(long userId, String password) {
         User user = getUser(userId);
+        if(user.getResetPassword() == 0){
+            throw new IllegalArgumentException("Password has already been reset!");
+        }
         user.setPassword(passwordEncoder.encode(password));
         user.setResetPassword(0);
         userRepository.save(user);
@@ -308,7 +311,7 @@ public class AuthServiceImpl implements AuthService {
 
         String content = "<p>Hello " + user.getFullName() + "</p>"
                 + "<p>For security reason, you're required to use the following link to change your password!</p>"
-                + "<a target='_blank' href=\"http://localhost:3000/resetPassword/" + passwordChangeCode + "\""
+                + "<a target='_blank' href=\"http://localhost:3000/change-password/" + passwordChangeCode + "\""
                 + "<button> Change your password </button>"
                 + "</form>"
                 + "</a>"
