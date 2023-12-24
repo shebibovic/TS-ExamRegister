@@ -18,7 +18,7 @@ const AdminSubjectID = () => {
     useEffect(() => {
         const fetchSelectedCategory = async () => {
             try {
-                const response = await fetch(`/api/subject/admin/${subjectId}`, {
+                const response = await fetch(`http://10.0.130.222:8081/api/subject/admin/${subjectId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "application/json",

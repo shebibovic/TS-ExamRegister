@@ -19,7 +19,7 @@ const UserProfilePage = () => {
     navigate('/user-edit');
   };
   const handleChangePassword = async () => {
-     try{ const response = await fetch('/api/change-password', {
+     try{ const response = await fetch('http://10.0.130.222:8081/api/change-password', {
       method: 'POST',
       headers: {
           Authorization: `Bearer ${token}`,

@@ -29,7 +29,7 @@ const UserSubjects = () => {
         if (categories.length === 0) {
             const fetchCategories = async () => {
                 try {
-                    const response = await fetch("/api/subject/student/", {
+                    const response = await fetch("http://10.0.130.222:8081/api/subject/student/", {
                         headers: {
                             Authorization: `Bearer ${token}`,
                             "Content-Type": "application/json",

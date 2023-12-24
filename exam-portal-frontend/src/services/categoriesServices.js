@@ -1,5 +1,8 @@
 import axios from "axios";
 
+axios.defaults.baseURL = "http://10.0.130.222:8081"
+
+
 const fetchCategories = async (token) => {
   try {
     const config = {

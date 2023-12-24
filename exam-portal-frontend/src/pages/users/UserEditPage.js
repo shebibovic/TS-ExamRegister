@@ -25,7 +25,7 @@ const UserEditPage = () => {
 
     const changePassword = async () => {
         try {
-            const response = await fetch('/api/change-password', {
+            const response = await fetch('http://10.0.130.222:8081/api/change-password', {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -65,7 +65,7 @@ const UserEditPage = () => {
                 email: username
             };
             try {
-                const response = await fetch('/api/user/request-update', {
+                const response = await fetch('http://10.0.130.222:8081/api/user/request-update', {
                     method: 'POST',
                     headers: {
                         Authorization: `Bearer ${token}`,

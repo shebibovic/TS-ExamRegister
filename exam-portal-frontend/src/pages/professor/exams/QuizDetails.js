@@ -17,7 +17,7 @@ const QuizDetails = () => {
         const token = localStorage.getItem("jwtToken");
         const fetchRegisteredStudents = async () => {
             try {
-                const response = await fetch(`/api/user/professor/exam-registered-students/${quizId}`, {
+                const response = await fetch(`http://10.0.130.222:8081/api/user/professor/exam-registered-students/${quizId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "application/json",

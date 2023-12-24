@@ -27,7 +27,7 @@ const Header = () => {
     try {
       const token = localStorage.getItem("jwtToken");
 
-      const response = await fetch(`/api/logout`, {
+      const response = await fetch(`http://10.0.130.222:8081/api/logout`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

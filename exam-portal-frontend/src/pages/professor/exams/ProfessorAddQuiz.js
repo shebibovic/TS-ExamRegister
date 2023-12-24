@@ -52,7 +52,7 @@ const ProfessorAddQuiz = () => {
       useEffect(() => {
         const fetchSubjects = async () => {
           try {
-            const response = await fetch("api/subject/professor", {
+            const response = await fetch("http://10.0.130.222:8081/api/subject/professor", {
               headers: {
                 Authorization: `Bearer ${token}`, // Dodajte ovu liniju kako biste poslali token
                 "Content-Type": "application/json", // Ovisno o potrebi, možda trebate dodati i Content-Type

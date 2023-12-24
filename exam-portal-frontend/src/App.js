@@ -27,6 +27,7 @@ import UnguardedRoute from "./components/UnGuardedRoute";
 import UserEditPage from "./pages/users/UserEditPage";
 import ProfessorEditPage from "./pages/professor/ProfessorEditPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
+import QuizDetails from "./pages/professor/exams/QuizDetails";
 
 
 const App = () => {
@@ -153,6 +154,11 @@ const App = () => {
         <Route path="/professorQuizzes" element={
           <GuardedRoute role={"PROFESSOR"}>
             <ProfessorQuizzesPage />
+          </GuardedRoute>
+        } />
+        <Route path="/quizzes/:examId" element={
+          <GuardedRoute role={"PROFESSOR"}>
+            <QuizDetails />
           </GuardedRoute>
         } />
         <Route path="/professorAddQuiz" element={

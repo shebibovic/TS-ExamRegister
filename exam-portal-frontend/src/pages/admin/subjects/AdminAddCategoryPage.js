@@ -55,7 +55,7 @@ const AdminAddCategoryPage = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("/api/user/admin/available-professors", {
+        const response = await fetch("http://10.0.130.222:8081/api/user/admin/available-professors", {
           headers: {
             Authorization: `Bearer ${token}`, // Dodajte ovu liniju kako biste poslali token
             "Content-Type": "application/json", // Ovisno o potrebi, možda trebate dodati i Content-Type
@@ -75,7 +75,7 @@ const AdminAddCategoryPage = () => {
       }
 
       try {
-        const response = await fetch("/api/user/admin/students", {
+        const response = await fetch("http://10.0.130.222:8081/api/user/admin/students", {
           headers: {
             Authorization: `Bearer ${token}`, // Dodajte ovu liniju kako biste poslali token
             "Content-Type": "application/json", // Ovisno o potrebi, možda trebate dodati i Content-Type

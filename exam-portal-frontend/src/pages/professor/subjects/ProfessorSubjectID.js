@@ -18,7 +18,7 @@ const ProfessorSubjectID = () => {
     useEffect(() => {
         const fetchSelectedCategory = async () => {
             try {
-                const response = await fetch('/api/subject/professor', {
+                const response = await fetch('http://10.0.130.222:8081/api/subject/professor', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "application/json",
@@ -50,7 +50,7 @@ const ProfessorSubjectID = () => {
     useEffect(() => {
         const fetchStudentsCategory = async () => {
             try {
-                const response = await fetch('/api/user/professor/subject-students', {
+                const response = await fetch('http://10.0.130.222:8081/api/user/professor/subject-students', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "application/json",
