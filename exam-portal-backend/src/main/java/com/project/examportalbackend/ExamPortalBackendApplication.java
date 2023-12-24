@@ -19,9 +19,9 @@ public class ExamPortalBackendApplication {
 		SpringApplication.run(ExamPortalBackendApplication.class, args);
 	}
 
-//	@Bean
-//	public ApplicationRunner initializer() {
-//		return args -> addStaticData.addStaticData();
-//	}
+	@Bean
+	public ApplicationRunner initializer() {
+		return args -> addStaticData.addStaticData();
+	}
 
 }
