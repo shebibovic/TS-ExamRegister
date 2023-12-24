@@ -25,6 +25,8 @@ import { useState } from "react";
 import { useEffect } from "react";
 import UnguardedRoute from "./components/UnGuardedRoute";
 import UserEditPage from "./pages/users/UserEditPage";
+import ProfessorEditPage from "./pages/professor/ProfessorEditPage";
+import ChangePasswordPage from "./pages/ChangePasswordPage";
 
 
 const App = () => {
@@ -46,10 +48,15 @@ const App = () => {
     <Router>
       <Header />
       <Routes>
-      <Route path="/user-edit" element={
-          <UnguardedRoute>
+        <Route path="/professor-edit" element={
+          <GuardedRoute role={"PROFESSOR"}>
+            <ProfessorEditPage />
+          </GuardedRoute>} />
+
+        <Route path="/student-edit" element={
+          <GuardedRoute role={"STUDENT"}>
             <UserEditPage />
-          </UnguardedRoute>} />
+          </GuardedRoute>} />
 
         <Route path="/" element={
           <UnguardedRoute>
@@ -66,6 +73,12 @@ const App = () => {
         <Route path="/resetPassword" element={
           <GuardedRoute anyRole={true}>
             <ResetPasswordPage />
+          </GuardedRoute>
+        } />
+
+        <Route path="/change-Password/:code" element={
+          <GuardedRoute anyRole={true}>
+            <ChangePasswordPage />
           </GuardedRoute>
         } />
 
@@ -143,7 +156,7 @@ const App = () => {
           </GuardedRoute>
         } />
         <Route path="/professorAddQuiz" element={
-          <GuardedRoute role={"ADMIN"}>
+          <GuardedRoute role={"PROFESSOR"}>
             <ProfessorAddQuiz />
           </GuardedRoute>
         } />

@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button} from 'react-bootstrap';
 import FormContainer from '../../components/FormContainer';
-import Sidebar from "../../components/Sidebar";
 import swal from "sweetalert";
-import "./UserProfilePage.css";
+import "./ProfessorProfilePage.css";
 import SidebarProfessor from '../../components/SidebarProfessor';
-import SidebarUser from '../../components/SidebarUser';
 
-const UserEditPage = () => {
+const ProfessorEditPage = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     const token = localStorage.getItem("jwtToken");
 
@@ -18,11 +16,6 @@ const UserEditPage = () => {
     const [usernameError, setUsernameError] = useState('');
     const [usernameExistsError, setUsernameExistsError] = useState('');
 
-
-    useEffect(() => {
-        setUsernameExistsError('');
-    }, [username]);
-
     const changePassword = async () => {
         try {
             const response = await fetch('/api/change-password', {
@@ -30,21 +23,26 @@ const UserEditPage = () => {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",
-                },
-                body: JSON.stringify(user)
+                  },
+                  body: JSON.stringify(user)
             });
-            if (response.status === 200) {
+            if (response.status===200) {
                 const responseData = await response.text(); // Dobavljanje odgovora kao teksta, ne kao JSON-a
                 swal("Password change request!",responseData,"success")
-            } else {
+              } else {
                 const errorData = await response.text(); // Dobavljanje greške kao teksta
                 swal("Password change request error!", errorData,"error")
+              }
+            } catch (error) {
+              // Obrada grešaka ako postoji problem s resetiranjem lozinke
+              console.error('Error changing password:', error);
             }
-        } catch (error) {
-            // Obrada grešaka ako postoji problem s resetiranjem lozinke
-            console.error('Error resetting password:', error);
-        }
     };
+
+    useEffect(() => {
+        setUsernameExistsError('');
+    }, [username]);
+
 
     const submitHandler = async (e) => {
         e.preventDefault();
@@ -64,38 +62,38 @@ const UserEditPage = () => {
                 lastName: lastName,
                 email: username
             };
-            try {
-                const response = await fetch('/api/user/request-update', {
-                    method: 'POST',
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(user)
-                });
-                if (response.status == 200) {
-                    swal("Request sent!", `Request successfully sent`, "success");
-                }
-                else {
-                    swal("Request was not sent!", `Request was not sent`, "error");
-                }
-
-            } catch (error) {
-                console.error('Error sending request:', error);
+           try{
+            const response = await fetch('/api/user/request-update', {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(user)
+            });
+            if(response.status==200){
+                swal("Request sent!", `Request successfully sent`, "success");
             }
-        }
+            else {
+                swal("Request was not sent!", `Request was not sent`, "error");
+            }
 
+           }catch(error){
+            console.error('Error sending request:', error);
+           }
+        }
+       
     };
 
-
+   
 
     return (
 
-        <div className="" style={{ display: "flex" }}>
+        <div className="" style={{display:"flex"}}>
             <div className="">
-                <SidebarUser />
+                <SidebarProfessor/>
             </div>
-
+            
             <FormContainer>
                 <h1>Change data</h1>
                 <h4>Leave the fields you don't want to update empty</h4>
@@ -147,14 +145,14 @@ const UserEditPage = () => {
                     <Button
                         onClick={changePassword}
                         variant=""
-                        style={{ backgroundColor: 'rgb(68 177 49)', color: 'white' }}
+                        style={{ backgroundColor: 'rgb(68 177 49)', color: 'white', margin:'25px' }}
                     >Change password</Button>
                 </Form>
-            </FormContainer>
 
+            </FormContainer>
         </div>
     );
 };
 
 
-export default UserEditPage;
+export default ProfessorEditPage;

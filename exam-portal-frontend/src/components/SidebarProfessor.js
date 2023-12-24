@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaBars, FaUserAlt, FaRegChartBar } from "react-icons/fa";
 import { TbLayoutGrid, TbLayoutGridAdd, TbReport } from "react-icons/tb";
-import { MdQuiz, MdQueue } from "react-icons/md";
+import { MdQuiz, MdQueue, MdEdit } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import "./Sidebar.css";
 
@@ -28,6 +28,11 @@ const SidebarProfessor = ({ children }) => {
             path: "/professorAddQuiz",
             name: "Add Exam",
             icon: <MdQueue />,
+        },
+        {
+            path: "/professor-edit",
+            name: "Edit profile",
+            icon: <MdEdit />,
         },
     ];
     return (
