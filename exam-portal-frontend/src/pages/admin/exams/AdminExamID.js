@@ -37,7 +37,7 @@ const AdminExamID = () => {
         const fetchProfessor = async () => {
             try {
                 if (oldCategory && oldCategory.userId) {
-                    const response = await fetch(`http://10.0.130.222:8081/api/category/users/${oldCategory.userId}`, {
+                    const response = await fetch(`http://10.0.142.35:8081/api/category/users/${oldCategory.userId}`, {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },

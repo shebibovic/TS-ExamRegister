@@ -26,7 +26,7 @@ const AdminQuizzesPage = () => {
   useEffect(() => {
     const fetchAllQuizzes = async () => {
       try {
-        const response = await fetch("http://10.0.130.222:8081/api/exam/admin", {
+        const response = await fetch("http://10.0.142.35:8081/api/exam/admin", {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -51,7 +51,7 @@ const AdminQuizzesPage = () => {
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
-        const response = await fetch("http://10.0.130.222:8081/api/subject/admin", {
+        const response = await fetch("http://10.0.142.35:8081/api/subject/admin", {
           headers: {
             Authorization: `Bearer ${token}`, // Dodajte ovu liniju kako biste poslali token
             "Content-Type": "application/json", // Ovisno o potrebi, možda trebate dodati i Content-Type

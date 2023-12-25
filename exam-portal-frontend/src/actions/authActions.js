@@ -19,7 +19,7 @@ export const register = async (dispatch, user, token) => {
 
 export const resetPassword = async (dispatch, userData) => {
   try {
-    const response = await fetch('http://10.0.130.222:8081/api/reset-password', {
+    const response = await fetch('http://10.0.142.35:8081/api/reset-password', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

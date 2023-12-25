@@ -33,7 +33,7 @@ const ProfessorQuizzesPage = () => {
         const fetchQuizzesForProfessor = async () => {
             try {
                 if (token) {
-                    const response = await fetch("http://10.0.130.222:8081/api/exam/professor/active-exams", {
+                    const response = await fetch("http://10.0.142.35:8081/api/exam/professor/active-exams", {
                         headers: {
                             Authorization: `Bearer ${token}`,
                             "Content-Type": "application/json",
@@ -81,7 +81,7 @@ const ProfessorQuizzesPage = () => {
     useEffect(() => {
         const fetchSubjects = async () => {
             try {
-                const response = await fetch("http://10.0.130.222:8081/api/subject/professor", {
+                const response = await fetch("http://10.0.142.35:8081/api/subject/professor", {
                     headers: {
                         Authorization: `Bearer ${token}`, // Dodajte ovu liniju kako biste poslali token
                         "Content-Type": "application/json", // Ovisno o potrebi, možda trebate dodati i Content-Type

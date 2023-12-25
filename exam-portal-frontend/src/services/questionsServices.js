@@ -1,6 +1,6 @@
 import axios from "axios";
 
-axios.defaults.baseURL = "http://10.0.130.222:8081"
+axios.defaults.baseURL = "http://10.0.142.35:8081"
 
 
 const fetchQuestionsByQuiz = async (quizId, token) => {

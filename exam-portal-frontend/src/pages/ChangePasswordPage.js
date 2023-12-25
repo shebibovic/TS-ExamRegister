@@ -65,7 +65,7 @@ const ChangePasswordPage = () => {
                 password: password
             };
             try {
-                const response = await fetch('http://10.0.130.222:8081/api/change-password/' + changeCode, {
+                const response = await fetch('http://10.0.142.35:8081/api/change-password/' + changeCode, {
                     method: 'POST',
                     headers: {
                         Authorization: `Bearer ${token}`,

@@ -25,7 +25,7 @@ const AdminUsers = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await fetch("http://10.0.130.222:8081/api/user/admin/students", {
+                const response = await fetch("http://10.0.142.35:8081/api/user/admin/students", {
                     headers: {
                         Authorization: `Bearer ${token}`, // Dodajte ovu liniju kako biste poslali token
                         "Content-Type": "application/json", // Ovisno o potrebi, možda trebate dodati i Content-Type
@@ -43,7 +43,7 @@ const AdminUsers = () => {
 
         const fetchProfessors = async () => {
             try {
-                const response = await fetch("http://10.0.130.222:8081/api/user/admin/professors", {
+                const response = await fetch("http://10.0.142.35:8081/api/user/admin/professors", {
                     headers: {
                         Authorization: `Bearer ${token}`, // Dodajte ovu liniju kako biste poslali token
                         "Content-Type": "application/json", // Ovisno o potrebi, možda trebate dodati i Content-Type
@@ -72,7 +72,7 @@ const deleteUserHandler = (userId, token) => {
         dangerMode: true,
     }).then((willDelete) => {
         if (willDelete) {
-            fetch(`http://10.0.130.222:8081/api/user/admin/delete/${userId}`, {
+            fetch(`http://10.0.142.35:8081/api/user/admin/delete/${userId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -106,7 +106,7 @@ const deleteUserHandler = (userId, token) => {
     });
 };
 const resendOTPHandler = (userId, token) =>{
-     fetch(`http://10.0.130.222:8081/api/user/admin/generate-otp/${userId}`, {
+     fetch(`http://10.0.142.35:8081/api/user/admin/generate-otp/${userId}`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,

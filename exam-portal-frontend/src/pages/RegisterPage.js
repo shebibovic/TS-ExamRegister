@@ -45,7 +45,7 @@ const RegisterPage = () => {
             otp: code
         };
         try {
-          const response = await fetch('http://10.0.130.222:8081/api/login-otp', {
+          const response = await fetch('http://10.0.142.35:8081/api/login-otp', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

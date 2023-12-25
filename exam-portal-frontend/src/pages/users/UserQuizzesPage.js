@@ -29,7 +29,7 @@ const UserQuizzesPage = () => {
         if (quizzes.length === 0) {
             const fetchQuizzesRegistered = async () => {
                 try {
-                    const response = await fetch("http://10.0.130.222:8081/api/exam/student/registered-active-exams/", {
+                    const response = await fetch("http://10.0.142.35:8081/api/exam/student/registered-active-exams/", {
                         headers: {
                             Authorization: `Bearer ${token}`,
                             "Content-Type": "application/json",
@@ -55,7 +55,7 @@ const UserQuizzesPage = () => {
         if (otherQuizzes.length === 0) {
             const fetchQuizzesUnregistered = async () => {
                 try {
-                    const response = await fetch("http://10.0.130.222:8081/api/exam/student/unregistered-active-exams/", {
+                    const response = await fetch("http://10.0.142.35:8081/api/exam/student/unregistered-active-exams/", {
                         headers: {
                             Authorization: `Bearer ${token}`,
                             "Content-Type": "application/json",
@@ -82,7 +82,7 @@ const UserQuizzesPage = () => {
         try {
             const token = localStorage.getItem("jwtToken");
     
-            const response = await fetch(`http://10.0.130.222:8081/api/exam/student/register-exam/${examId}`, {
+            const response = await fetch(`http://10.0.142.35:8081/api/exam/student/register-exam/${examId}`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -103,7 +103,7 @@ const UserQuizzesPage = () => {
         try {
             const token = localStorage.getItem("jwtToken");
 
-            const response = await fetch(`http://10.0.130.222:8081/api/exam/student/unregister-exam/${examId}`, {
+            const response = await fetch(`http://10.0.142.35:8081/api/exam/student/unregister-exam/${examId}`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${token}`,
