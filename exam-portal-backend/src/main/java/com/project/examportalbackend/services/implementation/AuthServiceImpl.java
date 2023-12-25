@@ -311,7 +311,7 @@ public class AuthServiceImpl implements AuthService {
 
         String content = "<p>Hello " + user.getFullName() + "</p>"
                 + "<p>For security reason, you're required to use the following link to change your password!</p>"
-                + "<a target='_blank' href=\"http://10.0.152.69:3000/change-password/" + passwordChangeCode + "\""
+                + "<a target='_blank' href=\"http://10.0.150.47:3000/change-password/" + passwordChangeCode + "\""
                 + "<button> Change your password </button>"
                 + "</form>"
                 + "</a>"
